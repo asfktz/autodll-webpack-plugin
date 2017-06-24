@@ -1,16 +1,21 @@
+
 const { getBundles, getManifests } = require('./paths');
 const { buildIfNeeded } = require('./cache');
 
 const middleware = require('./middleware');
 const createCompiler = require('./createCompiler');
 
-const build = (webpack, dllSettings) => (
+const build = (dllSettings, webpack) => (
   buildIfNeeded(dllSettings, () => createCompiler(webpack, dllSettings))
 );
 
-module.exports = {
-  build,
-  middleware,
-  getBundles,
-  getManifests
+module.exports = (dllSettings) => {
+  const withSettings = (fn) => fn.bind(null, dllSettings);
+
+  return ({
+    build:        withSettings(build),
+    middleware:   withSettings(middleware),
+    getBundles:   withSettings(getBundles),
+    getManifests: withSettings(getManifests)
+  });
 };

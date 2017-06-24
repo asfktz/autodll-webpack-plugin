@@ -14,7 +14,6 @@ const getManifests = dllSettings => {
   );
 };
 
-
 module.exports = {
   cacheDir,
   getManifests,
