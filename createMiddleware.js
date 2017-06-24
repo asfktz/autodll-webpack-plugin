@@ -4,8 +4,8 @@ const { cacheDir } = require('./paths');
 
 const testMatch = (url) => (pathToRegexp('/dll/:bundleName.js').exec(url) || [])[1];
 
-const middleware = (dllSettings) => {
-  return (req, res, next) => {
+const createMiddleware = (dllSettings) => {
+  return () => (req, res, next) => {
     const bundleName = testMatch(req.url);
 
     if (!dllSettings.entry[bundleName]) {
@@ -16,4 +16,4 @@ const middleware = (dllSettings) => {
   };
 };
 
-module.exports = middleware;
+module.exports = createMiddleware;

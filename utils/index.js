@@ -8,10 +8,13 @@ const mkdirp = promisify(require('mkdirp'));
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
+const concat = Array.prototype.concat.bind([]);
+
 module.exports = {
   readFile,
   writeFile,
   rmdir,
   log,
-  mkdirp
+  mkdirp,
+  concat
 };

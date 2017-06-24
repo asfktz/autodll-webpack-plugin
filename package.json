@@ -14,7 +14,8 @@
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "path-to-regexp": "^1.7.0",
-    "rmdir": "^1.2.0"
+    "rmdir": "^1.2.0",
+    "webpack": "^3.0.0"
   },
   "devDependencies": {
     "del": "^3.0.0"

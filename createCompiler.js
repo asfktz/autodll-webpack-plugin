@@ -1,7 +1,8 @@
+const webpack = require('webpack');
 const path = require('path');
 const { cacheDir } = require('./paths');
 
-const createConfig = (webpack, settings) => ({
+const createConfig = (settings) => ({
   resolve: {
     extensions: ['.js', '.jsx']
   },
@@ -19,8 +20,8 @@ const createConfig = (webpack, settings) => ({
   ]
 });
 
-const compile = (webpack, dllSettings) => {
-  const config = createConfig(webpack, dllSettings);
+const compile = (dllSettings) => {
+  const config = createConfig(dllSettings);
   return webpack(config);
 };
 
