@@ -1,9 +1,10 @@
 const log = require('./utils/log');
 const { buildIfNeeded } = require('./cache');
 const createCompiler = require('./createCompiler');
-const { getManifests, getBundles } = require('./paths');
+const { getManifests, getBundles, cacheDir } = require('./paths');
 const webpack = require('webpack');
 const { concat } = require('./utils');
+const path = require('path');
 
 const createPluginClass = dllSettings => {
   return class Plugin {
