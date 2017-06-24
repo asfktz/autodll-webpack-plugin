@@ -19,12 +19,12 @@ const createPluginClass = dllSettings => {
         console.log('add DllReferences');
 
         getManifests(dllSettings).forEach(manifestPath => {
-          compiler.options.plugins.push(
-            new webpack.DllReferencePlugin({
-              context: context,
-              manifest: manifestPath
-            })
-          );
+          const instance = new webpack.DllReferencePlugin({
+            context: context,
+            manifest: manifestPath
+          });
+
+          instance.apply(compiler);
         });
       });
 
