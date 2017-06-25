@@ -5,17 +5,17 @@ const { createReadStream } = require('fs');
 
 const testMatch = (url) => (pathToRegexp('/dll/:bundleName.js').exec(url) || [])[1];
 
-const createMiddleware = (dllSettings) => {
-  return () => (req, res, next) => {
-    const bundleName = testMatch(req.url);
-    const bundlePath = path.resolve(cacheDir, `${bundleName}.bundle.js`);
+const createMiddleware = () => (req, res, next) => {
+  if (!req.url.startsWith('/dll/')) {
+    return next();
+  }
 
-    if (!dllSettings.entry[bundleName]) {
-      return next();
-    }
+  const bundleName = testMatch(req.url);
+  const bundlePath = path.resolve(cacheDir, `${bundleName}.bundle.js`);
 
-    createReadStream(bundlePath).pipe(res);
-  };
+  createReadStream(bundlePath)
+    .on('error', (err) => next(err))
+    .pipe(res);
 };
 
 module.exports = createMiddleware;

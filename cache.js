@@ -5,6 +5,8 @@ const { log, writeFile, readFile, mkdirp } = require('./utils');
 const { cacheDir } = require('./paths');
 const del = require('del');
 
+const chalk = require('chalk');
+
 const isCacheValid = dllSettings => {
   return mkdirp(cacheDir)
     .then(() => readFile(path.resolve(cacheDir, 'lastDllSettings.json')))
@@ -26,8 +28,11 @@ const storeDllSettings = dllSettings => () => {
   );
 };
 
+let counter = 0;
+
 const buildIfNeeded = (dllSettings, getCompiler) => {
   return isCacheValid(dllSettings)
+    .then(() => false) /////// <----
     .then(log(isValid => 'is valid cache? ' + isValid))
     .then(isValid => {
       if (isValid) return;
@@ -41,6 +46,8 @@ const buildIfNeeded = (dllSettings, getCompiler) => {
         });
       };
 
+      console.log(chalk.red('counter', ++counter));
+
       return (
         Promise.resolve()
           .then(log('cleanup'))
@@ -49,9 +56,9 @@ const buildIfNeeded = (dllSettings, getCompiler) => {
           .then(compile)
           .then(log('write lastDllSettings.json'))
           .then(storeDllSettings(dllSettings))
-          .catch((err) => {
-            console.log(err);
-          })
+          // .catch((err) => {
+          //   console.log(err);
+          // })
       );
     });
 };

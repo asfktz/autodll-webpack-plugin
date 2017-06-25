@@ -4,7 +4,6 @@ const createCompiler = require('./createCompiler');
 const { getManifests, getBundles, cacheDir } = require('./paths');
 const webpack = require('webpack');
 const { concat } = require('./utils');
-const path = require('path');
 
 const createPluginClass = dllSettings => {
   return class Plugin {
@@ -15,21 +14,23 @@ const createPluginClass = dllSettings => {
     apply(compiler) {
       const { context, inject } = this.options;
 
-      compiler.plugin('entry-option', () => {
-        console.log('add DllReferences');
-
-        getManifests(dllSettings).forEach(manifestPath => {
-          const instance = new webpack.DllReferencePlugin({
-            context: context,
-            manifest: manifestPath
-          });
-
-          instance.apply(compiler);
+      getManifests(dllSettings).forEach(manifestPath => {
+        const instance = new webpack.DllReferencePlugin({
+          context: context,
+          manifest: manifestPath
         });
+
+        instance.apply(compiler);
+      });
+
+      compiler.plugin('before-compile', (params, callback) => {
+        params.compilationDependencies = params.compilationDependencies
+          .filter((path) => !path.startsWith(cacheDir));
+          
+        callback();
       });
 
       compiler.plugin('watch-run', (compiler, callback) => {
-        console.log('-------');
         buildIfNeeded(dllSettings, () => createCompiler(dllSettings))
           .then(log('---- dll created! ---'))
           .then(() => callback());
