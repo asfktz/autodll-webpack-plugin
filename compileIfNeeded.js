@@ -1,15 +1,14 @@
 const path = require('path');
 const isEqual = require('lodash/isEqual');
-
-const { log, writeFile, readFile, mkdirp } = require('./utils');
+const fs = require('./utils/fs');
+const { mkdirp } = require('./utils');
 const { cacheDir } = require('./paths');
+const { log, tapLog } = require('./utils/log');
 const del = require('del');
-
-const chalk = require('chalk');
 
 const isCacheValid = settings => {
   return mkdirp(cacheDir)
-    .then(() => readFile(path.resolve(cacheDir, 'lastSettings.json')))
+    .then(() => fs.readFileAsync(path.resolve(cacheDir, 'lastSettings.json')))
     .then(file => {
       let lastSettings = JSON.parse(file);
       return isEqual(lastSettings, settings);
@@ -22,7 +21,7 @@ const isCacheValid = settings => {
 const cleanup = () => del(path.join(cacheDir, '**'));
 
 const storeSettings = settings => () => {
-  return writeFile(
+  return fs.writeFileAsync(
     path.resolve(cacheDir, 'lastSettings.json'),
     JSON.stringify(settings)
   );
@@ -30,9 +29,9 @@ const storeSettings = settings => () => {
 
 let counter = 0;
 
-const buildIfNeeded = (settings, getCompiler) => {
+const compileIfNeeded = (settings, getCompiler) => {
   return isCacheValid(settings)
-    .then(log(isValid => 'is valid cache? ' + isValid))
+    .then(tapLog(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
       if (isValid) return;
 
@@ -45,7 +44,7 @@ const buildIfNeeded = (settings, getCompiler) => {
         });
       };
 
-      console.log(chalk.red('counter', ++counter));
+      log(`counter ${++counter}`);
 
       return (
         Promise.resolve()
@@ -55,12 +54,9 @@ const buildIfNeeded = (settings, getCompiler) => {
           .then(compile)
           .then(log('write lastSettings.json'))
           .then(storeSettings(settings))
-          // .catch((err) => {
-          //   console.log(err);
-          // })
       );
     });
 };
 
 
-module.exports = { buildIfNeeded };
+module.exports = compileIfNeeded;

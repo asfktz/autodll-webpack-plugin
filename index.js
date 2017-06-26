@@ -1,7 +1,3 @@
-const createMiddleware = require('./createMiddleware');
-const createPluginClass = require('./createPluginClass');
+const Plugin = require('./Plugin');
 
-module.exports = {
-  middleware: createMiddleware,
-  Plugin: createPluginClass
-};
+module.exports = Plugin;

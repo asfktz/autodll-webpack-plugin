@@ -1,13 +1,11 @@
 // const { promisifyAll } = require('bluebird');
 
-const log = require('./utils/log');
-const { buildIfNeeded } = require('./cache');
+const { tapLog, log } = require('./utils/log');
+const compileIfNeeded = require('./compileIfNeeded');
 const createCompiler = require('./createCompiler');
-const { getManifests, getBundles, cacheDir } = require('./paths');
+const { getManifests, cacheDir } = require('./paths');
 const webpack = require('webpack');
-const { concat, readFile, merge } = require('./utils');
-const path = require('path');
-const chalk = require('chalk');
+const { concat, merge } = require('./utils');
 
 const createMemory = require('./createMemory');
 
@@ -18,15 +16,18 @@ class Plugin {
 
   onRun (compiler, callback) {
     const { entry } = this.options;
-    return buildIfNeeded(entry, () => createCompiler({ entry }))
+    return compileIfNeeded(entry, () => createCompiler({ entry }))
       .then(() => {
+        if (this.initialized)
+          return;
+
         log('initialized!');
         return createMemory().then((memory) => {
           this.initialized = true;
           this.memory = memory;
         });
       })    
-      .then(log('dll created!'))
+      .then(tapLog('dll created!'))
       .then(() => callback());
   }
 
