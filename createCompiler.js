@@ -20,8 +20,8 @@ const createConfig = (settings) => ({
   ]
 });
 
-const compile = (dllSettings) => {
-  const config = createConfig(dllSettings);
+const compile = (settings) => {
+  const config = createConfig(settings);
   return webpack(config);
 };
 

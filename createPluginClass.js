@@ -12,9 +12,8 @@ class Plugin {
 
   apply(compiler) {
     const { context, inject, entry } = this.options;
-    const dllSettings = { entry };
 
-    getManifests(dllSettings).forEach(manifestPath => {
+    getManifests(entry).forEach(manifestPath => {
       const instance = new webpack.DllReferencePlugin({
         context: context,
         manifest: manifestPath
@@ -31,8 +30,8 @@ class Plugin {
     });
 
     compiler.plugin('watch-run', (compiler, callback) => {
-      buildIfNeeded(dllSettings, () => createCompiler(dllSettings))
-        .then(log('---- dll created! ---'))
+      buildIfNeeded(entry, () => createCompiler({ entry }))
+        .then(log('dll created!'))
         .then(() => callback());
     });
 
@@ -42,12 +41,12 @@ class Plugin {
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
             console.log('injecting scripts to', htmlPluginData.outputName);
-            getBundles(dllSettings).forEach((bundleName) => {
+            getBundles(entry).forEach((bundleName) => {
               console.log('injecting', bundleName);
             });
 
             htmlPluginData.assets.js = concat(
-              getBundles(dllSettings),
+              getBundles(entry),
               htmlPluginData.assets.js
             );
 
