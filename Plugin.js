@@ -4,7 +4,7 @@ const { tapLog, log } = require('./utils/log');
 const compileIfNeeded = require('./compileIfNeeded');
 const createCompiler = require('./createCompiler');
 const { getManifests, cacheDir } = require('./paths');
-const webpack = require('webpack');
+const { DllReferencePlugin } = require('webpack');
 const { concat, merge } = require('./utils');
 
 const createMemory = require('./createMemory');
@@ -35,7 +35,7 @@ class Plugin {
     const { context, inject, entry } = this.options;
 
     getManifests(entry).forEach(manifestPath => {
-      const instance = new webpack.DllReferencePlugin({
+      const instance = new DllReferencePlugin({
         context: context,
         manifest: manifestPath
       });
