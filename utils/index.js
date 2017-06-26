@@ -10,11 +10,14 @@ const writeFile = promisify(fs.writeFile);
 
 const concat = Array.prototype.concat.bind([]);
 
+const merge = (...args) => Object.assign({}, ...args);
+
 module.exports = {
   readFile,
   writeFile,
   rmdir,
   log,
   mkdirp,
-  concat
+  concat,
+  merge
 };

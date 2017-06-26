@@ -32,16 +32,15 @@ let counter = 0;
 
 const buildIfNeeded = (settings, getCompiler) => {
   return isCacheValid(settings)
-    // .then(() => false) /////// <----
     .then(log(isValid => 'is valid cache? ' + isValid))
     .then(isValid => {
       if (isValid) return;
 
       const compile = () => {
         return new Promise((resolve, reject) => {
-          getCompiler().run((err) => {
+          getCompiler().run((err, stats) => {
             if (err) { return reject(err); }
-            resolve();
+            resolve(stats);
           });
         });
       };

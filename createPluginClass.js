@@ -1,13 +1,33 @@
+// const { promisifyAll } = require('bluebird');
+
 const log = require('./utils/log');
 const { buildIfNeeded } = require('./cache');
 const createCompiler = require('./createCompiler');
 const { getManifests, getBundles, cacheDir } = require('./paths');
 const webpack = require('webpack');
-const { concat } = require('./utils');
+const { concat, readFile, merge } = require('./utils');
+const path = require('path');
+const chalk = require('chalk');
+
+const createMemory = require('./createMemory');
 
 class Plugin {
   constructor(options) {
     this.options = options;
+  }
+
+  onRun (compiler, callback) {
+    const { entry } = this.options;
+    return buildIfNeeded(entry, () => createCompiler({ entry }))
+      .then(() => {
+        log('initialized!');
+        return createMemory().then((memory) => {
+          this.initialized = true;
+          this.memory = memory;
+        });
+      })    
+      .then(log('dll created!'))
+      .then(() => callback());
   }
 
   apply(compiler) {
@@ -29,10 +49,24 @@ class Plugin {
       callback();
     });
 
-    compiler.plugin('watch-run', (compiler, callback) => {
-      buildIfNeeded(entry, () => createCompiler({ entry }))
-        .then(log('dll created!'))
-        .then(() => callback());
+    compiler.plugin('run', this.onRun.bind(this));
+    compiler.plugin('watch-run', this.onRun.bind(this));
+
+    compiler.plugin('emit', (compilation, callback) => {
+      const { memory } = this;
+
+      const assets = memory.getBundles()
+        .map(({ filename, buffer }) => {
+          return {
+            [`dll/${filename}`]: {
+              source: () => buffer.toString(),
+              size: () => buffer.length
+            }
+          };
+        });
+
+      compilation.assets = merge(compilation.assets, ...assets);
+      callback();
     });
 
     if (inject) {
@@ -40,13 +74,17 @@ class Plugin {
         compilation.plugin(
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
-            console.log('injecting scripts to', htmlPluginData.outputName);
-            getBundles(entry).forEach((bundleName) => {
-              console.log('injecting', bundleName);
+            const { memory } = this;
+            const bundlesPublicPaths = memory.getBundles().map(({ filename }) => `dll/${filename}`);
+
+            log('injecting scripts to', htmlPluginData.outputName);
+            
+            bundlesPublicPaths.forEach((bundleName) => {
+              log('injecting', bundleName);
             });
 
             htmlPluginData.assets.js = concat(
-              getBundles(entry),
+              bundlesPublicPaths,
               htmlPluginData.assets.js
             );
 
