@@ -9,7 +9,6 @@ const del = require('del');
 const isCacheValid = settings => {
   return mkdirp(cacheDir)
     .then(() => fs.readFileAsync(path.resolve(cacheDir, 'lastSettings.json')))
-    .then((() => false)) ////////////// ------
     .then(file => {
       let lastSettings = JSON.parse(file);
       return isEqual(lastSettings, settings);

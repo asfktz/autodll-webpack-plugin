@@ -1,3 +1,3 @@
-const Plugin = require('./Plugin');
+const plugin = require('./plugin');
 
-module.exports = Plugin;
+module.exports = plugin;

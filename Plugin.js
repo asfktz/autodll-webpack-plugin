@@ -3,16 +3,22 @@
 const { tapLog, log } = require('./utils/log');
 const compileIfNeeded = require('./compileIfNeeded');
 const createCompiler = require('./createCompiler');
-const { getManifests, cacheDir } = require('./paths');
+const { getManifestPath, cacheDir } = require('./paths');
 const { DllReferencePlugin } = require('webpack');
-const { concat, merge } = require('./utils');
+const { concat, merge, keys } = require('./utils');
 const path = require('path');
 
 const createMemory = require('./createMemory');
 
 class Plugin {
   constructor(options) {
-    this.options = options;
+    this.options = merge({
+      context: __dirname,
+      path: '',
+      entry: {},
+      filename: '[name].dll.js',
+      inject: false
+    }, options);
   }
 
   onRun (compiler, callback) {
@@ -35,14 +41,11 @@ class Plugin {
 
     const publicPath = (filename) => path.join(outputPath, filename);
 
-    getManifests(entry).forEach(manifestPath => {
-      const instance = new DllReferencePlugin({
-        context: context,
-        manifest: manifestPath
+    keys(entry).map(getManifestPath)
+      .forEach(manifestPath => {
+        new DllReferencePlugin({ context: context, manifest: manifestPath })
+          .apply(compiler);
       });
-
-      instance.apply(compiler);
-    });
 
     compiler.plugin('before-compile', (params, callback) => {
       params.compilationDependencies = params.compilationDependencies
