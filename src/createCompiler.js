@@ -1,8 +1,8 @@
-const webpack = require('webpack');
-const path = require('path');
-const { cacheDir } = require('./paths');
+import webpack from 'webpack';
+import path from 'path';
+import { cacheDir } from './paths';
 
-const createConfig = ({ filename, entry }) => {
+export const createConfig = ({ filename, entry }) => {
   return {
     resolve: {
       extensions: ['.js', '.jsx']
@@ -27,4 +27,4 @@ const compile = (settings) => {
   return webpack(config);
 };
 
-module.exports = compile;
+export default compile;

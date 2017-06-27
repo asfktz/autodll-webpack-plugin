@@ -1,14 +1,12 @@
-// const { promisifyAll } = require('bluebird');
+import { tapLog, log } from './utils/log';
+import compileIfNeeded from './compileIfNeeded';
+import createCompiler from './createCompiler';
+import { getManifestPath, cacheDir } from './paths';
+import { DllReferencePlugin } from 'webpack';
+import { concat, merge, keys } from './utils/index.js';
+import path from 'path';
 
-const { tapLog, log } = require('./utils/log');
-const compileIfNeeded = require('./compileIfNeeded');
-const createCompiler = require('./createCompiler');
-const { getManifestPath, cacheDir } = require('./paths');
-const { DllReferencePlugin } = require('webpack');
-const { concat, merge, keys } = require('./utils');
-const path = require('path');
-
-const createMemory = require('./createMemory');
+import createMemory from './createMemory';
 
 class Plugin {
   constructor(options) {
@@ -101,4 +99,4 @@ class Plugin {
   }
 }
 
-module.exports = Plugin;
+export default Plugin;

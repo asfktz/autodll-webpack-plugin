@@ -1,8 +1,8 @@
-const MemoryFileSystem = require('memory-fs');
-const fs = require('./utils/fs');
-const { join } = require('bluebird');
-const { cacheDir } = require('./paths');
-const path = require('path');
+import MemoryFileSystem from 'memory-fs';
+import fs from './utils/fs';
+import { join } from 'bluebird';
+import { cacheDir } from './paths';
+import path from 'path';
 
 const getBundles = (mfs) => {
   return mfs.readdirSync('/').map((filename) => ({
@@ -11,10 +11,11 @@ const getBundles = (mfs) => {
   }));
 };
 
-const createMemory = () => {
+export const createMemory = (fs, cacheDir) => () => {
   const mfs = new MemoryFileSystem();  
 
   return fs.readdirAsync(path.join(cacheDir, 'bundles'))
+    .catch(() => [])
     .map(filename => join(
       filename,
       fs.readFileAsync(path.join(cacheDir, 'bundles', filename)))
@@ -27,4 +28,4 @@ const createMemory = () => {
     }));
 };
 
-module.exports = createMemory;
+export default createMemory(fs, cacheDir);

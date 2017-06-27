@@ -1,10 +1,10 @@
-const path = require('path');
-const isEqual = require('lodash/isEqual');
-const fs = require('./utils/fs');
-const { mkdirp } = require('./utils');
-const { cacheDir } = require('./paths');
-const { log, tapLog } = require('./utils/log');
-const del = require('del');
+import path from 'path';
+import isEqual from 'lodash/isEqual';
+import fs from './utils/fs';
+import { mkdirp } from './utils/index.js';
+import { cacheDir } from './paths';
+import { log, tapLog } from './utils/log';
+import del from 'del';
 
 const isCacheValid = settings => {
   return mkdirp(cacheDir)
@@ -58,5 +58,4 @@ const compileIfNeeded = (settings, getCompiler) => {
     });
 };
 
-
-module.exports = compileIfNeeded;
+export default compileIfNeeded;
