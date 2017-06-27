@@ -6,6 +6,7 @@ const createCompiler = require('./createCompiler');
 const { getManifests, cacheDir } = require('./paths');
 const { DllReferencePlugin } = require('webpack');
 const { concat, merge } = require('./utils');
+const path = require('path');
 
 const createMemory = require('./createMemory');
 
@@ -16,12 +17,10 @@ class Plugin {
 
   onRun (compiler, callback) {
     const { entry } = this.options;
-    return compileIfNeeded(entry, () => createCompiler({ entry }))
-      .then(() => {
-        if (this.initialized)
-          return;
 
-        log('initialized!');
+    return compileIfNeeded(entry, () => createCompiler(this.options))
+      .then(tapLog('initialized!', 1))
+      .then(() => {
         return createMemory().then((memory) => {
           this.initialized = true;
           this.memory = memory;
@@ -32,7 +31,9 @@ class Plugin {
   }
 
   apply(compiler) {
-    const { context, inject, entry } = this.options;
+    const { context, inject, entry, path: outputPath } = this.options;
+
+    const publicPath = (filename) => path.join(outputPath, filename);
 
     getManifests(entry).forEach(manifestPath => {
       const instance = new DllReferencePlugin({
@@ -46,12 +47,12 @@ class Plugin {
     compiler.plugin('before-compile', (params, callback) => {
       params.compilationDependencies = params.compilationDependencies
         .filter((path) => !path.startsWith(cacheDir));
-        
+
       callback();
     });
 
-    compiler.plugin('run', this.onRun.bind(this));
     compiler.plugin('watch-run', this.onRun.bind(this));
+    compiler.plugin('run', this.onRun.bind(this));
 
     compiler.plugin('emit', (compilation, callback) => {
       const { memory } = this;
@@ -59,7 +60,7 @@ class Plugin {
       const assets = memory.getBundles()
         .map(({ filename, buffer }) => {
           return {
-            [`dll/${filename}`]: {
+            [publicPath(filename)]: {
               source: () => buffer.toString(),
               size: () => buffer.length
             }
@@ -76,7 +77,7 @@ class Plugin {
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
             const { memory } = this;
-            const bundlesPublicPaths = memory.getBundles().map(({ filename }) => `dll/${filename}`);
+            const bundlesPublicPaths = memory.getBundles().map(({ filename }) => publicPath(filename));
 
             log('injecting scripts to', htmlPluginData.outputName);
             

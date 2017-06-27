@@ -9,6 +9,7 @@ const del = require('del');
 const isCacheValid = settings => {
   return mkdirp(cacheDir)
     .then(() => fs.readFileAsync(path.resolve(cacheDir, 'lastSettings.json')))
+    .then((() => false)) ////////////// ------
     .then(file => {
       let lastSettings = JSON.parse(file);
       return isEqual(lastSettings, settings);
@@ -48,11 +49,11 @@ const compileIfNeeded = (settings, getCompiler) => {
 
       return (
         Promise.resolve()
-          .then(log('cleanup'))
+          .then(tapLog('cleanup'))
           .then(cleanup)
-          .then(log('compile'))
+          .then(tapLog('compile'))
           .then(compile)
-          .then(log('write lastSettings.json'))
+          .then(tapLog('write lastSettings.json'))
           .then(storeSettings(settings))
       );
     });
