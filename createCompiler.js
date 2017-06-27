@@ -9,7 +9,7 @@ const createConfig = ({ filename, entry }) => {
     },
     entry: entry,
     output: {
-      path: path.join(cacheDir),
+      path: path.join(cacheDir, 'bundles'),
       filename: filename || '[name].bundle.js',
       library: '[name]_[hash]'
     },
