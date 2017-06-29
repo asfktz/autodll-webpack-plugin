@@ -1,42 +1,31 @@
-import { tapLog, log } from './utils/log';
+import defaults from 'lodash/defaults';
+import { DllReferencePlugin } from 'webpack';
+import path from 'path';
+
 import compileIfNeeded from './compileIfNeeded';
 import createCompiler from './createCompiler';
 import { getManifestPath, cacheDir } from './paths';
-import { DllReferencePlugin } from 'webpack';
 import { concat, merge, keys } from './utils/index.js';
-import path from 'path';
+import createLogger from './utils/createLogger';
 
 import createMemory from './createMemory';
 
 class Plugin {
-  constructor(options) {
-    this.options = merge({
+  constructor(settings) {
+    this.settings = defaults(settings, {
       context: __dirname,
       path: '',
       entry: {},
-      filename: '[name].dll.js',
-      inject: false
-    }, options);
-  }
-
-  onRun (compiler, callback) {
-    const { entry } = this.options;
-
-    return compileIfNeeded(entry, () => createCompiler(this.options))
-      .then(tapLog('initialized!', 1))
-      .then(() => {
-        return createMemory().then((memory) => {
-          this.initialized = true;
-          this.memory = memory;
-        });
-      })    
-      .then(tapLog('dll created!'))
-      .then(() => callback());
+      filename: '[name].js',
+      inject: false,
+      debug: false
+    });
   }
 
   apply(compiler) {
-    const { context, inject, entry, path: outputPath } = this.options;
-
+    const { context, inject, entry, path: outputPath } = this.settings;
+    const log = createLogger(this.settings.debug);
+    
     const publicPath = (filename) => path.join(outputPath, filename);
 
     keys(entry).map(getManifestPath)
@@ -51,13 +40,25 @@ class Plugin {
 
       callback();
     });
+    
+    const onRun = (compiler, callback) => (
+      compileIfNeeded(this.settings, () => createCompiler(this.settings))
+        .then(() => createMemory()
+          .then((memory) => {
+            this.initialized = true;
+            this.memory = memory;
+          })
+        )    
+        .then(log.tap('initialized'))
+        .then(callback)
+    );
 
-    compiler.plugin('watch-run', this.onRun.bind(this));
-    compiler.plugin('run', this.onRun.bind(this));
+    compiler.plugin('watch-run', onRun);
+    compiler.plugin('run', onRun);
 
     compiler.plugin('emit', (compilation, callback) => {
       const { memory } = this;
-
+      
       const assets = memory.getBundles()
         .map(({ filename, buffer }) => {
           return {
@@ -79,12 +80,6 @@ class Plugin {
           (htmlPluginData, callback) => {
             const { memory } = this;
             const bundlesPublicPaths = memory.getBundles().map(({ filename }) => publicPath(filename));
-
-            log('injecting scripts to', htmlPluginData.outputName);
-            
-            bundlesPublicPaths.forEach((bundleName) => {
-              log('injecting', bundleName);
-            });
 
             htmlPluginData.assets.js = concat(
               bundlesPublicPaths,

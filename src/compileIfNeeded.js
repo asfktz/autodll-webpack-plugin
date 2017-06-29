@@ -3,7 +3,7 @@ import isEqual from 'lodash/isEqual';
 import fs from './utils/fs';
 import { mkdirp } from './utils/index.js';
 import { cacheDir } from './paths';
-import { log, tapLog } from './utils/log';
+import createLogger from './utils/createLogger';
 import del from 'del';
 
 const isCacheValid = settings => {
@@ -30,8 +30,10 @@ const storeSettings = settings => () => {
 let counter = 0;
 
 const compileIfNeeded = (settings, getCompiler) => {
+  const log = createLogger(settings.debug);
+
   return isCacheValid(settings)
-    .then(tapLog(isValid => `is valid cache? ${isValid}`))
+    .then(log.tap(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
       if (isValid) return;
 
@@ -48,11 +50,11 @@ const compileIfNeeded = (settings, getCompiler) => {
 
       return (
         Promise.resolve()
-          .then(tapLog('cleanup'))
+          .then(log.tap('cleanup'))
           .then(cleanup)
-          .then(tapLog('compile'))
+          .then(log.tap('compile'))
           .then(compile)
-          .then(tapLog('write lastSettings.json'))
+          .then(log.tap('write lastSettings.json'))
           .then(storeSettings(settings))
       );
     });

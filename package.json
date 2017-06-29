@@ -1,16 +1,16 @@
 {
-  "name": "dll-creator",
-  "version": "1.0.0",
+  "name": "autodll-webpack-plugin",
+  "version": "0.0.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "dev": "babel-node src/index.js --inspect",
     "test": "tape -r babel-register specs/**/*.js | faucet",
     "test:inspect": "babel-node --inspect ./node_modules/.bin/tape specs/**/*.js",
     "build": "babel src --out-dir lib",
+    "build:watch": "babel src --out-dir lib --watch",
     "prepublish": "npm build"
   },
-  "author": "",
+  "author": "Asaf Katz",
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.5.0",
