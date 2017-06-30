@@ -14,7 +14,7 @@ You can see how impresive it is:
 | **PreDLL** | 6801ms | 7536ms | 1489ms | 1192ms | 816ms | 1248ms | 1226ms |
 | **PostDLL** | 2965ms | 2202ms | 633ms | 145ms | 222ms | 230ms | 241ms |
 
-## If the DllPlugin is so great, Why sould I use AutoDllPlugin?
+## If the DllPlugin is so great, Why should I use AutoDllPlugin?
 
 While the DllPlugin has many advances, its main drawback is that it requires a lot of boilerplate
 
