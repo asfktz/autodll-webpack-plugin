@@ -3,5 +3,4 @@
 logs
 *.log
 
-lib
 node_modules
