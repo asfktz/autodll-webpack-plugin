@@ -26,6 +26,8 @@ The next time you compile your code,  AutoDllPlugin will skip the build and read
 
 AutoDllPlugin will rebuild your DLLs every time you install or remove a node module, or change the Plugin's configuration.
 
+When using Webpack's Dev Server, the bundle are loaded into the memory, to prevent unnecessary reads from the FileSystem.
+
 The way that DLL works means that you have to load the DLL bundles somehow before your own bundle. That's commonly done by adding another script tag to the HTML.
 
 And Because that is such a common task, AutoDllPlugin can do it for you (in conjunction with the HtmlPlugin)
@@ -69,9 +71,8 @@ Will Result in:
 </html>
 ```
 
-The Plugin truly shines with Hot reloading
 
-## Basic Usage:
+## Basic Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/basic)):
 
 ./webpack.config.js
 ```js
@@ -126,7 +127,7 @@ module.exports = {
 ```
 
 
-## Recommended Usage:
+## Recommended Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/recommended)):
 
 ```js
 const webpack = require('webpack');
