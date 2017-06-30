@@ -27,8 +27,11 @@ The next time you compile your code,  AutoDllPlugin will skip the build and read
 
 AutoDllPlugin will also rebuild your DLLs every time you install or remove a node module, or change the Plugin's configuration.
 
-The way that DLL works means that you have to load it somehow before your bundle loads. That's commonly done by including in the HTML another script tag before your own
+The way that DLL works means that you have to load it somehow before your bundle loads. That's commonly done by including in the HTML another script tag before your own.
 
+And Because this is such a common task, AutoDllPlugin can do it for you (in conjunction with the HtmlPlugin), by setting `inject : true`
+
+The Plugin truly shines with Hot reloading
 
 ## Basic Usage:
 
