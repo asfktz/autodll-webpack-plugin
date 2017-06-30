@@ -12,7 +12,7 @@ const getBundles = (mfs) => {
 };
 
 export const createMemory = (fs, cacheDir) => () => {
-  const mfs = new MemoryFileSystem();  
+  const mfs = new MemoryFileSystem();
 
   return fs.readdirAsync(path.join(cacheDir, 'bundles'))
     .catch(() => [])
@@ -21,7 +21,7 @@ export const createMemory = (fs, cacheDir) => () => {
       fs.readFileAsync(path.join(cacheDir, 'bundles', filename)))
     )
     .map(([filename, buffer]) => {
-      mfs.writeFileSync(`/${filename}`,buffer);
+      mfs.writeFileSync(`/${filename}`, buffer);
     })
     .then(() => ({
       getBundles: getBundles.bind(null, mfs)
