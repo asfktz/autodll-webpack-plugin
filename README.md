@@ -28,7 +28,28 @@ AutoDllPlugin will rebuild your DLLs every time you install or remove a node mod
 
 The way that DLL works means that you have to load the DLL bundles somehow before your own bundle. That's commonly done by adding another script tag to the HTML.
 
-And Because that is such a common task, AutoDllPlugin can do it for you (in conjunction with the HtmlPlugin), by setting `inject : true`
+And Because that is such a common task, AutoDllPlugin can do it for you (in conjunction with the HtmlPlugin)
+
+```js
+plugins: [
+  new HtmlWebpackPlugin({
+    inject: true,
+    template: './src/index.html',
+  }),
+  new AutoDllPlugin({
+    inject: true, // will inject the DLL bundles to index.html
+    context: __dirname,
+    filename: '[name]_[hash].js',
+    entry: {
+      vendor: [
+        'react',
+        'react-dom',
+        'moment'
+      ]
+    }
+  })
+]
+```
 
 The Plugin truly shines with Hot reloading
 
