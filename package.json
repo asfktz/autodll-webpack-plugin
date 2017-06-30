@@ -8,7 +8,7 @@
     "test:inspect": "babel-node --inspect ./node_modules/.bin/tape specs/**/*.js",
     "build": "babel src --out-dir lib",
     "build:watch": "babel src --out-dir lib --watch",
-    "prepublish": "npm build"
+    "prepublish": "npm run build"
   },
   "author": "Asaf Katz",
   "license": "ISC",
