@@ -51,6 +51,24 @@ plugins: [
 ]
 ```
 
+Will Result in:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test</title>
+</head>
+<body>
+  
+  ...
+  
+  <script src="dist/vendor.dll.js"></script>
+  <script src="dist/main.bundle.js"></script>
+</body>
+</html>
+```
+
 The Plugin truly shines with Hot reloading
 
 ## Basic Usage:
