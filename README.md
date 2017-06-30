@@ -1,9 +1,9 @@
 ## What
 Webpack's own DllPlugin it great, it can drastically reduce the amount of time needed to build (and rebuild) your bundles by reducing the amount of work needs to be done.
 
-If you think about it, most of the code in your bundles comes from modules you've download from NPM and that you're probobly no going to change. you know that, but webpack don't. so every time it compile's your bundles it has to analyze and build them too. and that's take time.
+If you think about it, most of the code in your bundles comes from NPM modules that you're rarely going to touch. you know that, but webpack don't. so every time it compile's your bundles it has to analyze and build them too, and that's take time.
 
-What the DllPlugin does it allowing you to create a separate bundle of modules you're rarely going to touch and tell webpack to read these modules from that bundle instead. 
+What the DllPlugin does is allowing you to create a separate bundle of modules you're not planing to change and tell webpack to read these modules from that bundle instead. 
 
 And to quotes someone else's numbers for a project that imports: <br>
 react, react-dom, redux, react-redux, lodash, react-bootstrap, immutable, redux-saga, reselect, babel-polyfill, react-router
