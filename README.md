@@ -74,7 +74,6 @@ Will Result in:
 
 ## Basic Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/basic)):
 
-./webpack.config.js
 ```js
 const webpack = require('webpack');
 const path = require('path');
@@ -105,27 +104,6 @@ module.exports = {
   ]
 };
 ```
-
-./index.html
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>AutoDllPlugin Test</title>
-</head>
-<body>
-  
-  ...
-  
-  <!-- Add the dll bundles before your app's bundle  -->
-  <script src="dist/vendor.dll.js"></script>
-  <script src="dist/app.bundle.js"></script>
-</body>
-</html>
-```
-
 
 ## Recommended Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/recommended)):
 
@@ -164,3 +142,11 @@ module.exports = {
   ]
 };
 ```
+
+
+## Running Examples
+
+1. `git clone https://github.com/asfktz/autodll-webpack-plugin`
+2. `cd examples/recommended`
+3. `npm install`
+3. `npm start` or `npm run build`
