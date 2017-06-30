@@ -16,20 +16,19 @@ You can see how impresive it is:
 
 ## If the DllPlugin is so great, Why sould I use AutoDllPlugin?
 
-While the DllPlugin has many advances, its main drawback it that it requires a lot of boilerplate
+While the DllPlugin has many advances, its main drawback is that it requires a lot of boilerplate
 
-What the AutoDllPlugin do it hides away all of that complexity,
-every time you build
+AutoDllPlugin serves as a high-level plugin for both the DllPlugin and the DllReferencePlugin, and hides away most of their complexity.
 
-When you build your bundle for the first time, the AutoDllPlugin will Compiles the DLL for you, and reference all the specified modules from your bundle to the DLL bundle.
+When you build your bundle for the first time, the AutoDllPlugin Compiles the DLL for you, and reference all the specified modules from your bundle to the DLL.
 
-The next time you compile your code,  AutoDllPlugin will skip the build and read it from the cache instead.
+The next time you compile your code,  AutoDllPlugin will skip the build and read from the cache instead.
 
-AutoDllPlugin will also rebuild your DLLs every time you install or remove a node module, or change the Plugin's configuration.
+AutoDllPlugin will rebuild your DLLs every time you install or remove a node module, or change the Plugin's configuration.
 
-The way that DLL works means that you have to load it somehow before your bundle loads. That's commonly done by including in the HTML another script tag before your own.
+The way that DLL works means that you have to load the DLL bundles somehow before your own bundle. That's commonly done by adding another script tag to the HTML.
 
-And Because this is such a common task, AutoDllPlugin can do it for you (in conjunction with the HtmlPlugin), by setting `inject : true`
+And Because that is such a common task, AutoDllPlugin can do it for you (in conjunction with the HtmlPlugin), by setting `inject : true`
 
 The Plugin truly shines with Hot reloading
 
