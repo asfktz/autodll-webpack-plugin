@@ -21,8 +21,15 @@ export default () => {
   return (
     <div>
       <h1>AutoDllPlugin Performance Test</h1>
-      <p>Try to this dfdf</p>
-      <p>then, go to webpack.config.js</p>
+      <p>
+        1. Open ./src/App.js and change this Text to see how long it takes for webpack to build when AutoDllPlugin is activated.
+      </p>
+      <p>
+        2. Then go to ./webpack.config.js, remove the Plugin, and try again.
+      </p>
+      <p>
+        Note: Look for the word "Time:" in your terminal output, to see long each build took.
+      </p>
     </div>
   )
 };

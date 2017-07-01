@@ -34,7 +34,6 @@ module.exports = {
   },
 
   plugins: [
-    // uncomment the plugin to see it in action
     new AutoDllPlugin({
       debug: true,
       inject: true,
