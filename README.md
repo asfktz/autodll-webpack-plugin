@@ -6,8 +6,8 @@ The DllPlugin allows you to to create in advance a separate bundle for all of th
 
 That lead to a dramatic reduction in the amount of time takes Webpack to build your bundles.
 
+For example, these are the measurements for the  [performance test](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/performance) that you can find in the [examples](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples) folder:
 
-Without DllPlugin
 
 |                   | **Build Time**    | **DevServer Rebuild** |
 |-------------------|-------------------|-----------------------|
