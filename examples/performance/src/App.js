@@ -22,7 +22,7 @@ export default () => {
     <div>
       <h1>AutoDllPlugin Performance Test</h1>
       <p>
-        1. Open ./src/App.js and change this Text to see how long it takes for webpack to build when AutoDllPlugin is activated.
+        1. Open ./src/App.js and change this Text to see how long it takes for webpack to build when AutoDllPlugin is active.
       </p>
       <p>
         2. Then go to ./webpack.config.js, remove the Plugin, and try again.
