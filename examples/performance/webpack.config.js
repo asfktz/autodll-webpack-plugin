@@ -34,12 +34,8 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: './src/index.html',
-    })
-    ,new AutoDllPlugin({
+    // uncomment the plugin to see it in action
+    new AutoDllPlugin({
       debug: true,
       inject: true,
       context: __dirname,
@@ -68,6 +64,11 @@ module.exports = {
           'pixi.js'
         ]
       }
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: './src/index.html',
     })
   ]
 };
