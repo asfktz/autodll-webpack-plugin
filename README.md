@@ -2,17 +2,20 @@ Webpack's own DllPlugin it great, it can drastically reduce the amount of time n
 
 If you think about it, most of the code in your bundles come from NPM modules that you're rarely going to touch. You know that, but Webpack doesn't. So every time it compiles it has to analyze and build them too - and that takes time.
 
-The DllPlugin allows you to to create in advance a separate bundle for all of those modules, and teach Webpack to read them from that bundle instead. 
+The DllPlugin allows you to to create in advance a separate bundle for all of those modules, and teach Webpack to reference them to that bundle instead. 
 
-And if I may quote someone else's numbers for a project that requires: <br>
-react, react-dom, redux, react-redux, lodash, react-bootstrap, immutable, redux-saga, reselect, babel-polyfill, react-router
+That lead to a dramatic reduction in the amount of time takes Webpack to build your bundles.
 
-You can see how impresive it is:
 
-| Commit | First build | second build | Rebuild 1 | Rebuild 2 | Rebuild 3 | File 2 | File 2 RB |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **PreDLL** | 6801ms | 7536ms | 1489ms | 1192ms | 816ms | 1248ms | 1226ms |
-| **PostDLL** | 2965ms | 2202ms | 633ms | 145ms | 222ms | 230ms | 241ms |
+Without DllPlugin
+
+|                   | **Build Time**    | **DevServer Rebuild** |
+|-------------------|-------------------|-----------------------|
+| **Without DllPlugin** | 16461ms - 17310ms | 2991ms - 3505ms       |
+| **With DllPlugin**    | 2924ms - 2997ms   | 316ms - 369ms         |
+
+
+
 
 ## The DllPlugin sounds great! So why AutoDllPlugin?
 
