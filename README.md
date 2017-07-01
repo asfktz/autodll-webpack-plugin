@@ -15,12 +15,10 @@ That lead to a dramatic reduction in the amount of time takes Webpack to build y
 
 For example, these are the measurements for the  [performance test](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/performance) that you can find in the [examples](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples) folder:
 
-
-|                   | **Build Time**    | **DevServer Rebuild** |
+|                   |  **Without DllPlugin**  | **With DllPlugin** |
 |-------------------|-------------------|-----------------------|
-| **Without DllPlugin** | 16461ms - 17310ms | 2991ms - 3505ms       |
-| **With DllPlugin**    | 2924ms - 2997ms   | 316ms - 369ms         |
-
+| **Build Time** | 16461ms - 17310ms | 2991ms - 3505ms |
+| **DevServer Rebuild** | 2924ms - 2997ms | 316ms - 369ms |
 
 
 
