@@ -156,7 +156,7 @@ module.exports = {
 
 ## Running Examples
 
-1. `git clone https://github.com/asfktz/autodll-webpack-plugin`
+1. `git clone git@github.com:asfktz/autodll-webpack-plugin.git`
 2. `cd examples/recommended`
 3. `npm install`
 3. `npm start` or `npm run build`
