@@ -1,3 +1,8 @@
+# AutoDllPlugin
+Webpack's DllPlugin without the boilerplate
+
+---
+
 Webpack's own DllPlugin it great, it can drastically reduce the amount of time needed to build (and rebuild) your bundles by reducing the amount of work needs to be done.
 
 If you think about it, most of the code in your bundles come from NPM modules that you're rarely going to touch. You know that, but Webpack doesn't. So every time it compiles it has to analyze and build them too - and that takes time.
