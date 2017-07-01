@@ -1,8 +1,7 @@
 import test from 'tape';
-import { createConfig } from '../src/createCompiler';
+import createConfig from '../src/createConfig';
 import { cacheDir } from '../src/paths';
 import path from 'path';
-
 
 test('createConfig', (t) => {
   const filename = '[name].[hash].js';

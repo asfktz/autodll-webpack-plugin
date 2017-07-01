@@ -1,25 +1,36 @@
-import defaults from 'lodash/defaults';
 import { DllReferencePlugin } from 'webpack';
 import path from 'path';
 
 import compileIfNeeded from './compileIfNeeded';
 import createCompiler from './createCompiler';
-import { getManifestPath, cacheDir } from './paths';
+import { cacheDir } from './paths';
 import { concat, merge, keys } from './utils/index.js';
-import createLogger from './utils/createLogger';
+import normalizeEntry from './normalizeEntry';
+import createLogger from './createLogger';
 
 import createMemory from './createMemory';
 
+export const getManifestPath = bundleName =>
+  path.resolve(cacheDir, `${bundleName}.manifest.json`);
+
+export const createSettings = ({ entry, ...settings }) => {
+  const defaults = {
+    context: __dirname,
+    path: '',
+    entry: null,
+    filename: '[name].js',
+    inject: false,
+    debug: false
+  };
+
+  return merge(defaults, settings, {
+    entry: normalizeEntry(entry)
+  });
+};
+
 class Plugin {
   constructor(settings) {
-    this.settings = defaults(settings, {
-      context: __dirname,
-      path: '',
-      entry: {},
-      filename: '[name].js',
-      inject: false,
-      debug: false
-    });
+    this.settings = createSettings(settings);
   }
 
   apply(compiler) {
@@ -49,7 +60,7 @@ class Plugin {
             this.memory = memory;
           })
         )    
-        .then(log.tap('initialized'))
+        // .then(log.tap('initialized'))
         .then(callback)
     );
 

@@ -29,12 +29,18 @@ module.exports = {
     ]
   },
 
+  devServer: {
+    hot: true
+  },
+
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       inject: true,
       template: './src/index.html',
     })
     ,new AutoDllPlugin({
+      debug: true,
       inject: true,
       context: __dirname,
       filename: '[name]_[hash].js',

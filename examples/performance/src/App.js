@@ -17,14 +17,13 @@ import ReactRouterDom from 'react-router-dom';
 import redux from 'redux';
 import styled from 'styled-components';
 
-const App = () => {
+export default () => {
   return (
     <div>
       <h1>AutoDllPlugin Performance Test</h1>
-      <p>Try to this text.</p>
+      <p>Try to this dfdf</p>
       <p>then, go to webpack.config.js</p>
     </div>
   )
 };
 
-ReactDOM.render(<App/>, document.getElementById('root'));

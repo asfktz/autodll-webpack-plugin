@@ -1,7 +1,7 @@
 import isFunction from 'lodash/isFunction';
 
 const log = (msg) => {
-  console.log('autoDll:', msg);
+  console.log('AutoDllPlugin:', msg);
 };
 
 log.tap = (msg) => res => {
