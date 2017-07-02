@@ -9,9 +9,9 @@ Webpack's own DllPlugin it great, it can drastically reduce the amount of time n
 
 If you think about it, most of the code in your bundles come from NPM modules that you're rarely going to touch. You know that, but Webpack doesn't. So every time it compiles it has to analyze and build them too - and that takes time.
 
-The DllPlugin allows you to to create in advance a separate bundle for all of those modules, and teach Webpack to reference them to that bundle instead. 
+The DllPlugin allows you to to create a separate bundle in advance for all of those modules, and teach Webpack to reference them to that bundle instead. 
 
-That lead to a dramatic reduction in the amount of time takes Webpack to build your bundles.
+That leads to a dramatic reduction in the amount of time takes Webpack to build your bundles.
 
 For example, these are the measurements for the  [performance test](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/performance) that you can find in the [examples](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples) folder:
 
@@ -24,21 +24,21 @@ For example, these are the measurements for the  [performance test](https://gith
 
 ## The DllPlugin sounds great! So why AutoDllPlugin?
 
-While the DllPlugin has many advances, its main drawback is that it requires a lot of boilerplate
+While the DllPlugin has many advantages, its main drawback is that it requires a lot of boilerplate.
 
 AutoDllPlugin serves as a high-level plugin for both the DllPlugin and the DllReferencePlugin, and hides away most of their complexity.
 
-When you build your bundle for the first time, the AutoDllPlugin Compiles the DLL for you, and reference all the specified modules from your bundle to the DLL.
+When you build your bundle for the first time, the AutoDllPlugin Compiles the DLL for you, and references all the specified modules from your bundle to the DLL.
 
 The next time you compile your code,  AutoDllPlugin will skip the build and read from the cache instead.
 
-AutoDllPlugin will rebuild your DLLs every time you install or remove a node module, or change the Plugin's configuration.
+AutoDllPlugin will rebuild your DLLs every time you change the Plugin's configuration, install or remove a node module.
 
-When using Webpack's Dev Server, the bundle are loaded into the memory, to prevent unnecessary reads from the FileSystem.
+When using Webpack's Dev Server, the bundle are loaded into the memory preventing unnecessary reads from the FileSystem.
 
-The way that DLL works means that you have to load the DLL bundles somehow before your own bundle. That's commonly done by adding another script tag to the HTML.
+With the way the DLLPlugin works, you must load the DLL bundles before your own bundle. This is commonly accomplished by adding an additional script tag to the HTML.
 
-And Because that is such a common task, AutoDllPlugin can do it for you (in conjunction with the HtmlPlugin)
+Because that is such a common task, AutoDllPlugin can do this for you (in conjunction with the HtmlPlugin ).
 
 ```js
 plugins: [
