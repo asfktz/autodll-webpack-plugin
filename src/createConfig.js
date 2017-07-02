@@ -2,7 +2,9 @@ import webpack from 'webpack';
 import path from 'path';
 import { cacheDir } from './paths';
 
-const createConfig = ({ filename, entry, plugins = [] }) => {
+const createConfig = ({ filename, entry, plugins }) => {
+  plugins = plugins || [];
+
   return {
     resolve: {
       extensions: ['.js', '.jsx']
