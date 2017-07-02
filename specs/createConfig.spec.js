@@ -2,6 +2,7 @@ import test from 'tape';
 import createConfig from '../src/createConfig';
 import { cacheDir } from '../src/paths';
 import path from 'path';
+import webpack from 'webpack';
 
 test('createConfig', (t) => {
   const filename = '[name].[hash].js';
@@ -9,7 +10,14 @@ test('createConfig', (t) => {
     vendor: ['react', 'react-dom']
   };
 
-  const results = createConfig({ filename, entry });
+  const plugins = [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: true,
+    }),
+  ];
+
+  const results = createConfig({ filename, entry, plugins });
+
   const expected = {
     resolve: {
       extensions: [
@@ -28,6 +36,11 @@ test('createConfig', (t) => {
         options: {
           path: path.join(cacheDir, '/[name].manifest.json'),
           name: '[name]_[hash]'
+        }
+      },
+      {
+        options: {
+          compress: true,
         }
       }
     ]

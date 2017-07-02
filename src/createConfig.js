@@ -2,7 +2,7 @@ import webpack from 'webpack';
 import path from 'path';
 import { cacheDir } from './paths';
 
-const createConfig = ({ filename, entry }) => {
+const createConfig = ({ filename, entry, plugins = [] }) => {
   return {
     resolve: {
       extensions: ['.js', '.jsx']
@@ -18,7 +18,7 @@ const createConfig = ({ filename, entry }) => {
         path: path.join(cacheDir, '[name].manifest.json'),
         name: '[name]_[hash]'
       })
-    ]
+    ].concat(plugins)
   };
 };
 
