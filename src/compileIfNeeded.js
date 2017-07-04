@@ -43,18 +43,23 @@ export const compile = (settings, getCompiler) => () => {
 };
 
 const getContents = watchPath => {
-  if (fs.existsSync(watchPath)) {
-    if (fs.lstatSync(watchPath).isDirectory()) {
-      if (watchPath.startsWith(cacheDir)) {
-        return '';
+  try {
+    if (fs.existsSync(watchPath)) {
+      if (fs.lstatSync(watchPath).isDirectory()) {
+        if (watchPath.startsWith(cacheDir)) {
+          return '';
+        }
+        return fs
+          .readdirSync(watchPath)
+          .map(p => getContents(path.join(watchPath, p)))
+          .join('');
+      } else {
+        return fs.readFileSync(watchPath, 'utf-8');
       }
-      return fs
-        .readdirSync(watchPath)
-        .map(p => getContents(path.join(watchPath, p)))
-        .join('');
-    } else {
-      return fs.readFileSync(watchPath, 'utf-8');
     }
+  } catch (e) {
+    //Failed to read file, fallback to string
+    return ''; 
   }
 };
 
@@ -65,11 +70,7 @@ export const getHash = settings => {
   hash.update(settingsJSON);
 
   if (Array.isArray(settings.watch)) {
-    hash.update(
-      settings.watch.map(getContents).reduce((str, content) => {
-        return (str += content);
-      }, '')
-    );
+    hash.update(settings.watch.map(getContents).join(''));
   }
   return hash.digest('hex');
 };
