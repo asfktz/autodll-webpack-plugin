@@ -48,13 +48,13 @@ test('compileIfNeeded: should generate files', (t) => {
   ));
 
   compileIfNeeded(settings, () => createCompiler(settings))
-  .then(() => recursive(cacheDir))
-  .then((files) => {
-    t.same(expected.sort(), files.sort());
+    .then(() => recursive(cacheDir))
+    .then((files) => {
+      t.same(expected.sort(), files.sort());
     
-    cleanup();
-    t.end();
-  });
+      cleanup();
+      t.end();
+    });
 });
 
 
@@ -84,8 +84,7 @@ test('compileIfNeeded: should skip when settings equals lastSettings.json', (t) 
       return compileIfNeeded(settings, () => {
         _compiler = createCompilerSpy(settings);
         return _compiler;
-      })
-      .then(() => {
+      }).then(() => {
         t.is(_compiler.run.called, true, 'Should call getCompiler the first time');
       });
     })
@@ -96,8 +95,7 @@ test('compileIfNeeded: should skip when settings equals lastSettings.json', (t) 
       return compileIfNeeded(settings, () => {
         _compiler = createCompilerSpy(settings);
         return _compiler;
-      })
-      .then(() => {
+      }).then(() => {
         t.is(_compiler, 'NEVER_CREATED', 'Should NOT call the getCompiler the second time');
       });
     }) 

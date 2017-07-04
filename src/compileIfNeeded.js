@@ -81,15 +81,12 @@ const compileIfNeeded = (settings, getCompiler) => {
     .then(isValid => {
       if (isValid) return;
 
-      return (
-        Promise.resolve()
-          .then(log.tap('cleanup'))
-          .then(cleanup)
-          .then(log.tap('compile'))
-          .then(compile(settings, getCompiler))
-          // .then(log.tap('write lastSettings.json'))
-          .then(storeHash(currentHash))
-      );
+      return Promise.resolve()
+        .then(log.tap('cleanup'))
+        .then(cleanup)
+        .then(log.tap('compile'))
+        .then(compile(settings, getCompiler))
+        .then(storeHash(currentHash));
     });
 };
 

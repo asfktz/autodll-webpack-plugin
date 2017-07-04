@@ -6,7 +6,6 @@ import createCompiler from './createCompiler';
 import { cacheDir } from './paths';
 import { concat, merge, keys } from './utils/index.js';
 import normalizeEntry from './normalizeEntry';
-import createLogger from './createLogger';
 
 import createMemory from './createMemory';
 
@@ -35,7 +34,6 @@ class Plugin {
 
   apply(compiler) {
     const { context, inject, entry, path: outputPath } = this.settings;
-    const log = createLogger(this.settings.debug);
     
     const publicPath = (filename) => path.join(outputPath, filename);
 
@@ -60,7 +58,6 @@ class Plugin {
             this.memory = memory;
           })
         )    
-        // .then(log.tap('initialized'))
         .then(callback)
     );
 

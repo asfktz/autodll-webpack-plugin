@@ -11,8 +11,8 @@ log.tap = (msg) => res => {
 
 const createLogger = showLogs => {
   if (!showLogs) {
-    const log = function () {};
-    log.tap   = function () {};
+    const log = () => {};
+    log.tap   = () => res => res;
     return log;
   }
 
