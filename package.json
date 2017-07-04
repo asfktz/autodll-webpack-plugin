@@ -30,6 +30,8 @@
     "babel-preset-env": "^1.5.2",
     "babel-preset-stage-3": "^6.24.1",
     "del-cli": "^1.1.0",
+    "eslint": "^4.1.1",
+    "eslint-plugin-react": "^7.1.0",
     "faucet": "^0.0.1",
     "recursive-readdir": "^2.2.1",
     "spy": "^1.0.0",
