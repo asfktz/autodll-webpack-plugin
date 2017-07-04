@@ -8,4 +8,4 @@ const Test = createElement('div', {}, [
   createElement('p', {}, [ moment().format('LLLL') ])
 ]);
 
-ReactDOM.render(Test, document.getElementById('root'))
+ReactDOM.render(Test, document.getElementById('root'));
