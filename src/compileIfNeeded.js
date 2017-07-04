@@ -6,12 +6,13 @@ import { mkdirp } from './utils/index.js';
 import { cacheDir } from './paths';
 import createLogger from './createLogger';
 import del from 'del';
-
 const HASH_FILENAME = 'lastHash';
 
 const isCacheValid = newHash => {
   return mkdirp(cacheDir)
-    .then(() => fs.readFileAsync(path.resolve(cacheDir, HASH_FILENAME), 'utf-8'))
+    .then(() =>
+      fs.readFileAsync(path.resolve(cacheDir, HASH_FILENAME), 'utf-8')
+    )
     .then(lastHash => {
       return lastHash === newHash;
     })
@@ -40,6 +41,22 @@ export const compile = (settings, getCompiler) => () => {
   });
 };
 
+const getContents = watchPath => {
+  if (fs.existsSync(watchPath)) {
+    if (fs.lstatSync(watchPath).isDirectory()) {
+      if (watchPath.startsWith(cacheDir)) {
+        return '';
+      }
+      return fs
+        .readdirSync(watchPath)
+        .map(p => getContents(path.join(watchPath, p)))
+        .join('');
+    } else {
+      return fs.readFileSync(watchPath, 'utf-8');
+    }
+  }
+};
+
 export const getHash = settings => {
   const hash = crypto.createHash('md5');
   const settingsJSON = JSON.stringify(settings);
@@ -48,19 +65,9 @@ export const getHash = settings => {
 
   if (Array.isArray(settings.watch)) {
     hash.update(
-      settings.watch
-        .map(watchPath => {
-          if (fs.existsSync(watchPath)) {
-            if (fs.lstatSync(watchPath).isDirectory()) {
-              return ''; //TODO: hash the content of directory
-            } else {
-              return fs.readFileSync(watchPath, 'utf-8');
-            }
-          }
-        })
-        .reduce((str, content) => {
-          return (str += content);
-        }, '')
+      settings.watch.map(getContents).reduce((str, content) => {
+        return (str += content);
+      }, '')
     );
   }
   return hash.digest('hex');
