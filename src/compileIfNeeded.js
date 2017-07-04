@@ -1,5 +1,5 @@
 import path from 'path';
-import isEqual from 'lodash/isEqual';
+import crypto from 'crypto';
 import isEmpty from 'lodash/isEmpty';
 import fs from './utils/fs';
 import { mkdirp } from './utils/index.js';
@@ -7,12 +7,13 @@ import { cacheDir } from './paths';
 import createLogger from './createLogger';
 import del from 'del';
 
-const isCacheValid = settings => {
+const HASH_FILENAME = 'lastHash';
+
+const isCacheValid = newHash => {
   return mkdirp(cacheDir)
-    .then(() => fs.readFileAsync(path.resolve(cacheDir, 'lastSettings.json')))
-    .then(file => {
-      let lastSettings = JSON.parse(file);
-      return isEqual(lastSettings, settings);
+    .then(() => fs.readFileAsync(path.resolve(cacheDir, HASH_FILENAME), 'utf-8'))
+    .then(lastHash => {
+      return lastHash === newHash;
     })
     .catch(() => {
       return false;
@@ -21,11 +22,8 @@ const isCacheValid = settings => {
 
 const cleanup = () => del(path.join(cacheDir, '**/*'));
 
-const storeSettings = settings => () => {
-  return fs.writeFileAsync(
-    path.resolve(cacheDir, 'lastSettings.json'),
-    JSON.stringify(settings)
-  );
+const storeHash = hash => () => {
+  return fs.writeFileAsync(path.resolve(cacheDir, HASH_FILENAME), hash);
 };
 
 export const compile = (settings, getCompiler) => () => {
@@ -34,16 +32,44 @@ export const compile = (settings, getCompiler) => () => {
 
   return new Promise((resolve, reject) => {
     getCompiler().run((err, stats) => {
-      if (err) { return reject(err); }
+      if (err) {
+        return reject(err);
+      }
       resolve(stats);
     });
   });
 };
 
+export const getHash = settings => {
+  const hash = crypto.createHash('md5');
+  const settingsJSON = JSON.stringify(settings);
+
+  hash.update(settingsJSON);
+
+  if (Array.isArray(settings.watch)) {
+    hash.update(
+      settings.watch
+        .map(watchPath => {
+          if (fs.existsSync(watchPath)) {
+            if (fs.lstatSync(watchPath).isDirectory()) {
+              return ''; //TODO: hash the content of directory
+            } else {
+              return fs.readFileSync(watchPath, 'utf-8');
+            }
+          }
+        })
+        .reduce((str, content) => {
+          return (str += content);
+        }, '')
+    );
+  }
+  return hash.digest('hex');
+};
+
 const compileIfNeeded = (settings, getCompiler) => {
   const log = createLogger(settings.debug);
-      
-  return isCacheValid(settings)
+  const currentHash = getHash(settings);
+  return isCacheValid(currentHash)
     .then(log.tap(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
       if (isValid) return;
@@ -55,7 +81,7 @@ const compileIfNeeded = (settings, getCompiler) => {
           .then(log.tap('compile'))
           .then(compile(settings, getCompiler))
           // .then(log.tap('write lastSettings.json'))
-          .then(storeSettings(settings))
+          .then(storeHash(currentHash))
       );
     });
 };
