@@ -6,7 +6,8 @@ import { mkdirp } from './utils/index.js';
 import { cacheDir } from './paths';
 import createLogger from './createLogger';
 import del from 'del';
-const HASH_FILENAME = 'lastHash';
+
+export const HASH_FILENAME = 'lastHash';
 
 const isCacheValid = newHash => {
   return mkdirp(cacheDir)
