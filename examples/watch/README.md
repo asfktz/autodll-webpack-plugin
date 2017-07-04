@@ -1,9 +1,9 @@
-# AutoDllPlugin Performance Test
+# AutoDllPlugin Watch Test
 
 ### How to install
 
 1. `git clone git@github.com:asfktz/autodll-webpack-plugin.git`
-2. `cd examples/performance`
+2. `cd examples/watch`
 3. `npm install`
 4. `npm run`
 5. `open http://localhost:8080`
