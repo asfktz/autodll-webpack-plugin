@@ -10,12 +10,8 @@ import del from 'del';
 const isCacheValid = newHash => {
   return mkdirp(cacheDir)
     .then(() => fs.statAsync(path.resolve(cacheDir, newHash)))
-    .then(() => {
-      return true;
-    })
-    .catch(() => {
-      return false;
-    });
+    .then(() => true)
+    .catch(() => false);
 };
 
 const cleanup = settings =>
