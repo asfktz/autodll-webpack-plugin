@@ -12,6 +12,10 @@
   },
   "author": "Asaf Katz",
   "license": "ISC",
+  "files": [
+    "src",
+    "lib"
+  ],
   "dependencies": {
     "bluebird": "^3.5.0",
     "chalk": "^1.1.3",
