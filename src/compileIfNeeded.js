@@ -21,13 +21,12 @@ const isCacheValid = newHash => {
 const cleanup = settings =>
   fs
     .readdirSync(cacheDir)
-    .map(file => file.split('_'))
     .filter(
       identifiers =>
         identifiers.includes(settings.id) &&
         identifiers.includes(settings.nodeEnv)
     )
-    .map(p => del(path.join(cacheDir, p.join('_'))));
+    .forEach(p => del(path.join(cacheDir, p)));
 
 const storeHash = hash => stats => {
   return fs.writeFileAsync(path.resolve(cacheDir, hash), stats.toString());
