@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
