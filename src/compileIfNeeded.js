@@ -7,25 +7,30 @@ import { cacheDir } from './paths';
 import createLogger from './createLogger';
 import del from 'del';
 
-export const HASH_FILENAME = 'lastHash';
-
 const isCacheValid = newHash => {
   return mkdirp(cacheDir)
-    .then(() =>
-      fs.readFileAsync(path.resolve(cacheDir, HASH_FILENAME), 'utf-8')
-    )
-    .then(lastHash => {
-      return lastHash === newHash;
+    .then(() => fs.statAsync(path.resolve(cacheDir, newHash)))
+    .then(() => {
+      return true;
     })
     .catch(() => {
       return false;
     });
 };
 
-const cleanup = () => del(path.join(cacheDir, '**/*'));
+const cleanup = settings =>
+  fs
+    .readdirSync(cacheDir)
+    .map(file => file.split('_'))
+    .filter(
+      identifiers =>
+        identifiers.includes(settings.id) &&
+        identifiers.includes(settings.nodeEnv)
+    )
+    .map(p => del(path.join(cacheDir, p.join('_'))));
 
-const storeHash = hash => () => {
-  return fs.writeFileAsync(path.resolve(cacheDir, HASH_FILENAME), hash);
+const storeHash = hash => stats => {
+  return fs.writeFileAsync(path.resolve(cacheDir, hash), stats.toString());
 };
 
 export const compile = (settings, getCompiler) => () => {
@@ -59,7 +64,7 @@ const getContents = watchPath => {
     }
   } catch (e) {
     //Failed to read file, fallback to string
-    return ''; 
+    return '';
   }
 };
 
@@ -72,7 +77,7 @@ export const getHash = settings => {
   if (Array.isArray(settings.watch)) {
     hash.update(settings.watch.map(getContents).join(''));
   }
-  return hash.digest('hex');
+  return [settings.nodeEnv, settings.id, hash.digest('hex')].join('_');
 };
 
 const compileIfNeeded = (settings, getCompiler) => {
@@ -83,7 +88,7 @@ const compileIfNeeded = (settings, getCompiler) => {
     .then(isValid => {
       if (isValid) return;
 
-      return Promise.resolve()
+      return Promise.resolve(settings)
         .then(log.tap('cleanup'))
         .then(cleanup)
         .then(log.tap('compile'))

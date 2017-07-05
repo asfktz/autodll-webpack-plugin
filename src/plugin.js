@@ -9,11 +9,15 @@ import normalizeEntry from './normalizeEntry';
 
 import createMemory from './createMemory';
 
+let counter = 0;
+
 export const getManifestPath = bundleName =>
   path.resolve(cacheDir, `${bundleName}.manifest.json`);
 
 export const createSettings = ({ entry, ...settings }) => {
   const defaults = {
+    nodeEnv: process.env.NODE_ENV || 'development',
+    id: `instance${counter++}`,
     context: __dirname,
     path: '',
     entry: null,
