@@ -1,4 +1,4 @@
-# AutoDllPlugin Watch Test
+# AutoDllPlugin Watch Example
 
 ### How to install
 
@@ -11,7 +11,10 @@
 
 ### How to use
 
-1. Open `./src/App.js` and change the Text to see how long it takes for webpack to build when AutoDllPlugin is active.
-2. Then go to `./webpack.config.js`, remove the Plugin, and try again.
-
-Note: Look for the word "Time:" in your terminal output, to see long each build took.
+1. Close devServer using ctrl + C
+2. Rerun the devServer using `npm start` to verify that cache is working
+3. Modify something in node_modules or package.json
+4. Close devServer using ctrl + C
+5. Rerun devServer using `npm start`
+6. You'll see that DLL is recompiling, cache is invalidated, and your changes should be included in the DLL bundle.
+7. Repeat
