@@ -1,6 +1,6 @@
 import test from 'tape';
 import spy from 'spy';
-import compileIfNeeded, { compile, HASH_FILENAME } from '../src/compileIfNeeded';
+import compileIfNeeded, { compile, getHash } from '../src/compileIfNeeded';
 import createCompiler from '../src/createCompiler';
 import { createSettings } from '../src/plugin';
 import path from 'path';
@@ -40,7 +40,7 @@ test('compileIfNeeded: should generate files', (t) => {
   });
 
   const expected = [
-    HASH_FILENAME,
+    getHash(settings),
     'vendor.manifest.json',
     'bundles/vendor.js'
   ].map((file) => (
