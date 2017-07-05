@@ -4,8 +4,8 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "tape -r babel-register specs/**/*.js | faucet",
-    "test:inspect": "babel-node --inspect ./node_modules/.bin/tape specs/**/*.js",
+    "test": "tape -r babel-register specs/**/*.spec.js | faucet",
+    "test:inspect": "babel-node --inspect ./node_modules/.bin/tape specs/**/*.spec.js",
     "build": "del-cli ./lib && babel src --out-dir lib",
     "build:watch": "babel src --out-dir lib --watch",
     "prepublishOnly": "npm run build"
