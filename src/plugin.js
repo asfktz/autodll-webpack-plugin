@@ -3,7 +3,7 @@ import path from 'path';
 
 import compileIfNeeded from './compileIfNeeded';
 import createCompiler from './createCompiler';
-import { cacheDir } from './paths';
+import { cacheDir, createGetPublicPath } from './paths';
 import { concat, merge, keys } from './utils/index.js';
 import normalizeEntry from './normalizeEntry';
 
@@ -33,9 +33,12 @@ class Plugin {
   }
 
   apply(compiler) {
-    const { context, inject, entry, path: outputPath } = this.settings;
+    const { context, inject, entry } = this.settings;
     
-    const publicPath = (filename) => path.join(outputPath, filename);
+    const getPublicPath = createGetPublicPath(
+      compiler.options,
+      this.settings.path
+    );
 
     keys(entry).map(getManifestPath)
       .forEach(manifestPath => {
@@ -69,8 +72,10 @@ class Plugin {
       
       const assets = memory.getBundles()
         .map(({ filename, buffer }) => {
+          const relativePath = getPublicPath(filename, true);
+          
           return {
-            [publicPath(filename)]: {
+            [relativePath]: {
               source: () => buffer.toString(),
               size: () => buffer.length
             }
@@ -87,7 +92,7 @@ class Plugin {
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
             const { memory } = this;
-            const bundlesPublicPaths = memory.getBundles().map(({ filename }) => publicPath(filename));
+            const bundlesPublicPaths = memory.getBundles().map(({ filename }) => getPublicPath(filename));
 
             htmlPluginData.assets.js = concat(
               bundlesPublicPaths,
