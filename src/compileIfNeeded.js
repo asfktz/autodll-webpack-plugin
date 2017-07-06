@@ -57,6 +57,7 @@ const getContents = watchPath => {
         return fs.readFileSync(watchPath, 'utf-8');
       }
     }
+    return '';
   } catch (e) {
     //Failed to read file, fallback to string
     return '';
