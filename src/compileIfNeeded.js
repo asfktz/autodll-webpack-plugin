@@ -2,13 +2,13 @@ import path from 'path';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import fs from './utils/fs';
-import { mkdirp } from './utils/index.js';
+import makeDir from 'make-dir';
 import { cacheDir } from './paths';
 import createLogger from './createLogger';
 import del from 'del';
 
 const isCacheValid = settings => {
-  return mkdirp(cacheDir)
+  return makeDir(cacheDir)
     .then(() => fs.readFileAsync(path.resolve(cacheDir, 'lastSettings.json')))
     .then(file => {
       let lastSettings = JSON.parse(file);
@@ -42,7 +42,7 @@ export const compile = (settings, getCompiler) => () => {
 
 const compileIfNeeded = (settings, getCompiler) => {
   const log = createLogger(settings.debug);
-      
+
   return isCacheValid(settings)
     .then(log.tap(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
