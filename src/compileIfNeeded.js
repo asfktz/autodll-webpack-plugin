@@ -1,13 +1,13 @@
 import path from 'path';
 import isEmpty from 'lodash/isEmpty';
 import fs from './utils/fs';
-import { mkdirp } from './utils/index.js';
+import makeDir from 'make-dir';
 import { cacheDir } from './paths';
 import createLogger from './createLogger';
 import del from 'del';
 
 const isCacheValid = newHash => {
-  return mkdirp(cacheDir)
+  return makeDir(cacheDir)
     .then(() => fs.statAsync(path.resolve(cacheDir, newHash)))
     .then(() => true)
     .catch(() => false);
@@ -36,6 +36,7 @@ export const compile = (settings, getCompiler) => () => {
 
 const compileIfNeeded = (settings, getCompiler) => {
   const log = createLogger(settings.debug);
+
   return isCacheValid(settings.hash)
     .then(log.tap(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
