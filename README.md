@@ -82,6 +82,7 @@ Will Result in:
 
 ## Basic Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/basic)):
 
+
 ```js
 const webpack = require('webpack');
 const path = require('path');
@@ -95,6 +96,7 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
+    publicPath: '/'
   },
 
   plugins: [
@@ -126,7 +128,8 @@ module.exports = {
 
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
 
   plugins: [

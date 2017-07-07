@@ -7,7 +7,7 @@
     "build": "webpack --config ./webpack.config.js"
   },
   "devDependencies": {
-    "autodll-webpack-plugin": "file:../../",
+    "autodll-webpack-plugin": "latest",
     "webpack": "^3.0.0"
   },
   "dependencies": {
