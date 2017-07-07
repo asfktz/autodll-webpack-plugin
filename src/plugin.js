@@ -34,7 +34,7 @@ export const createSettings = ({ entry, ...settings }) => {
   return mergedSettings;
 };
 
-class Plugin {
+class AutoDLLPlugin {
   constructor(settings) {
     this.settings = createSettings(settings);
   }
@@ -117,4 +117,4 @@ class Plugin {
   }
 }
 
-export default Plugin;
+export default AutoDLLPlugin;
