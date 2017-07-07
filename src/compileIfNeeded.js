@@ -6,9 +6,9 @@ import { cacheDir } from './paths';
 import createLogger from './createLogger';
 import del from 'del';
 
-const isCacheValid = newHash => {
+const isCacheValid = settings => {
   return makeDir(cacheDir)
-    .then(() => fs.statAsync(path.resolve(cacheDir, newHash)))
+    .then(() => fs.statAsync(path.resolve(cacheDir, settings.hash)))
     .then(() => true)
     .catch(() => false);
 };
@@ -37,7 +37,7 @@ export const compile = (settings, getCompiler) => () => {
 const compileIfNeeded = (settings, getCompiler) => {
   const log = createLogger(settings.debug);
 
-  return isCacheValid(settings.hash)
+  return isCacheValid(settings)
     .then(log.tap(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
       if (isValid) return;
