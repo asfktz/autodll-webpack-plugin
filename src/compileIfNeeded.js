@@ -1,5 +1,4 @@
 import path from 'path';
-import crypto from 'crypto';
 import isEmpty from 'lodash/isEmpty';
 import fs from './utils/fs';
 import { mkdirp } from './utils/index.js';
@@ -17,16 +16,9 @@ const isCacheValid = newHash => {
 const cleanup = settings =>
   fs
     .readdirSync(cacheDir)
-    .filter(
-      identifiers =>
-        identifiers.includes(settings.id) &&
-        identifiers.includes(settings.nodeEnv)
-    )
+    .filter(fileName => fileName.includes(settings.nodeEnv))
+    .filter(fileName => fileName.includes(settings.id))
     .forEach(p => del(path.join(cacheDir, p)));
-
-const storeHash = hash => stats => {
-  return fs.writeFileAsync(path.resolve(cacheDir, hash), stats.toString());
-};
 
 export const compile = (settings, getCompiler) => () => {
   // skip compiling if there is nothing to build
@@ -42,44 +34,9 @@ export const compile = (settings, getCompiler) => () => {
   });
 };
 
-const getContents = watchPath => {
-  try {
-    if (fs.existsSync(watchPath)) {
-      if (fs.lstatSync(watchPath).isDirectory()) {
-        if (watchPath.startsWith(cacheDir)) {
-          return '';
-        }
-        return fs
-          .readdirSync(watchPath)
-          .map(p => getContents(path.join(watchPath, p)))
-          .join('');
-      } else {
-        return fs.readFileSync(watchPath, 'utf-8');
-      }
-    }
-    return '';
-  } catch (e) {
-    //Failed to read file, fallback to string
-    return '';
-  }
-};
-
-export const getHash = settings => {
-  const hash = crypto.createHash('md5');
-  const settingsJSON = JSON.stringify(settings);
-
-  hash.update(settingsJSON);
-
-  if (Array.isArray(settings.watch)) {
-    hash.update(settings.watch.map(getContents).join(''));
-  }
-  return [settings.nodeEnv, settings.id, hash.digest('hex')].join('_');
-};
-
 const compileIfNeeded = (settings, getCompiler) => {
   const log = createLogger(settings.debug);
-  const currentHash = getHash(settings);
-  return isCacheValid(currentHash)
+  return isCacheValid(settings.hash)
     .then(log.tap(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
       if (isValid) return;
@@ -88,8 +45,7 @@ const compileIfNeeded = (settings, getCompiler) => {
         .then(log.tap('cleanup'))
         .then(cleanup)
         .then(log.tap('compile'))
-        .then(compile(settings, getCompiler))
-        .then(storeHash(currentHash));
+        .then(compile(settings, getCompiler));
     });
 };
 

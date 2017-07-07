@@ -3,6 +3,7 @@ import path from 'path';
 
 import compileIfNeeded from './compileIfNeeded';
 import createCompiler from './createCompiler';
+import createHash from './createHash';
 import { cacheDir } from './paths';
 import { concat, merge, keys } from './utils/index.js';
 import normalizeEntry from './normalizeEntry';
@@ -11,8 +12,8 @@ import createMemory from './createMemory';
 
 let counter = 0;
 
-export const getManifestPath = bundleName =>
-  path.resolve(cacheDir, `${bundleName}.manifest.json`);
+export const getManifestPath = hash => bundleName =>
+  path.resolve(cacheDir, hash, `${bundleName}.manifest.json`);
 
 export const createSettings = ({ entry, ...settings }) => {
   const defaults = {
@@ -23,12 +24,14 @@ export const createSettings = ({ entry, ...settings }) => {
     entry: null,
     filename: '[name].js',
     inject: false,
-    debug: false
+    debug: false,
   };
 
-  return merge(defaults, settings, {
-    entry: normalizeEntry(entry)
+  const mergedSettings = merge(defaults, settings, {
+    entry: normalizeEntry(entry),
   });
+  mergedSettings.hash = createHash(mergedSettings);
+  return mergedSettings;
 };
 
 class Plugin {
@@ -38,48 +41,50 @@ class Plugin {
 
   apply(compiler) {
     const { context, inject, entry, path: outputPath } = this.settings;
-    
-    const publicPath = (filename) => path.join(outputPath, filename);
 
-    keys(entry).map(getManifestPath)
+    const publicPath = filename => path.join(outputPath, filename);
+
+    keys(entry)
+      .map(getManifestPath(this.settings.hash))
       .forEach(manifestPath => {
-        new DllReferencePlugin({ context: context, manifest: manifestPath })
-          .apply(compiler);
+        new DllReferencePlugin({
+          context: context,
+          manifest: manifestPath,
+        }).apply(compiler);
       });
 
     compiler.plugin('before-compile', (params, callback) => {
-      params.compilationDependencies = params.compilationDependencies
-        .filter((path) => !path.startsWith(cacheDir));
+      params.compilationDependencies = params.compilationDependencies.filter(
+        path => !path.startsWith(cacheDir)
+      );
 
       callback();
     });
-    
-    const onRun = (compiler, callback) => (
+
+    const onRun = (compiler, callback) =>
       compileIfNeeded(this.settings, () => createCompiler(this.settings))
-        .then(() => createMemory()
-          .then((memory) => {
+        .then(() =>
+          createMemory(this.settings.hash).then(memory => {
             this.initialized = true;
             this.memory = memory;
           })
-        )    
-        .then(callback)
-    );
+        )
+        .then(callback);
 
     compiler.plugin('watch-run', onRun);
     compiler.plugin('run', onRun);
 
     compiler.plugin('emit', (compilation, callback) => {
       const { memory } = this;
-      
-      const assets = memory.getBundles()
-        .map(({ filename, buffer }) => {
-          return {
-            [publicPath(filename)]: {
-              source: () => buffer.toString(),
-              size: () => buffer.length
-            }
-          };
-        });
+
+      const assets = memory.getBundles().map(({ filename, buffer }) => {
+        return {
+          [publicPath(filename)]: {
+            source: () => buffer.toString(),
+            size: () => buffer.length,
+          },
+        };
+      });
 
       compilation.assets = merge(compilation.assets, ...assets);
       callback();
@@ -91,7 +96,9 @@ class Plugin {
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
             const { memory } = this;
-            const bundlesPublicPaths = memory.getBundles().map(({ filename }) => publicPath(filename));
+            const bundlesPublicPaths = memory
+              .getBundles()
+              .map(({ filename }) => publicPath(filename));
 
             htmlPluginData.assets.js = concat(
               bundlesPublicPaths,
