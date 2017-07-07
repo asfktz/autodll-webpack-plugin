@@ -4,6 +4,9 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
+    "lint": "eslint src specs",
+    "lint:fix": "npm run lint -- --fix",
+    "lint-staged": "lint-staged",
     "test": "babel-node ./node_modules/.bin/tape specs/**/*.spec.js | faucet",
     "test:inspect": "babel-node --inspect ./node_modules/.bin/tape specs/**/*.spec.js",
     "build": "del-cli ./lib && babel src --out-dir lib",
@@ -16,6 +19,17 @@
     "src",
     "lib"
   ],
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "specs/**/*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "pre-commit": ["lint-staged", "test"],
   "dependencies": {
     "bluebird": "^3.5.0",
     "del": "^3.0.0",
@@ -34,6 +48,8 @@
     "eslint": "^4.1.1",
     "eslint-plugin-react": "^7.1.0",
     "faucet": "^0.0.1",
+    "lint-staged": "^4.0.0",
+    "pre-commit": "^1.2.2",
     "recursive-readdir": "^2.2.1",
     "spy": "^1.0.0",
     "tape": "^4.7.0"
