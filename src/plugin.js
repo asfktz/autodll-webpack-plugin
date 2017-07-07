@@ -110,6 +110,7 @@ class AutoDLLPlugin {
             );
 
             callback();
+            callback(null, htmlPluginData);
           }
         );
       });
