@@ -7,7 +7,7 @@ import path from 'path';
 const getBundles = mfs => {
   return mfs.readdirSync('/').map(filename => ({
     filename,
-    buffer: mfs.readFileSync(`/${filename}`),
+    buffer: mfs.readFileSync(`/${filename}`)
   }));
 };
 
@@ -25,7 +25,7 @@ export const createMemory = (fs, cacheDir) => hash => {
       mfs.writeFileSync(`/${filename}`, buffer);
     })
     .then(() => ({
-      getBundles: getBundles.bind(null, mfs),
+      getBundles: getBundles.bind(null, mfs)
     }));
 };
 
