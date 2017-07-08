@@ -13,7 +13,7 @@ test('createSettings:', t => {
   });
 
   const expected = {
-    context: '/Users/asafkatz/dev/autodll-webpack-plugin',
+    context: process.cwd(),
     path: '',
     entry: {
       reactStuff: ['react', 'react-dom'],
@@ -46,7 +46,7 @@ test('createSettings:', t => {
   });
 
   const expected = {
-    context: '/Users/asafkatz/dev/autodll-webpack-plugin',
+    context: process.cwd(),
     path: '',
     entry: {
       reactStuff: ['react', 'react-dom'],
