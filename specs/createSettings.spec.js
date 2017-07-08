@@ -61,7 +61,7 @@ test('createSettings:', t => {
     debug: true,
     id: 'instance_9',
     env: 'mars',
-    hash: 'mars_instance_9_42b03373e0b5adb471bcb7e7bd8d34e6'
+    hash: results.hash
   };
 
   t.same(results, expected);
