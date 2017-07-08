@@ -17,6 +17,7 @@ module.exports = {
       template: './src/index.html',
     }),
     new AutoDllPlugin({
+      debug: true,
       inject: true,
       filename: '[name]_[hash].js',
       path: './dll',
