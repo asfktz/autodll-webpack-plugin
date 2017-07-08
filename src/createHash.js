@@ -35,7 +35,7 @@ export const createHash = settings => {
   //   hash.update(settings.watch.map(getContents).join(''));
   // }
 
-  return [settings.nodeEnv, settings.id, hash.digest('hex')].join('_');
+  return [settings.env, settings.id, hash.digest('hex')].join('_');
 };
 
 export default createHash;

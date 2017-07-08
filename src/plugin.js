@@ -30,7 +30,7 @@ export const createSettings = ({ originalSettings, index, env = 'development' })
   const settings = merge(defaults, otherSettings, {
     entry: normalizeEntry(entry),
     id: getInstanceId(index),
-    nodeEnv: env
+    env: env
   });
 
   return merge(settings, {

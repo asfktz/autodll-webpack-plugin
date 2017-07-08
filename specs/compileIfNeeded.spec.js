@@ -32,10 +32,14 @@ test('compileIfNeeded: should generate files', t => {
   cleanup();
 
   const settings = createSettings({
-    context: path.join(__dirname, '..'),
-    entry: {
-      vendor: ['lodash'],
+    originalSettings: {
+      context: path.join(__dirname, '..'),
+      entry: {
+        vendor: ['lodash']
+      }
     },
+    index: 1,
+    env: 'production'
   });
 
   const expected = ['vendor.manifest.json', 'vendor.js'].map(file =>
@@ -64,10 +68,14 @@ test('compileIfNeeded: should skip when settings equals lastSettings.json', t =>
   };
 
   const settings = createSettings({
-    context: path.join(__dirname, '..'),
-    entry: {
-      vendor: ['lodash'],
+    originalSettings: {
+      context: path.join(__dirname, '..'),
+      entry: {
+        vendor: ['lodash']
+      }
     },
+    index: 4,
+    env: 'planet_earth'
   });
 
   Promise.resolve()

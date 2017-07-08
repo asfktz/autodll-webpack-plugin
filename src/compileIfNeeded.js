@@ -16,7 +16,7 @@ const isCacheValid = settings => {
 const cleanup = settings => () => {
   return fs
     .readdirAsync(cacheDir)
-    .filter(dirname => dirname.startsWith(`${settings.nodeEnv}_${settings.id}`))
+    .filter(dirname => dirname.startsWith(`${settings.env}_${settings.id}`))
     .each(dirname => del(path.join(cacheDir, dirname)));
 };
 
