@@ -9,6 +9,7 @@ const createSettings = ({ originalSettings, index }) => {
   const { entry, env, ...otherSettings } = originalSettings;
   
   const defaults = {
+    context: process.cwd(),
     path: '',
     entry: null,
     filename: '[name].js',
