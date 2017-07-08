@@ -10,45 +10,56 @@ import normalizeEntry from './normalizeEntry';
 
 import createMemory from './createMemory';
 
-let counter = 0;
-
 export const getManifestPath = hash => bundleName =>
   path.resolve(cacheDir, hash, `${bundleName}.manifest.json`);
 
-export const createSettings = ({ entry, ...settings }) => {
+const getInstanceId = (index) => `instance_${index}`;
+
+export const createSettings = ({ originalSettings, index, env = 'development' }) => {
+  const { entry, ...otherSettings } = originalSettings;
+
   const defaults = {
-    nodeEnv: process.env.NODE_ENV || 'development',
-    id: `instance${counter++}`,
     context: __dirname,
     path: '',
     entry: null,
     filename: '[name].js',
     inject: false,
-    debug: false,
+    debug: false
   };
 
-  const mergedSettings = merge(defaults, settings, {
+  const settings = merge(defaults, otherSettings, {
     entry: normalizeEntry(entry),
+    id: getInstanceId(index),
+    nodeEnv: env
   });
-  mergedSettings.hash = createHash(mergedSettings);
-  return mergedSettings;
+
+  return merge(settings, {
+    hash: createHash(settings)
+  });
 };
 
 class AutoDLLPlugin {
   constructor(settings) {
-    this.settings = createSettings(settings);
+    this.originalSettings = settings;
   }
 
   apply(compiler) {
-    const { context, inject, entry } = this.settings;
+
+    const settings = createSettings({
+      originalSettings: this.originalSettings,
+      index: compiler.options.plugins.indexOf(this),
+      env: process.env.NODE_ENV
+    });
+
+    const { context, inject, entry } = settings;
     
     const getPublicPath = createGetPublicPath(
       compiler.options,
-      this.settings.path
+      settings.path
     );
 
     keys(entry)
-      .map(getManifestPath(this.settings.hash))
+      .map(getManifestPath(settings.hash))
       .forEach(manifestPath => {
         new DllReferencePlugin({
           context: context,
@@ -65,9 +76,9 @@ class AutoDLLPlugin {
     });
 
     const onRun = (compiler, callback) =>
-      compileIfNeeded(this.settings, () => createCompiler(this.settings))
+      compileIfNeeded(settings, () => createCompiler(settings))
         .then(() =>
-          createMemory(this.settings.hash).then(memory => {
+          createMemory(settings.hash).then(memory => {
             this.initialized = true;
             this.memory = memory;
           })
@@ -109,7 +120,6 @@ class AutoDLLPlugin {
               htmlPluginData.assets.js
             );
 
-            callback();
             callback(null, htmlPluginData);
           }
         );
