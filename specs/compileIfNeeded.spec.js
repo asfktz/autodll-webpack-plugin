@@ -2,7 +2,7 @@ import test from 'tape';
 import spy from 'spy';
 import compileIfNeeded, { compile } from '../src/compileIfNeeded';
 import createCompiler from '../src/createCompiler';
-import { createSettings } from '../src/plugin';
+import createSettings from '../src/createSettings';
 import path from 'path';
 import { cacheDir } from '../src/paths';
 import del from 'del';
@@ -32,14 +32,14 @@ test('compileIfNeeded: should generate files', t => {
   cleanup();
 
   const settings = createSettings({
+    index: 1,
     originalSettings: {
       context: path.join(__dirname, '..'),
+      env: 'production',
       entry: {
         vendor: ['lodash']
       }
-    },
-    index: 1,
-    env: 'production'
+    }
   });
 
   const expected = ['vendor.manifest.json', 'vendor.js'].map(file =>
