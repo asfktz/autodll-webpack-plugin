@@ -1,6 +1,6 @@
 {
   "name": "autodll-webpack-plugin",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -30,7 +30,10 @@
       "git add"
     ]
   },
-  "pre-commit": ["lint-staged", "test"],
+  "pre-commit": [
+    "lint-staged",
+    "test"
+  ],
   "dependencies": {
     "bluebird": "^3.5.0",
     "del": "^3.0.0",
@@ -58,15 +61,28 @@
   "babel": {
     "presets": [
       "stage-3",
-      ["env", { "targets": { "node": "4" } }]
+      [
+        "env",
+        {
+          "targets": {
+            "node": "4"
+          }
+        }
+      ]
     ],
-    
     "env": {
       "debug": {
         "sourceMaps": "inline",
         "presets": [
           "stage-3",
-          ["env", { "targets": { "node": "current" } }]
+          [
+            "env",
+            {
+              "targets": {
+                "node": "current"
+              }
+            }
+          ]
         ]
       }
     }
