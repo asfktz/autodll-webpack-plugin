@@ -103,7 +103,6 @@ module.exports = {
 
   plugins: [
     new AutoDllPlugin({
-      context: __dirname,
       filename: '[name].dll.js',
       entry: {
         vendor: [
@@ -140,8 +139,8 @@ module.exports = {
       template: './src/index.html',
     }),
     new AutoDllPlugin({
+      debug: true,
       inject: true,
-      context: __dirname,
       filename: '[name]_[hash].js',
       path: './dll',
       entry: {
