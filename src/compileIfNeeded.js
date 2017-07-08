@@ -13,12 +13,12 @@ const isCacheValid = settings => {
     .catch(() => false);
 };
 
-const cleanup = settings =>
-  fs
-    .readdirSync(cacheDir)
-    .filter(fileName => fileName.includes(settings.nodeEnv))
-    .filter(fileName => fileName.includes(settings.id))
-    .forEach(p => del(path.join(cacheDir, p)));
+const cleanup = settings => () => {
+  return fs
+    .readdirAsync(cacheDir)
+    .filter(dirname => dirname.startsWith(`${settings.nodeEnv}_${settings.id}`))
+    .each(dirname => del(path.join(cacheDir, dirname)));
+};
 
 export const compile = (settings, getCompiler) => () => {
   // skip compiling if there is nothing to build
