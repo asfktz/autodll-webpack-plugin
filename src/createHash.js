@@ -25,7 +25,7 @@ const getContents = watchPath => {
   }
 };
 
-export const createHash = settings => {
+const createHash = settings => {
   const hash = crypto.createHash('md5');
   const settingsJSON = JSON.stringify(settings);
 
