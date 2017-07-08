@@ -15,7 +15,7 @@ module.exports = {
 
   plugins: [
     new AutoDllPlugin({
-      context: __dirname,
+      debug: true,
       filename: '[name].dll.js',
       entry: {
         vendor: [

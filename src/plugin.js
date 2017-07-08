@@ -5,64 +5,58 @@ import compileIfNeeded from './compileIfNeeded';
 import createCompiler from './createCompiler';
 import { cacheDir, createGetPublicPath } from './paths';
 import { concat, merge, keys } from './utils/index.js';
-import normalizeEntry from './normalizeEntry';
+import createSettings from './createSettings';
 
 import createMemory from './createMemory';
 
-export const getManifestPath = bundleName =>
-  path.resolve(cacheDir, `${bundleName}.manifest.json`);
+export const getManifestPath = hash => bundleName =>
+  path.resolve(cacheDir, hash, `${bundleName}.manifest.json`);
 
-export const createSettings = ({ entry, ...settings }) => {
-  const defaults = {
-    context: __dirname,
-    path: '',
-    entry: null,
-    filename: '[name].js',
-    inject: false,
-    debug: false
-  };
-
-  return merge(defaults, settings, {
-    entry: normalizeEntry(entry)
-  });
-};
-
-class Plugin {
+class AutoDLLPlugin {
   constructor(settings) {
-    this.settings = createSettings(settings);
+    this.originalSettings = settings;
   }
 
   apply(compiler) {
-    const { context, inject, entry } = this.settings;
+
+    const settings = createSettings({
+      originalSettings: this.originalSettings,
+      index: compiler.options.plugins.indexOf(this)
+    });
+
+    const { context, inject, entry } = settings;
     
     const getPublicPath = createGetPublicPath(
       compiler.options,
-      this.settings.path
+      settings.path
     );
 
-    keys(entry).map(getManifestPath)
+    keys(entry)
+      .map(getManifestPath(settings.hash))
       .forEach(manifestPath => {
-        new DllReferencePlugin({ context: context, manifest: manifestPath })
-          .apply(compiler);
+        new DllReferencePlugin({
+          context: context,
+          manifest: manifestPath,
+        }).apply(compiler);
       });
 
     compiler.plugin('before-compile', (params, callback) => {
-      params.compilationDependencies = params.compilationDependencies
-        .filter((path) => !path.startsWith(cacheDir));
+      params.compilationDependencies = params.compilationDependencies.filter(
+        path => !path.startsWith(cacheDir)
+      );
 
       callback();
     });
-    
-    const onRun = (compiler, callback) => (
-      compileIfNeeded(this.settings, () => createCompiler(this.settings))
-        .then(() => createMemory()
-          .then((memory) => {
+
+    const onRun = (compiler, callback) =>
+      compileIfNeeded(settings, () => createCompiler(settings))
+        .then(() =>
+          createMemory(settings.hash).then(memory => {
             this.initialized = true;
             this.memory = memory;
           })
-        )    
-        .then(callback)
-    );
+        )
+        .then(callback);
 
     compiler.plugin('watch-run', onRun);
     compiler.plugin('run', onRun);
@@ -99,7 +93,7 @@ class Plugin {
               htmlPluginData.assets.js
             );
 
-            callback();
+            callback(null, htmlPluginData);
           }
         );
       });
@@ -107,4 +101,4 @@ class Plugin {
   }
 }
 
-export default Plugin;
+export default AutoDLLPlugin;

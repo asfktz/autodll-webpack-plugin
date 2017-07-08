@@ -1,5 +1,4 @@
 import path from 'path';
-import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import fs from './utils/fs';
 import makeDir from 'make-dir';
@@ -9,23 +8,16 @@ import del from 'del';
 
 const isCacheValid = settings => {
   return makeDir(cacheDir)
-    .then(() => fs.readFileAsync(path.resolve(cacheDir, 'lastSettings.json')))
-    .then(file => {
-      let lastSettings = JSON.parse(file);
-      return isEqual(lastSettings, settings);
-    })
-    .catch(() => {
-      return false;
-    });
+    .then(() => fs.statAsync(path.resolve(cacheDir, settings.hash)))
+    .then(() => true)
+    .catch(() => false);
 };
 
-const cleanup = () => del(path.join(cacheDir, '**/*'));
-
-const storeSettings = settings => () => {
-  return fs.writeFileAsync(
-    path.resolve(cacheDir, 'lastSettings.json'),
-    JSON.stringify(settings)
-  );
+const cleanup = settings => () => {
+  return fs
+    .readdirAsync(cacheDir)
+    .filter(dirname => dirname.startsWith(`${settings.env}_${settings.id}`))
+    .each(dirname => del(path.join(cacheDir, dirname)));
 };
 
 export const compile = (settings, getCompiler) => () => {
@@ -34,7 +26,9 @@ export const compile = (settings, getCompiler) => () => {
 
   return new Promise((resolve, reject) => {
     getCompiler().run((err, stats) => {
-      if (err) { return reject(err); }
+      if (err) {
+        return reject(err);
+      }
       resolve(stats);
     });
   });
@@ -50,10 +44,9 @@ const compileIfNeeded = (settings, getCompiler) => {
 
       return Promise.resolve()
         .then(log.tap('cleanup'))
-        .then(cleanup)
+        .then(cleanup(settings))
         .then(log.tap('compile'))
-        .then(compile(settings, getCompiler))
-        .then(storeSettings(settings));
+        .then(compile(settings, getCompiler));
     });
 };
 

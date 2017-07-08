@@ -31,14 +31,14 @@ module.exports = {
   },
 
   devServer: {
-    hot: true
+    hot: true,
+    historyApiFallback: true
   },
 
   plugins: [
     new AutoDllPlugin({
       debug: true,
       inject: true,
-      context: __dirname,
       filename: '[name]_[hash].js',
       path: './dll',
       entry: {

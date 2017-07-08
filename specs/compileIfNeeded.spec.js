@@ -2,16 +2,15 @@ import test from 'tape';
 import spy from 'spy';
 import compileIfNeeded, { compile } from '../src/compileIfNeeded';
 import createCompiler from '../src/createCompiler';
-import { createSettings } from '../src/plugin';
+import createSettings from '../src/createSettings';
 import path from 'path';
 import { cacheDir } from '../src/paths';
 import del from 'del';
 import recursive from 'recursive-readdir';
 
-
-test('compileIfNeeded: compile: should not call getCompiler when entry is {} ', (t) => {
+test('compileIfNeeded: compile: should not call getCompiler when entry is {} ', t => {
   {
-    const settings = { entry: { vendor: [ 'lib' ] } };
+    const settings = { entry: { vendor: ['lib'] } };
     const compiler = { run: spy() };
     compile(settings, () => compiler)();
     t.is(compiler.run.called, true, 'should call compiler.run');
@@ -29,52 +28,54 @@ test('compileIfNeeded: compile: should not call getCompiler when entry is {} ', 
 
 const cleanup = () => del.sync(path.join(cacheDir));
 
-test('compileIfNeeded: should generate files', (t) => {
+test('compileIfNeeded: should generate files', t => {
   cleanup();
 
   const settings = createSettings({
-    context: path.join(__dirname, '..'),
-    entry: {
-      vendor: ['lodash']
+    index: 1,
+    originalSettings: {
+      context: path.join(__dirname, '..'),
+      env: 'production',
+      entry: {
+        vendor: ['lodash']
+      }
     }
   });
 
-  const expected = [
-    'lastSettings.json',
-    'vendor.manifest.json',
-    'bundles/vendor.js'
-  ].map((file) => (
-    path.join(cacheDir, file)
-  ));
+  const expected = ['vendor.manifest.json', 'vendor.js'].map(file =>
+    path.join(cacheDir, settings.hash, file)
+  );
 
   compileIfNeeded(settings, () => createCompiler(settings))
     .then(() => recursive(cacheDir))
-    .then((files) => {
+    .then(files => {
       t.same(expected.sort(), files.sort());
-    
+
       cleanup();
       t.end();
     });
 });
 
-
-
-test('compileIfNeeded: should skip when settings equals lastSettings.json', (t) => {
+test('compileIfNeeded: should skip when settings equals lastSettings.json', t => {
   cleanup();
 
   t.timeoutAfter(5000);
 
-  const createCompilerSpy = (settings) => {
+  const createCompilerSpy = settings => {
     const compiler = createCompiler(settings);
     spy(compiler, 'run');
     return compiler;
   };
 
   const settings = createSettings({
-    context: path.join(__dirname, '..'),
-    entry: {
-      vendor: ['lodash']
-    }
+    originalSettings: {
+      context: path.join(__dirname, '..'),
+      entry: {
+        vendor: ['lodash']
+      }
+    },
+    index: 4,
+    env: 'planet_earth'
   });
 
   Promise.resolve()
@@ -85,10 +86,13 @@ test('compileIfNeeded: should skip when settings equals lastSettings.json', (t) 
         _compiler = createCompilerSpy(settings);
         return _compiler;
       }).then(() => {
-        t.is(_compiler.run.called, true, 'Should call getCompiler the first time');
+        t.is(
+          _compiler.run.called,
+          true,
+          'Should call getCompiler the first time'
+        );
       });
     })
-
     .then(() => {
       let _compiler = 'NEVER_CREATED';
 
@@ -96,9 +100,13 @@ test('compileIfNeeded: should skip when settings equals lastSettings.json', (t) 
         _compiler = createCompilerSpy(settings);
         return _compiler;
       }).then(() => {
-        t.is(_compiler, 'NEVER_CREATED', 'Should NOT call the getCompiler the second time');
+        t.is(
+          _compiler,
+          'NEVER_CREATED',
+          'Should NOT call the getCompiler the second time'
+        );
       });
-    }) 
+    })
     .then(() => {
       cleanup();
       t.end();
