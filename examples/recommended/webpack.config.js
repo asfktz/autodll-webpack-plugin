@@ -18,7 +18,6 @@ module.exports = {
     }),
     new AutoDllPlugin({
       inject: true,
-      context: __dirname,
       filename: '[name]_[hash].js',
       path: './dll',
       entry: {
