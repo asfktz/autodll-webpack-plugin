@@ -3,40 +3,14 @@ import path from 'path';
 
 import compileIfNeeded from './compileIfNeeded';
 import createCompiler from './createCompiler';
-import createHash from './createHash';
 import { cacheDir, createGetPublicPath } from './paths';
 import { concat, merge, keys } from './utils/index.js';
-import normalizeEntry from './normalizeEntry';
+import createSettings from './createSettings';
 
 import createMemory from './createMemory';
 
 export const getManifestPath = hash => bundleName =>
   path.resolve(cacheDir, hash, `${bundleName}.manifest.json`);
-
-const getInstanceId = (index) => `instance_${index}`;
-
-export const createSettings = ({ originalSettings, index, env = 'development' }) => {
-  const { entry, ...otherSettings } = originalSettings;
-
-  const defaults = {
-    context: __dirname,
-    path: '',
-    entry: null,
-    filename: '[name].js',
-    inject: false,
-    debug: false
-  };
-
-  const settings = merge(defaults, otherSettings, {
-    entry: normalizeEntry(entry),
-    id: getInstanceId(index),
-    env: env
-  });
-
-  return merge(settings, {
-    hash: createHash(settings)
-  });
-};
 
 class AutoDLLPlugin {
   constructor(settings) {
@@ -47,8 +21,7 @@ class AutoDLLPlugin {
 
     const settings = createSettings({
       originalSettings: this.originalSettings,
-      index: compiler.options.plugins.indexOf(this),
-      env: process.env.NODE_ENV
+      index: compiler.options.plugins.indexOf(this)
     });
 
     const { context, inject, entry } = settings;
