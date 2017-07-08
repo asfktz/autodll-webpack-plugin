@@ -31,9 +31,10 @@ export const createHash = settings => {
 
   hash.update(settingsJSON);
 
-  if (Array.isArray(settings.watch)) {
-    hash.update(settings.watch.map(getContents).join(''));
-  }
+  // if (Array.isArray(settings.watch)) {
+  //   hash.update(settings.watch.map(getContents).join(''));
+  // }
+
   return [settings.nodeEnv, settings.id, hash.digest('hex')].join('_');
 };
 
