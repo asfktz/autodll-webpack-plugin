@@ -1,4 +1,4 @@
-![](https://travis-ci.org/asfktz/autodll-webpack-plugin.svg?branch=master)
+[![Build Status](https://travis-ci.org/asfktz/autodll-webpack-plugin.svg?branch=master)](https://travis-ci.org/asfktz/autodll-webpack-plugin)
 
 # AutoDllPlugin
 Webpack's DllPlugin without the boilerplate
