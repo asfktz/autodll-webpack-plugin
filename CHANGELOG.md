@@ -29,8 +29,8 @@
 
 ## 0.0.8
 - Set babel target to node 4 instead of current [#19](https://github.com/asfktz/autodll-webpack-plugin/pull/19) [@sudo-suhas](https://github.com/sudo-suhas)
-- Setup pre-commit hook with lint-staged and tests [#18](https://github.com/asfktz/autodll-webpack-plugin/pull/18) @sudo-suhas
-- delete ./lib and add it to gitignore [#14](https://github.com/asfktz/autodll-webpack-plugin/pull/14) @viankakrisna
+- Setup pre-commit hook with lint-staged and tests [#18](https://github.com/asfktz/autodll-webpack-plugin/pull/18) [@sudo-suhas](https://github.com/sudo-suhas)
+- delete ./lib and add it to gitignore [#14](https://github.com/asfktz/autodll-webpack-plugin/pull/14) [@viankakrisna](https://github.com/viankakrisna)
 
 #### Committers:
 - Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
