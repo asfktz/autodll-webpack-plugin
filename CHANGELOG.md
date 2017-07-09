@@ -5,7 +5,7 @@
 #### Bug Fix:
 
 - Multiple AutoDLL's overwrite each other [@viankakrisna](https://github.com/viankakrisna)
-- AutoDLL's is not playing nicely with other plugins which integrate with html-webpack-plugin @asfktz
+- AutoDLL's is not playing nicely with other plugins which integrate with html-webpack-plugin [@asfktz](https://github.com/asfktz)
 
 #### Enhancement:
 - AutoDll's `.cache` dir now stores each instance files in it's own seperate subdirectory. [@viankakrisna](https://github.com/viankakrisna)
