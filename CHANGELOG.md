@@ -15,11 +15,12 @@
 - Remove context from examples, use the new default instead [@asfktz](https://github.com/asfktz)
 
 #### Internal:
-- Remove unused dependencies #25 [@sudo-suhas](https://github.com/sudo-suhas)
-- Fix failing tests for createGetPublicPath on windows(path compare) [#27](https://github.com/asfktz/autodll-webpack-plugin/pull/27)  [@sudo-suhas](https://github.com/sudo-suhas)
-- Use make-dir instead of mkdirp #26 [@sudo-suhas](https://github.com/sudo-suhas)
-- Run CI tests on multiple node versions in Travis #35 [@sudo-suhas](https://github.com/sudo-suhas) 
+- [#25](https://github.com/asfktz/autodll-webpack-plugin/pull/25) Remove unused dependencies [@sudo-suhas](https://github.com/sudo-suhas)
+- [#27](https://github.com/asfktz/autodll-webpack-plugin/pull/27) Fix failing tests for createGetPublicPath on windows(path compare) [@sudo-suhas](https://github.com/sudo-suhas)
+- [#26](https://github.com/asfktz/autodll-webpack-plugin/pull/26) Use make-dir instead of mkdirp [@sudo-suhas](https://github.com/sudo-suhas)
+- [#35](https://github.com/asfktz/autodll-webpack-plugin/pull/35) Run CI tests on multiple node versions in Travis [@sudo-suhas](https://github.com/sudo-suhas) 
 - Setup CI [@asfktz](https://github.com/asfktz)
+
 
 #### Committers:
 - Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
@@ -28,9 +29,9 @@
 
 
 ## 0.0.8
-- Set babel target to node 4 instead of current [#19](https://github.com/asfktz/autodll-webpack-plugin/pull/19) [@sudo-suhas](https://github.com/sudo-suhas)
-- Setup pre-commit hook with lint-staged and tests [#18](https://github.com/asfktz/autodll-webpack-plugin/pull/18) [@sudo-suhas](https://github.com/sudo-suhas)
-- delete ./lib and add it to gitignore [#14](https://github.com/asfktz/autodll-webpack-plugin/pull/14) [@viankakrisna](https://github.com/viankakrisna)
+- [#19](https://github.com/asfktz/autodll-webpack-plugin/pull/19) Set babel target to node 4 instead of current [@sudo-suhas](https://github.com/sudo-suhas)
+- [#18](https://github.com/asfktz/autodll-webpack-plugin/pull/18) Setup pre-commit hook with lint-staged and tests [@sudo-suhas](https://github.com/sudo-suhas)
+- [#14](https://github.com/asfktz/autodll-webpack-plugin/pull/14) delete ./lib and add it to gitignore [@viankakrisna](https://github.com/viankakrisna)
 
 #### Committers:
 - Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
@@ -47,7 +48,7 @@
 ### Enhancement
 - Absolute Paths are now supported [@asfktz](https://github.com/asfktz)
 - You can now pass plugins to the Dll compiler (useful for production builds). <br>
-  Related to: Support extra plugins in config (such as UglifyJS) [#4](https://github.com/asfktz/autodll-webpack-plugin/pull/4) [@drewhamlett](https://github.com/drewhamlett)
+  Related to: [#4](https://github.com/asfktz/autodll-webpack-plugin/pull/4) Support extra plugins in config (such as UglifyJS) [@drewhamlett](https://github.com/drewhamlett)
 
 #### Documentation:
 - Docs(readme): Tweaks readme grammar #3 [@d3viant0ne](https://github.com/d3viant0ne)
