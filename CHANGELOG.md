@@ -54,11 +54,11 @@
 - Docs(readme): Tweaks readme grammar #3 [@d3viant0ne](https://github.com/d3viant0ne)
 
 #### Internal:
-- Add eslint, eslint-plugin-react to devDependencies [#12](https://github.com/asfktz/autodll-webpack-plugin/pull/12) 
+- [#12](https://github.com/asfktz/autodll-webpack-plugin/pull/12)  Add eslint, eslint-plugin-react to devDependencies
 [@sudo-suhas](https://github.com/sudo-suhas)
-- Fix logger creation when showLogs is false [#10](https://github.com/asfktz/autodll-webpack-plugin/pull/10) [@sudo-suhas](https://github.com/sudo-suhas)
-- Use del-cli since del is builtin cmd on windows [#11](https://github.com/asfktz/autodll-webpack-plugin/pull/11) [@sudo-suhas](https://github.com/sudo-suhas)
-- Create LICENSE [#5](https://github.com/asfktz/autodll-webpack-plugin/pull/5) [@amilajack](https://github.com/amilajack)
+- [#10](https://github.com/asfktz/autodll-webpack-plugin/pull/10) Fix logger creation when showLogs is false [@sudo-suhas](https://github.com/sudo-suhas)
+- [#11](https://github.com/asfktz/autodll-webpack-plugin/pull/11) Use del-cli since del is builtin cmd on windows [@sudo-suhas](https://github.com/sudo-suhas)
+- [#5](https://github.com/asfktz/autodll-webpack-plugin/pull/5) Create LICENSE [@amilajack](https://github.com/amilajack)
 
 #### Committers:
 - Amila Welihinda ([@amilajack](https://github.com/amilajack))
