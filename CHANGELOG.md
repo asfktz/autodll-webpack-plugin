@@ -23,9 +23,9 @@
 
 
 #### Committers:
-- Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
 - Ade Viankakrisna Fadlil ([@viankakrisna](https://github.com/viankakrisna))
 - Asaf Katz ([@asfktz](https://github.com/asfktz))
+- Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
 
 
 ## 0.0.8
@@ -34,8 +34,8 @@
 - [#14](https://github.com/asfktz/autodll-webpack-plugin/pull/14) delete ./lib and add it to gitignore [@viankakrisna](https://github.com/viankakrisna)
 
 #### Committers:
-- Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
 - Ade Viankakrisna Fadlil ([@viankakrisna](https://github.com/viankakrisna))
+- Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
 
 
 ## 0.0.7
@@ -62,10 +62,10 @@
 
 #### Committers:
 - Amila Welihinda ([@amilajack](https://github.com/amilajack))
+- Asaf Katz ([@asfktz](https://github.com/asfktz))
 - Drew Hamlett ([@drewhamlett](https://github.com/drewhamlett))
 - Joshua Wiens ([@d3viant0ne](https://github.com/d3viant0ne))
 - Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
-- Asaf Katz ([@asfktz](https://github.com/asfktz))
 
 
 ### 0.0.6
