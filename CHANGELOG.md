@@ -43,12 +43,12 @@
 ###  Bug fix
 
 - AutoDll's ignores `output.publicPath` [@asfktz](https://github.com/asfktz). <br>
-  Related to: Is it possible to set path as an absolute path? [#6](https://github.com/asfktz/autodll-webpack-plugin/issues/6)
+  Related to: [#6](https://github.com/asfktz/autodll-webpack-plugin/issues/6) Is it possible to set path as an absolute path?
 
 ### Enhancement
 - Absolute Paths are now supported [@asfktz](https://github.com/asfktz)
-- You can now pass plugins to the Dll compiler (useful for production builds). <br>
-  Related to: [#4](https://github.com/asfktz/autodll-webpack-plugin/pull/4) Support extra plugins in config (such as UglifyJS) [@drewhamlett](https://github.com/drewhamlett)
+- You can now pass plugins to the Dll compiler (useful for production builds) [@drewhamlett](https://github.com/drewhamlett)<br>
+  Related to: [#4](https://github.com/asfktz/autodll-webpack-plugin/pull/4) Support extra plugins in config (such as UglifyJS)
 
 #### Documentation:
 - Docs(readme): Tweaks readme grammar #3 [@d3viant0ne](https://github.com/d3viant0ne)
