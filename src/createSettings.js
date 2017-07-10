@@ -2,12 +2,12 @@ import { merge } from './utils';
 import createHash from './createHash';
 import normalizeEntry from './normalizeEntry';
 
-const getInstanceId = (index) => `instance_${index}`;
-const getEnv = (env) => env || process.env.NODE_ENV || 'development';
+const getInstanceId = index => `instance_${index}`;
+const getEnv = env => env || process.env.NODE_ENV || 'development';
 
 const createSettings = ({ originalSettings, index }) => {
   const { entry, env, ...otherSettings } = originalSettings;
-  
+
   const defaults = {
     context: process.cwd(),
     path: '',

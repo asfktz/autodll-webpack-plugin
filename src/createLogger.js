@@ -1,10 +1,10 @@
 import isFunction from 'lodash/isFunction';
 
-const log = (msg) => {
+const log = msg => {
   console.log('AutoDllPlugin:', msg);
 };
 
-log.tap = (msg) => res => {
+log.tap = msg => res => {
   log(isFunction(msg) ? msg(res) : msg);
   return res;
 };
@@ -12,7 +12,7 @@ log.tap = (msg) => res => {
 const createLogger = showLogs => {
   if (!showLogs) {
     const log = () => {};
-    log.tap   = () => res => res;
+    log.tap = () => res => res;
     return log;
   }
 
