@@ -50,7 +50,6 @@ plugins: [
   }),
   new AutoDllPlugin({
     inject: true, // will inject the DLL bundles to index.html
-    context: __dirname,
     filename: '[name]_[hash].js',
     entry: {
       vendor: [
