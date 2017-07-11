@@ -1,6 +1,6 @@
 {
   "name": "autodll-webpack-plugin",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -58,7 +58,8 @@
     "pre-commit": "^1.2.2",
     "recursive-readdir": "^2.2.1",
     "spy": "^1.0.0",
-    "tape": "^4.7.0"
+    "tape": "^4.7.0",
+    "webpack": "^3.2.0"
   },
   "babel": {
     "presets": [
