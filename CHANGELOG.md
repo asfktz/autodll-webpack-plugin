@@ -3,7 +3,11 @@
 ## Next release
 
 #### Bug Fix:
-- [#36](https://github.com/asfktz/autodll-webpack-plugin/issues/36) Instance index is wrong when other plugins are used [@asfktz](https://github.com/asfktz)
+- [#36](https://github.com/asfktz/autodll-webpack-plugin/issues/36) Instance index is wrong when other plugins are used. [@asfktz](https://github.com/asfktz)
+
+#### Internal:
+- Move webpack from `dependencies` to `peerDependencies`. [@asfktz](https://github.com/asfktz) <br>
+  Related to [#30](https://github.com/asfktz/autodll-webpack-plugin/issues/30#issuecomment-314489292) [breaking change]
 
 
 ## 0.1.0
