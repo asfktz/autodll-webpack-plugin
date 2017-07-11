@@ -58,7 +58,8 @@
     "pre-commit": "^1.2.2",
     "recursive-readdir": "^2.2.1",
     "spy": "^1.0.0",
-    "tape": "^4.7.0"
+    "tape": "^4.7.0",
+    "webpack": "^3.2.0"
   },
   "babel": {
     "presets": [
