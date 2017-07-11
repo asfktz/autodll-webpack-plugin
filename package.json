@@ -34,14 +34,16 @@
     "lint-staged",
     "test"
   ],
+  "peerDependencies": {
+    "webpack": ">= 2.0.0"
+  },
   "dependencies": {
     "bluebird": "^3.5.0",
     "del": "^3.0.0",
     "find-cache-dir": "^1.0.0",
     "lodash": "^4.17.4",
     "make-dir": "^1.0.0",
-    "memory-fs": "^0.4.1",
-    "webpack": "^3.0.0"
+    "memory-fs": "^0.4.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
