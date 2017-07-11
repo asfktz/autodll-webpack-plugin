@@ -8,6 +8,7 @@
 #### Internal:
 - Move webpack from `dependencies` to `peerDependencies`. [@asfktz](https://github.com/asfktz) <br>
   Related to [#30](https://github.com/asfktz/autodll-webpack-plugin/issues/30#issuecomment-314489292) [breaking change]
+- Remove `yarn.lock` from examples.
 
 
 ## 0.1.0
