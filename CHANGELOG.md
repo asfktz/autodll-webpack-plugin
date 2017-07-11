@@ -1,6 +1,8 @@
 # Change log
 
 ## 0.2.1
+
+#### Internal:
 - Add webpack as `devDependencies` for testing [@asfktz](https://github.com/asfktz)
 
 ## 0.2.0
