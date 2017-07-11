@@ -6,7 +6,7 @@ import createCompiler from './createCompiler';
 import { cacheDir, createGetPublicPath } from './paths';
 import { concat, merge, keys } from './utils/index.js';
 import createSettings from './createSettings';
-
+import getInstanceIndex from './getInstanceIndex';
 import createMemory from './createMemory';
 
 export const getManifestPath = hash => bundleName =>
@@ -18,10 +18,9 @@ class AutoDLLPlugin {
   }
 
   apply(compiler) {
-
     const settings = createSettings({
       originalSettings: this.originalSettings,
-      index: compiler.options.plugins.indexOf(this)
+      index: getInstanceIndex(compiler.options.plugins, this)
     });
 
     const { context, inject, entry } = settings;
