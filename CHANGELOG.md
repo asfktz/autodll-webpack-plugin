@@ -1,5 +1,10 @@
 # Change log
 
+## Next release
+
+- [#36](https://github.com/asfktz/autodll-webpack-plugin/issues/36) Instance index is wrong when other plugins are used [@asfktz](https://github.com/asfktz)
+
+
 ## 0.1.0
 
 #### Bug Fix:
