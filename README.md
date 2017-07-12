@@ -156,17 +156,59 @@ module.exports = {
 
 
 ## Options
-
-|  Option  |   Type  |    Default    |                                                                                   Decription                                                                                  |
-|----------|---------|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| entries  | Object  |               | The entry points for the DLL's. <br> Think of it like the entry option in your webpack config. <br> Each entry point represents a DLL bundle and expects an array of modules. |
-| filename | String  | '[name].js'   | The filename template. <br> Same as webpack's output.filename                                                                                                                |
-| context  | String  | process.cwd() |                                                                                                                                                                               |
-| inject   | Boolean | false         |                                                                                                                                                                               |
-| path     | String  | ""            | The target directory for all output files. <br> Same as webpack's output.path.                                                                                                |
-| debug    | Boolean | false         | Whether or not debug mode should be enabled.                                                                                                                                  |
-
-
+<table>
+    <thead>
+        <tr>
+            <th>Option</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Decription</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>entries</td>
+            <td>Object</td>
+            <td></td>
+            <td>
+              The entry points for the DLL's. <br>
+              Think of it like the entry option in your webpack config. <br>
+              Each entry point represents a DLL bundle and expects an array of modules.
+              <pre>var test = 1</pre>
+            </td>
+        </tr>
+        <tr>
+            <td>filename</td>
+            <td>String</td>
+            <td>'[name].js'</td>
+            <td>The filename template. <br> Same as webpack's output.filename</td>
+        </tr>
+        <tr>
+            <td>context</td>
+            <td>String</td>
+            <td>process.cwd()</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>inject</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>path</td>
+            <td>String</td>
+            <td>""</td>
+            <td>The target directory for all output files. <br> Same as webpack's output.path.</td>
+        </tr>
+        <tr>
+            <td>debug</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Whether or not debug mode should be enabled.</td>
+        </tr>
+    </tbody>
+</table>
 
 ## FAQ
 
