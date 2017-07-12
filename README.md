@@ -166,6 +166,8 @@ module.exports = {
 Same as webpack's output.path.                                                                                            |
 | debug    | Boolean | false         | Whether or not debug mode should be enabled.                                                                                                                         |
 
+## FAQ
+
 
 ## Running Examples
 
