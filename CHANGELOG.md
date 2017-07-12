@@ -1,9 +1,20 @@
 # Change log
 
+## Next release
+
+#### Internal:
+- [#38](https://github.com/asfktz/autodll-webpack-plugin/pull/38) Fix test script on windows [@sudo-suhas](https://github.com/sudo-suhas)
+
+#### Committers:
+- Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
+
 ## 0.2.1
 
 #### Internal:
 - Add webpack as `devDependencies` for testing [@asfktz](https://github.com/asfktz)
+
+#### Committers:
+- Asaf Katz ([@asfktz](https://github.com/asfktz))
 
 ## 0.2.0
 
@@ -15,6 +26,8 @@
   Related to [#30](https://github.com/asfktz/autodll-webpack-plugin/issues/30#issuecomment-314489292) [breaking change]
 - Remove `yarn.lock` from examples. [@asfktz](https://github.com/asfktz)
 
+#### Committers:
+- Asaf Katz ([@asfktz](https://github.com/asfktz))
 
 ## 0.1.0
 
