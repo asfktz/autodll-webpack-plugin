@@ -23,8 +23,8 @@ Related to [#9](https://github.com/asfktz/autodll-webpack-plugin/issues/9).
 - [#36](https://github.com/asfktz/autodll-webpack-plugin/issues/36) Instance index is wrong when other plugins are used. [@asfktz](https://github.com/asfktz)
 
 #### Internal:
-- Move webpack from `dependencies` to `peerDependencies`. [@asfktz](https://github.com/asfktz) <br>
-  Related to [#30](https://github.com/asfktz/autodll-webpack-plugin/issues/30#issuecomment-314489292) **[breaking change]**
+- **[breaking change]** Move webpack from `dependencies` to `peerDependencies`. [@asfktz](https://github.com/asfktz) <br>
+  Related to [#30](https://github.com/asfktz/autodll-webpack-plugin/issues/30#issuecomment-314489292)
 - Remove `yarn.lock` from examples. [@asfktz](https://github.com/asfktz)
 
 #### Committers:
@@ -38,7 +38,7 @@ Related to [#9](https://github.com/asfktz/autodll-webpack-plugin/issues/9).
 - AutoDLL's is not playing nicely with other plugins which integrate with html-webpack-plugin [@asfktz](https://github.com/asfktz)
 
 #### Enhancement:
-- AutoDll's `.cache` dir now stores each instance files in it's own seperate subdirectory. [@viankakrisna](https://github.com/viankakrisna)
+- **[breaking change]** AutoDll's `.cache` dir now stores each instance files in it's own seperate subdirectory. [@viankakrisna](https://github.com/viankakrisna)
 - Context is now defaults to `process.cwd()` [@asfktz](https://github.com/asfktz)
 
 #### Documentation:
