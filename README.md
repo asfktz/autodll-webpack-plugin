@@ -160,7 +160,7 @@ module.exports = {
 |  Option  |   Type  |    Default    |                                                                                   Decription                                                                                  |
 |----------|---------|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | entries  | Object  |               | The entry points for the DLL's. <br> Think of it like the entry option in your webpack config. <br> Each entry point represents a DLL bundle and expects an array of modules. |
-| filename | String  | '[name].js'   | Thie filename template. <br> Same as webpack's output.filename                                                                                                                |
+| filename | String  | '[name].js'   | The filename template. <br> Same as webpack's output.filename                                                                                                                |
 | context  | String  | process.cwd() |                                                                                                                                                                               |
 | inject   | Boolean | false         |                                                                                                                                                                               |
 | path     | String  | ""            | The target directory for all output files. <br> Same as webpack's output.path.                                                                                                |
