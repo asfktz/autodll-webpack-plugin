@@ -3,8 +3,8 @@
 ## Next release
 
 #### Internal:
-- [#38](https://github.com/asfktz/autodll-webpack-plugin/pull/38) Fix test script on windows [@sudo-suhas](https://github.com/sudo-suhas) <br>
-Related to [#9](https://github.com/asfktz/autodll-webpack-plugin/issues/9)
+- [#38](https://github.com/asfktz/autodll-webpack-plugin/pull/38) Fix test script on windows. [@sudo-suhas](https://github.com/sudo-suhas) <br>
+Related to [#9](https://github.com/asfktz/autodll-webpack-plugin/issues/9).
 
 #### Committers:
 - Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
@@ -12,7 +12,7 @@ Related to [#9](https://github.com/asfktz/autodll-webpack-plugin/issues/9)
 ## 0.2.1
 
 #### Internal:
-- Add webpack as `devDependencies` for testing [@asfktz](https://github.com/asfktz)
+- Add webpack as `devDependencies` for testing. [@asfktz](https://github.com/asfktz)
 
 #### Committers:
 - Asaf Katz ([@asfktz](https://github.com/asfktz))
