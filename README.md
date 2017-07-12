@@ -155,6 +155,19 @@ module.exports = {
 ```
 
 
+## Options
+
+| Option   | Type    | Default       | Decription                                                                                                                                                           |
+| -------- | ------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| entries  | Object  |               | The entry points for the DLL's.  Think of it like the entry option in your webpack config. Each entry point represents a DLL bundle and expects an array of modules. |
+| filename | String  | '[name].js'   | Thie filename template.
+Same as webpack's output.filename                                                                                                            |
+| context  | String  | process.cwd() |                                                                                                                                                                      |
+| inject   | Boolean | false         |                                                                                                                                                                      |
+| path     | String  | ""            | The target directory for all output files.
+Same as webpack's output.path.                                                                                            |
+| debug    | Boolean | false         | Whether or not debug mode should be enabled.                                                                                                                         |
+
 ## Running Examples
 
 1. `git clone git@github.com:asfktz/autodll-webpack-plugin.git`
