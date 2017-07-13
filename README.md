@@ -7,6 +7,77 @@ Webpack's DllPlugin without the boilerplate
 
 ---
 
+## Options
+
+<table>
+    <thead>
+        <tr>
+            <th>Option</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Decription</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>entries</td>
+            <td>Object</td>
+            <td></td>
+            <td>
+              The entry points for the DLL's. <br>
+              Think of it like the entry option in your webpack config. <br>
+              Each entry point represents a DLL bundle and expects an array of modules. <br>
+<pre>entry: {
+    vendor: [
+      'react',
+      'react-dom',
+      'moment',
+      'lodash'
+    ],
+    admin: [
+        './src/admin/index.js'
+    ]
+}</pre>
+            </td>
+        </tr>
+        <tr>
+            <td>filename</td>
+            <td>String</td>
+            <td>'[name].js'</td>
+            <td>
+              The filename template. <br> Same as webpack's <code>output.filename</code>. <br>
+              Example: '[name]_[hash].dll.js'
+            </td>
+        </tr>
+        <tr>
+            <td>context</td>
+            <td>String</td>
+            <td>process.cwd()</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>inject</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>path</td>
+            <td>String</td>
+            <td>""</td>
+            <td>The target directory for all output files. <br> Same as webpack's <code>output.path</code>.</td>
+        </tr>
+        <tr>
+            <td>debug</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Whether or not debug mode should be enabled.</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
 Webpack's own DllPlugin it great, it can drastically reduce the amount of time needed to build (and rebuild) your bundles by reducing the amount of work needs to be done.
 
 If you think about it, most of the code in your bundles come from NPM modules that you're rarely going to touch. You know that, but Webpack doesn't. So every time it compiles it has to analyze and build them too - and that takes time.
@@ -154,72 +225,6 @@ module.exports = {
 };
 ```
 
-
-## Options
-
-<table>
-    <thead>
-        <tr>
-            <th>Option</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th>Decription</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>entries</td>
-            <td>Object</td>
-            <td></td>
-            <td>
-              The entry points for the DLL's. <br>
-              Think of it like the entry option in your webpack config. <br>
-              Each entry point represents a DLL bundle and expects an array of modules. <br>
-              <pre>entry: {
-    vendor: [
-      'react',
-      'react-dom',
-      'moment',
-      'lodash'
-    ],
-    admin: [
-        './src/admin/index.js'
-    ]
-}</pre>
-            </td>
-        </tr>
-        <tr>
-            <td>filename</td>
-            <td>String</td>
-            <td>'[name].js'</td>
-            <td>The filename template. <br> Same as webpack's output.filename</td>
-        </tr>
-        <tr>
-            <td>context</td>
-            <td>String</td>
-            <td>process.cwd()</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>inject</td>
-            <td>Boolean</td>
-            <td>false</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>path</td>
-            <td>String</td>
-            <td>""</td>
-            <td>The target directory for all output files. <br> Same as webpack's output.path.</td>
-        </tr>
-        <tr>
-            <td>debug</td>
-            <td>Boolean</td>
-            <td>false</td>
-            <td>Whether or not debug mode should be enabled.</td>
-        </tr>
-    </tbody>
-</table>
 
 ## FAQ
 
