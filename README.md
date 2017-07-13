@@ -174,7 +174,6 @@ module.exports = {
               The entry points for the DLL's. <br>
               Think of it like the entry option in your webpack config. <br>
               Each entry point represents a DLL bundle and expects an array of modules.
-              <pre>var test = 1</pre>
             </td>
         </tr>
         <tr>
