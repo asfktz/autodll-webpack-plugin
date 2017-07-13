@@ -156,6 +156,7 @@ module.exports = {
 
 
 ## Options
+
 <table>
     <thead>
         <tr>
@@ -173,7 +174,18 @@ module.exports = {
             <td>
               The entry points for the DLL's. <br>
               Think of it like the entry option in your webpack config. <br>
-              Each entry point represents a DLL bundle and expects an array of modules.
+              Each entry point represents a DLL bundle and expects an array of modules. <br>
+              <pre>entry: {
+    vendor: [
+      'react',
+      'react-dom',
+      'moment',
+      'lodash'
+    ],
+    admin: [
+        './src/admin/index.js'
+    ]
+}</pre>
             </td>
         </tr>
         <tr>
