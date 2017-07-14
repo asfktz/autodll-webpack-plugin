@@ -7,6 +7,7 @@ Webpack's DllPlugin without the boilerplate
 
 ---
 
+## Table of contents
 
 - [Introduction](#introduction)
 - [Options](#options)
