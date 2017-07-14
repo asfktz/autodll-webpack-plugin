@@ -5,15 +5,15 @@ Webpack's DllPlugin without the boilerplate
 
 `npm install --save-dev autodll-webpack-plugin`
 
-- Introduction
-- Options
-- FAQ
-- Examples
+- [Introduction](#introduction)
+- [Options](#options)
+- [FAQ](#faq)
+- [Examples](#running-examples)
 
 
 ---
 
-## Motivation
+## Introduction
 
 Webpack's own DllPlugin it great, it can drastically reduce the amount of time needed to build (and rebuild) your bundles by reducing the amount of work needs to be done.
 
