@@ -125,7 +125,7 @@ module.exports = {
 
 ### Recommended Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/recommended)):
 
-While it's not required, using AutoDllPlugin together with [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin), is highly recommended, because its saves you the trouble of manually adding the DLL bundles to the HTML by yourself.
+While it's not required, using AutoDllPlugin together with [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin) is highly recommended, because its saves you the trouble of manually adding the DLL bundles to the HTML by yourself.
 
 Use AutoDllPlugin's `inject` option to enabled this feature.
 
@@ -146,12 +146,12 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      inject: true,
+      inject: true, // will inject the main bundle to index.html
       template: './src/index.html',
     }),
     new AutoDllPlugin({
+      inject: true, // will inject the DLL bundle to index.html
       debug: true,
-      inject: true,
       filename: '[name]_[hash].js',
       path: './dll',
       entry: {
@@ -300,7 +300,55 @@ module.exports = {
 
 ## FAQ
 
-### The modules I specified in the DLL entry are duplicated! They included both in the DLL bundle AND the main bundle.
+### I added my dependencies to the DLL, and now, when I make a change to one of them I don't see it! Why?
+
+When you run webpack for the first time,  AutoDLL builds the DLL bundles and stores them in the cache for next time.
+
+That leads to faster builds and rebuilds (using webpack's dev server).
+
+There are two conditions for triggering a new build on the next run:
+1. Running `npm install / remove / update package-name` (or Yarn equivalent). 
+2. Changing the plugin's configurations.
+
+For performance considerations,  AutoDLL is not aware of any changes made to module's files themselves.
+
+So as long as you intend to work on a module, just exclude it from the DLL.
+
+For example, let's say you configured the plugin like so:
+
+```js
+new AutoDllPlugin({
+  entry: {
+    vendor: [
+      'react',
+      'react-dom',
+      'moment'
+    ]
+  }
+})
+```
+
+And then, while working on your project, you encountered some weird behavior with `moment` and decided to put a `console.log` statement in one of its files to see how it behaves.
+
+As explained above, AutoDLL is not going to invalidate its cache in this case, and you might get surprised that you don't see the changes.
+
+To fix that, all you have to do is comment out `moment` from the DLL, and uncomment it when you're done.
+
+```js
+new AutoDllPlugin({
+  entry: {
+    vendor: [
+      'react',
+      'react-dom',
+     // 'moment'
+    ]
+  }
+})
+```
+
+Simple as that (:
+
+### The modules I added to the DLL are duplicated! They included both in the DLL bundle AND the main bundle.
 
 That is most likely caused by using an incorrect context.
 
@@ -357,7 +405,7 @@ my-project
 ```
 
 Noticed that now our config is no longer stored at the base of our project, but in a subdirectory of its own. <br>
-That means that now we have to subtract the relative path from our base project to our config file from `__dirname`.
+That means that now we have to subtract the relative path to our config file from `__dirname`.
 
 We can use [node's path module](https://nodejs.org/docs/latest/api/path.html) to help us with that:
 
