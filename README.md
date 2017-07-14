@@ -5,13 +5,14 @@ Webpack's DllPlugin without the boilerplate
 
 `npm install --save-dev autodll-webpack-plugin`
 
+---
+
+
 - [Introduction](#introduction)
 - [Options](#options)
 - [FAQ](#faq)
 - [Examples](#running-examples)
 
-
----
 
 ## Introduction
 
