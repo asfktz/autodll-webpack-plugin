@@ -7,77 +7,6 @@ Webpack's DllPlugin without the boilerplate
 
 ---
 
-## Options
-
-<table>
-    <thead>
-        <tr>
-            <th>Option</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th>Decription</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>entries</td>
-            <td>Object</td>
-            <td></td>
-            <td>
-              The entry points for the DLL's. <br>
-              Think of it like the entry option in your webpack config. <br>
-              Each entry point represents a DLL bundle and expects an array of modules. <br>
-<pre>entry: {
-    vendor: [
-      'react',
-      'react-dom',
-      'moment',
-      'lodash'
-    ],
-    admin: [
-        './src/admin/index.js'
-    ]
-}</pre>
-            </td>
-        </tr>
-        <tr>
-            <td>filename</td>
-            <td>String</td>
-            <td>'[name].js'</td>
-            <td>
-              The filename template. <br> Same as webpack's <code>output.filename</code>. <br>
-              Example: '[name]_[hash].dll.js'
-            </td>
-        </tr>
-        <tr>
-            <td>context</td>
-            <td>String</td>
-            <td>process.cwd()</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>inject</td>
-            <td>Boolean</td>
-            <td>false</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>path</td>
-            <td>String</td>
-            <td>""</td>
-            <td>The target directory for all output files. <br> Same as webpack's <code>output.path</code>.</td>
-        </tr>
-        <tr>
-            <td>debug</td>
-            <td>Boolean</td>
-            <td>false</td>
-            <td>Whether or not debug mode should be enabled.</td>
-        </tr>
-    </tbody>
-</table>
-
-
-
 Webpack's own DllPlugin it great, it can drastically reduce the amount of time needed to build (and rebuild) your bundles by reducing the amount of work needs to be done.
 
 If you think about it, most of the code in your bundles come from NPM modules that you're rarely going to touch. You know that, but Webpack doesn't. So every time it compiles it has to analyze and build them too - and that takes time.
@@ -225,13 +154,144 @@ module.exports = {
 };
 ```
 
+## Options
 
-## FAQ
+<table>
+    <thead>
+        <tr>
+            <th>Option</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Decription</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>entry</td>
+            <td>Object</td>
+            <td>{}</td>
+            <td>
+              <p>
+                The entry points for the DLL's. <br>
+                Think of it as the entry option in your webpack config. <br>
+                Each entry point represents a DLL bundle and expects an array of modules. 
+              </p>
+<pre>entry: {
+    // Create a DLL from NPM modules:
+    vendor: [
+      'react',
+      'react-dom',
+      'moment',
+      'lodash'
+    ],
+    // Create a DLL from a part of your app
+    // that you rarely change:
+    admin: [
+        './src/admin/index.js'
+    ]
+}</pre>
+            </td>
+        </tr>
+        <tr>
+            <td>filename</td>
+            <td>String</td>
+            <td>"[name].js"</td>
+            <td>
+              <p>The filename template. <br> Same as webpack's
+                <a href="https://webpack.js.org/configuration/output/#output-filename">output.filename</a>.
+              </p>
+              <p>Examples:</p>
+              <ul>
+                <li>[name]_[hash].dll.js</li>
+                <li>[id].bundle.js</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>context</td>
+            <td>String</td>
+            <td><p>process.cwd()</p></td>
+            <td>
+              <p>
+                The base directory, an <strong>absolute path</strong>, for resolving entry points and loaders from the configuration.
+              </p>
+              <p>
+                Same as webpack's <a href="https://webpack.js.org/configuration/entry-context/#context">context</a>
+              </p>
+              <p>
+                <b>It is very important to make sure the context is set correctly</b>, <br>
+                otherwise, you'll end up with having the same modules both in the DLL bundles and in your main bundles!
+              </p>
+              <p>Most of the time, the defaults (the current directory) should work for you, here's how it should work:</p>
+              <p>If your webpack's config stored at the base of your project:</p>
+              <p><i>~/my-project/webpack.config.js</i></p>
+              <p>Set it up like this:</p>
+<pre>
+{
+  context: __dirname
+}
+</pre>
+
+<p>If your webpack's config stored in a nested directory:</p>
+<p><i>~/my-project/<b>config</b>/webpack.config.js</i></p>
+<p>It should look like this:</p>
+<pre>
+{
+  context: path.join(__dirname, '..')
+}
+</pre>
+          </td>
+        </tr>
+        <tr>
+            <td>inject</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>
+              <p>By setting inject to true, AutoDLL will inject the DLL bundles into the HTML for you.</p>
+              <p>
+                <b>Note:</b> <a href="https://github.com/jantimon/html-webpack-plugin">htmlWebpackPlugin</a>
+                is required for this feature to work.
+              </p>
+            </td>
+        </tr>
+        <tr>
+            <td>path</td>
+            <td>String</td>
+            <td>""</td>
+            <td>
+                The path for the DLL bundles, relative to webpack's
+                <a href="https://webpack.js.org/configuration/output/#output-publicpath">output.publicPath</a>
+            </td>
+        </tr>
+        <tr>
+            <td>debug</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Use debug mode the see more clearly what AutoDLL is doing.</td>
+        </tr>
+        <tr>
+            <td>plugins</td>
+            <td>Array</td>
+            <td>[]</td>
+            <td>
+              <p>
+                Plugins for the DLL compiler. Same as webpack's
+                <a href="https://webpack.js.org/configuration/plugins/">plugins</a>.
+              </p>
+              <pre>plugins: [
+  new webpack.optimize.UglifyJsPlugin()
+]</pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 
 ## Running Examples
 
 1. `git clone git@github.com:asfktz/autodll-webpack-plugin.git`
-2. `cd examples/recommended`
-3. `npm install`
-3. `npm start` or `npm run build`
+2. `cd autodll-webpack-plugin`
+3.  `npm install`
+4. `cd examples/recommended`
+5. `npm install`
+6. `npm start` or `npm run build`
