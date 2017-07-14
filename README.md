@@ -5,7 +5,15 @@ Webpack's DllPlugin without the boilerplate
 
 `npm install --save-dev autodll-webpack-plugin`
 
+- Introduction
+- Options
+- FAQ
+- Examples
+
+
 ---
+
+## Motivation
 
 Webpack's own DllPlugin it great, it can drastically reduce the amount of time needed to build (and rebuild) your bundles by reducing the amount of work needs to be done.
 
@@ -24,7 +32,7 @@ For example, these are the measurements for the  [performance test](https://gith
 
 
 
-## The DllPlugin sounds great! So why AutoDllPlugin?
+### The DllPlugin sounds great! So why AutoDllPlugin?
 
 While the DllPlugin has many advantages, its main drawback is that it requires a lot of boilerplate.
 
@@ -81,7 +89,7 @@ Will Result in:
 ```
 
 
-## Basic Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/basic)):
+### Basic Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/basic)):
 
 
 ```js
@@ -115,7 +123,11 @@ module.exports = {
 };
 ```
 
-## Recommended Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/recommended)):
+### Recommended Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/recommended)):
+
+While it's not required, using AutoDllPlugin together with [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin), is highly recommended, because its saves you the trouble of manually adding the DLL bundles to the HTML by yourself.
+
+Use AutoDllPlugin's `inject` option to enabled this feature.
 
 ```js
 const webpack = require('webpack');
@@ -286,6 +298,88 @@ module.exports = {
     </tbody>
 </table>
 
+## FAQ
+
+### The modules I specified in the DLL entry are duplicated! They included both in the DLL bundle AND the main bundle.
+
+That is most likely caused by using an incorrect context.
+
+AutoDLL will try its best to set the context for you, but as with [webpack's own context](https://webpack.js.org/configuration/entry-context/#context) property, sometimes it is better to do it manually.
+
+The context property should be an absolute path, pointing the base of your project.
+
+For example, let's you structured project like so:
+
+```
+my-project
+├── node_modules
+│   └── react
+│   └── react-dom
+├── src
+│   └── index.js
+│   └── module.js
+├── webpack.config.js
+└── package.json
+```
+
+Then, inside `webpack.config.js`, You'll setup the context like so:
+
+```js
+__dirname;   // '/Users/username/my-project'
+
+...
+
+new AutoDllPlugin({
+  context: __dirname,
+  entry: [
+    'react',
+    'react-dom',
+    './src/module.js'
+  ]
+})
+```
+
+Note that `__dirname` variable,  that's [node's way](https://nodejs.org/docs/latest/api/globals.html#globals_dirname) to get the absolute path of the current module's directly, which is exactly what we need because webpack.config.js stored in the base of our project.
+
+On the other hand, let's say your project is structured like so:
+
+```
+my-project
+├── node_modules
+│   └── react
+│   └── react-dom
+├── src
+│   └── index.js
+│   └── module.js
+├── config
+│   └── webpack.config.js
+└── package.json
+```
+
+Noticed that now our config is no longer stored at the base of our project, but in a subdirectory of its own. <br>
+That means that now we have to subtract the relative path from our base project to our config file from `__dirname`.
+
+We can use [node's path module](https://nodejs.org/docs/latest/api/path.html) to help us with that:
+
+```js
+var path = require('path');
+
+__dirname;                   // '/Users/username/my-project/config'
+path.join(__dirname, '..');  // '/Users/username/my-project'
+
+...
+
+new AutoDllPlugin({
+  context: path.join(__dirname, '..'),
+  entry: [
+    'react',
+    'react-dom',
+    './src/module.js'
+  ]
+})
+```
+
+If you still encounter an issue with setting up the context currently, please open an issue. I'll be happy to help you.
 
 ## Running Examples
 
