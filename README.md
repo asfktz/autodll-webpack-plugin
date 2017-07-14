@@ -346,7 +346,6 @@ new AutoDllPlugin({
 })
 ```
 
-Simple as that (:
 
 ### The modules I added to the DLL are duplicated! They included both in the DLL bundle AND the main bundle.
 
