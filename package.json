@@ -7,13 +7,12 @@
     "lint": "eslint src specs",
     "lint:fix": "npm run lint -- --fix",
     "lint-staged": "lint-staged",
-    "test": "ava specs/**/*.spec.js && ava --serial specs/**/*.spec-serial.js",
+    "test": "npm run build && ava specs/**/*.spec.js && ava --serial specs/**/*.spec-serial.js",
     "test:inspect": "node --inspect node_modules/ava/profile.js",
     "cleanup": "del-cli ./lib",
     "build": "npm run cleanup && babel src --out-dir lib",
     "build:watch": "npm run cleanup && babel src --out-dir lib --watch",
-    "prepublishOnly": "npm run build",
-    "precommit": "npm run build && lint-staged"
+    "prepublishOnly": "npm run build"
   },
   "author": "Asaf Katz",
   "license": "ISC",
@@ -21,14 +20,6 @@
     "src",
     "lib"
   ],
-  "lint-staged": {
-    "src/**/*.js": [
-      "eslint --fix"
-    ],
-    "specs/**/*.js": [
-      "eslint --fix"
-    ]
-  },
   "peerDependencies": {
     "webpack": ">= 2.0.0"
   },
