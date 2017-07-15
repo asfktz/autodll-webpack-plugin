@@ -6,14 +6,14 @@ import { cacheDir } from './paths';
 import createLogger from './createLogger';
 import del from 'del';
 
-const isCacheValid = settings => {
-  return makeDir(cacheDir)
+const _isCacheValid = (fs, cacheDir) => settings => {
+  return makeDir(cacheDir, { fs })
     .then(() => fs.statAsync(path.resolve(cacheDir, settings.hash)))
     .then(() => true)
     .catch(() => false);
 };
 
-const cleanup = settings => () => {
+const _cleanup = (fs, cacheDir) => settings => () => {
   return fs
     .readdirAsync(cacheDir)
     .filter(dirname => dirname.startsWith(`${settings.env}_${settings.id}`))
@@ -34,8 +34,10 @@ export const compile = (settings, getCompiler) => () => {
   });
 };
 
-const compileIfNeeded = (settings, getCompiler) => {
+export const _compileIfNeeded = (fs, cacheDir) => (settings, getCompiler) => {
   const log = createLogger(settings.debug);
+  const isCacheValid = _isCacheValid(fs, cacheDir);
+  const cleanup = _cleanup(fs, cacheDir);
 
   return isCacheValid(settings)
     .then(log.tap(isValid => `is valid cache? ${isValid}`))
@@ -50,4 +52,4 @@ const compileIfNeeded = (settings, getCompiler) => {
     });
 };
 
-export default compileIfNeeded;
+export default _compileIfNeeded(fs, cacheDir);
