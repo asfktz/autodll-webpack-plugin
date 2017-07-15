@@ -1,27 +1,25 @@
+import test from 'ava';
 import path from 'path';
-import test from 'tape';
-import { createGetPublicPath } from '../src/paths';
+import { createGetPublicPath } from '../lib/paths';
 
-test('createGetPublicPath: should return publicPath path currently', (tt) => {
+test('createGetPublicPath: should return publicPath path currently', (t) => {
   const compilerOptions = { output: { publicPath: '/base' } };
   const dllPath = './dllPath';
   const filename = 'filename.js';
   const getPublicPath = createGetPublicPath(compilerOptions, dllPath);
 
   const expected = path.normalize('/base/dllPath/filename.js');
-  tt.equals(getPublicPath(filename), expected);
-  tt.end();
+  t.deepEqual(getPublicPath(filename), expected);
 });
 
-test('createGetPublicPath: should return relative path currently when relative = true', (tt) => {
+test('createGetPublicPath: should return relative path currently when relative = true', (t) => {
   const compilerOptions = { output: { publicPath: '/base' } };
   const dllPath = './dllPath';
   const filename = 'filename.js';
   const getPublicPath = createGetPublicPath(compilerOptions, dllPath);
 
   const expected = path.normalize('dllPath/filename.js');
-  tt.equals(getPublicPath(filename, true), expected);
-  tt.end();
+  t.deepEqual(getPublicPath(filename, true), expected);
 });
 
 test('createGetPublicPath: without compiler.options.publicPath', (t) => {
@@ -32,6 +30,5 @@ test('createGetPublicPath: without compiler.options.publicPath', (t) => {
 
   const expected = path.normalize('dllPath/filename.js');
 
-  t.equals(getPublicPath(filename), expected);
-  t.end();
+  t.deepEqual(getPublicPath(filename), expected);
 });

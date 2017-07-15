@@ -7,8 +7,8 @@
     "lint": "eslint src specs",
     "lint:fix": "npm run lint -- --fix",
     "lint-staged": "lint-staged",
-    "test": "tape -r babel-register specs/**/*.spec.js | faucet",
-    "test:inspect": "babel-node --inspect ./node_modules/.bin/tape specs/**/*.spec.js",
+    "test": "ava specs/**/*.spec.js && ava --serial specs/**/*.spec-serial.js",
+    "test:inspect": "node --inspect node_modules/ava/profile.js",
     "cleanup": "del-cli ./lib",
     "build": "npm run cleanup && babel src --out-dir lib",
     "build:watch": "npm run cleanup && babel src --out-dir lib --watch",
@@ -46,6 +46,7 @@
     "memory-fs": "^0.4.1"
   },
   "devDependencies": {
+    "ava": "^0.21.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-preset-env": "^1.5.2",
@@ -59,7 +60,6 @@
     "pre-commit": "^1.2.2",
     "recursive-readdir": "^2.2.1",
     "spy": "^1.0.0",
-    "tape": "^4.7.0",
     "webpack": "^3.2.0"
   },
   "babel": {

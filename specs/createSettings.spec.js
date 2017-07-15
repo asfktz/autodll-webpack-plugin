@@ -1,5 +1,5 @@
-import test from 'tape';
-import createSettings from '../src/createSettings';
+import test from 'ava';
+import createSettings from '../lib/createSettings';
 
 test('createSettings:', t => {
   const results = createSettings({
@@ -26,13 +26,12 @@ test('createSettings:', t => {
     env: 'development',
     
     // TODO: test the hash separately.
-    // the context is diffrent on every environment,
-    // resulting in different hash on each
+    // context is diffrent in every environment,
+    // resulting in different hash for each
     hash: results.hash
   };
 
-  t.same(results, expected);
-  t.end();
+  t.deepEqual(results, expected);
 });
 
 test('createSettings:', t => {
@@ -64,6 +63,5 @@ test('createSettings:', t => {
     hash: results.hash
   };
 
-  t.same(results, expected);
-  t.end();
+  t.deepEqual(results, expected);
 });
