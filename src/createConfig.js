@@ -2,10 +2,15 @@ import webpack from 'webpack';
 import path from 'path';
 import { cacheDir } from './paths';
 
-const createConfig = ({ hash, filename, entry, plugins }) => {
+const createConfig = ({ hash, filename, entry, plugins: userPlugins = [], module = {} }) => {
   const outputPath = path.join(cacheDir, hash);
 
-  plugins = plugins || [];
+  const plugins = [
+    new webpack.DllPlugin({
+      path: path.join(outputPath, '[name].manifest.json'),
+      name: '[name]_[hash]'
+    })
+  ];
 
   return {
     resolve: {
@@ -17,12 +22,8 @@ const createConfig = ({ hash, filename, entry, plugins }) => {
       filename: filename,
       library: '[name]_[hash]'
     },
-    plugins: [
-      new webpack.DllPlugin({
-        path: path.join(outputPath, '[name].manifest.json'),
-        name: '[name]_[hash]'
-      })
-    ].concat(plugins)
+    module: module,
+    plugins: plugins.concat(userPlugins)
   };
 };
 
