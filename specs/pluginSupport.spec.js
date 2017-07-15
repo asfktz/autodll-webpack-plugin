@@ -34,6 +34,7 @@ test('pluginSupport', t => {
       filename: filename,
       library: '[name]_[hash]'
     },
+    module: {},
     plugins: [
       {
         options: {

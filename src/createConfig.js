@@ -2,7 +2,7 @@ import webpack from 'webpack';
 import path from 'path';
 import { cacheDir } from './paths';
 
-const createConfig = ({ hash, filename, entry, plugins: userPlugins = [], module = {} }) => {
+export const _createConfig = (cacheDir) => ({ hash, filename, entry, plugins: userPlugins = [], module = {} }) => {
   const outputPath = path.join(cacheDir, hash);
 
   const plugins = [
@@ -27,4 +27,4 @@ const createConfig = ({ hash, filename, entry, plugins: userPlugins = [], module
   };
 };
 
-export default createConfig;
+export default _createConfig(cacheDir);
