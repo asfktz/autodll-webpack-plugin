@@ -1,5 +1,5 @@
-import test from 'tape';
-import normalizeEntry from '../src/normalizeEntry';
+import test from 'ava';
+import normalizeEntry from '../lib/normalizeEntry';
 
 test('normalizeEntry: should exclude empty bundles', (t) => {
   const results = normalizeEntry({
@@ -9,15 +9,12 @@ test('normalizeEntry: should exclude empty bundles', (t) => {
     realBundle: ['test']
   });
 
-  t.same(results, {
+  t.deepEqual(results, {
     realBundle: ['test']
   });
-
-  t.end();
 });
 
-
-test('normalizeEntry: should return {} when received {}', (t) => {
-  t.same(normalizeEntry({}), {});
-  t.end();
+test('normalizeEntry: should return {} when received empty value', (t) => {
+  t.deepEqual(normalizeEntry({}), {});
+  t.deepEqual(normalizeEntry(undefined), {});
 });

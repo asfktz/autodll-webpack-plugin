@@ -1,6 +1,6 @@
-import test from 'tape';
-import { createMemory } from '../src/createMemory';
-import createHash from '../src/createHash';
+import test from 'ava';
+import { createMemory } from '../lib/createMemory';
+import createHash from '../lib/createHash';
 import MemoryFileSystem from 'memory-fs';
 import { promisifyAll } from 'bluebird';
 import path from 'path';
@@ -27,16 +27,14 @@ test('createMemory should have bundles', t => {
   const hash = createHash('someSettings');
   const fs = createFakeFS(hash);
 
-  createMemory(fs, cacheDir)(hash).then(memory => {
+  return createMemory(fs, cacheDir)(hash).then(memory => {
     const results = memory.getBundles();
 
-    t.equal(results[0].filename, 'vendor-a.bundle.js');
-    t.equal(results[1].filename, 'vendor-b.bundle.js');
+    t.deepEqual(results[0].filename, 'vendor-a.bundle.js');
+    t.deepEqual(results[1].filename, 'vendor-b.bundle.js');
 
-    t.equal(typeof results[0].buffer, 'object');
-    t.equal(typeof results[1].buffer, 'object');
-
-    t.end();
+    t.deepEqual(results[0].buffer.toString(), 'test 1');
+    t.deepEqual(results[1].buffer.toString(), 'test 2');
   });
 });
 
@@ -45,9 +43,8 @@ test('createMemory should not have bundles', t => {
   const otherSettingsHash = createHash('otherSettings');
   const fs = createFakeFS(otherSettingsHash);
 
-  createMemory(fs, cacheDir)(hash).then(memory => {
+  return createMemory(fs, cacheDir)(hash).then(memory => {
     const results = memory.getBundles();
-    t.equal(results.length, 0, 'should get no bundles');
-    t.end();
+    t.deepEqual(results.length, 0, 'should get no bundles');
   });
 });
