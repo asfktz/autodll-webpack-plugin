@@ -1,65 +1,70 @@
 import test from 'ava';
+import webpack from 'webpack';
 import { _createConfig } from '../lib/createConfig';
 import createHash from '../lib/createHash';
-import path from 'path';
 
 const cacheDir = '/.cache/fake-cache-dir';
 const createConfig = _createConfig(cacheDir);
 
 const makeConfig = ({ plugins, module } = {}) => {
-  const settings = {
+  const userSettings = {
+    filename: '[name].[hash].js',
     entry: {
       vendor: ['react', 'react-dom']
     }
   };
 
   if (plugins) {
-    settings.plugins = plugins;
+    userSettings.plugins = plugins;
   }
 
   if (module) {
-    settings.module = module;
+    userSettings.module = module;
   }
 
-  const filename = '[name].[hash].js';
-  const hash = createHash(settings);
-  const results = createConfig({ filename, entry: settings.entry, hash });
-  const outputPath = path.join(cacheDir, hash);
+  const settings = Object.assign({}, userSettings, {
+    hash: createHash(userSettings)
+  });
 
-  return { results, outputPath };
+  const results = createConfig(settings);
+
+  return results;
 };
 
 test('createConfig: basic', t => {
-  const { outputPath, results } = makeConfig();
+  t.snapshot(makeConfig());
+});
 
-  t.snapshot(results);
+test('createConfig: with plugins', t => {
+  t.snapshot(
+    makeConfig({
+      plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+          compress: true
+        })
+      ]
+    })
+  );
+});
 
-  // const expected = {
-  //   resolve: {
-  //     extensions: ['.js', '.jsx']
-  //   },
-  //   entry: {
-  //     vendor: ['react', 'react-dom']
-  //   },
-  //   output: {
-  //     path: outputPath,
-  //     filename: '[name].[hash].js',
-  //     library: '[name]_[hash]'
-  //   },
-  //   module: {},
-  //   plugins: [
-  //     {
-  //       options: {
-  //         path: path.join(outputPath, '/[name].manifest.json'),
-  //         name: '[name]_[hash]'
-  //       }
-  //     }
-  //   ]
-  // };
-
-  // t.deepEqual(
-  //   JSON.parse(JSON.stringify(results)),
-  //   JSON.parse(JSON.stringify(expected)),
-  //   'should output config currently'
-  // );
+test('createConfig: with module (loaders)', t => {
+  t.snapshot(
+    makeConfig({
+      module: {
+        rules: [
+          {
+            test: /\.jsx?$/,
+            include: [],
+            exclude: [],
+            issuer: {},
+            enforce: 'post',
+            loader: 'babel-loader',
+            options: {
+              presets: ['es2015']
+            }
+          }
+        ]
+      }
+    })
+  );
 });
