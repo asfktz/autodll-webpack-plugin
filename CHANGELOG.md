@@ -2,6 +2,10 @@
 
 ## Next release
 
+#### Documentation:
+- Add Options table
+- Add FAQ section
+
 #### Internal:
 - [#38](https://github.com/asfktz/autodll-webpack-plugin/pull/38) Fix test script on windows. [@sudo-suhas](https://github.com/sudo-suhas) <br>
 Related to [#9](https://github.com/asfktz/autodll-webpack-plugin/issues/9).
