@@ -9,7 +9,7 @@ const createConfig = ({ hash, filename, entry, plugins }) => {
 
   return {
     resolve: {
-      extensions: ['.js', '.jsx']
+      extensions: ['.js', '.jsx', '.json']
     },
     entry: entry,
     output: {
