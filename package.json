@@ -90,5 +90,19 @@
         ]
       }
     }
+  },
+  "ava": {
+    "files": [
+      "specs/getInstanceIndex.spec.js"
+    ],
+    "source": [
+      "src/**/*.js"
+    ],
+    "concurrency": 5,
+    "failFast": false,
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   }
 }
