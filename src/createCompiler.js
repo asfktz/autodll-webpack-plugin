@@ -1,9 +1,6 @@
 import webpack from 'webpack';
-import createConfig from './createConfig';
 
-const createCompiler = settings => {
-  const config = createConfig(settings);
-  //TODO: run in watch mode if settings.watch is set
+const createCompiler = config => {
   return webpack(config);
 };
 

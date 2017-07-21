@@ -50,20 +50,22 @@ test('createConfig: with plugins', t => {
 test('createConfig: with module (loaders)', t => {
   t.snapshot(
     makeConfig({
-      module: {
-        rules: [
-          {
-            test: /\.jsx?$/,
-            include: [],
-            exclude: [],
-            issuer: {},
-            enforce: 'post',
-            loader: 'babel-loader',
-            options: {
-              presets: ['es2015']
+      config: {
+        module: {
+          rules: [
+            {
+              test: /\.jsx?$/,
+              include: [],
+              exclude: [],
+              issuer: {},
+              enforce: 'post',
+              loader: 'babel-loader',
+              options: {
+                presets: ['es2015']
+              }
             }
-          }
-        ]
+          ]
+        }
       }
     })
   );

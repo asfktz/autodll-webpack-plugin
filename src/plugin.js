@@ -3,6 +3,7 @@ import path from 'path';
 
 import compileIfNeeded from './compileIfNeeded';
 import createCompiler from './createCompiler';
+import createConfig from './createConfig';
 import { cacheDir, createGetPublicPath } from './paths';
 import { concat, merge, keys } from './utils/index.js';
 import createSettings from './createSettings';
@@ -20,24 +21,20 @@ class AutoDLLPlugin {
   apply(compiler) {
     const settings = createSettings({
       originalSettings: this.originalSettings,
-      index: getInstanceIndex(compiler.options.plugins, this)
+      index: getInstanceIndex(compiler.options.plugins, this),
+      parentConfig: compiler.options
     });
 
     const { context, inject, entry } = settings;
-    
-    const getPublicPath = createGetPublicPath(
-      compiler.options,
-      settings.path
-    );
 
-    keys(entry)
-      .map(getManifestPath(settings.hash))
-      .forEach(manifestPath => {
-        new DllReferencePlugin({
-          context: context,
-          manifest: manifestPath,
-        }).apply(compiler);
-      });
+    const getPublicPath = createGetPublicPath(compiler.options, settings.path);
+
+    keys(entry).map(getManifestPath(settings.hash)).forEach(manifestPath => {
+      new DllReferencePlugin({
+        context: context,
+        manifest: manifestPath
+      }).apply(compiler);
+    });
 
     compiler.plugin('before-compile', (params, callback) => {
       params.compilationDependencies = params.compilationDependencies.filter(
@@ -47,8 +44,16 @@ class AutoDLLPlugin {
       callback();
     });
 
-    const onRun = (compiler, callback) =>
-      compileIfNeeded(settings, () => createCompiler(settings))
+    compiler.plugin(['run', 'watch-run'], (compiler, callback) => {
+      const getCompiler = () => {
+        const config = createConfig(settings, compiler.options);
+        console.log(config);
+        
+        
+        return createCompiler(config);
+      };
+
+      compileIfNeeded(settings, getCompiler)
         .then(() =>
           createMemory(settings.hash).then(memory => {
             this.initialized = true;
@@ -56,24 +61,21 @@ class AutoDLLPlugin {
           })
         )
         .then(callback);
-
-    compiler.plugin('watch-run', onRun);
-    compiler.plugin('run', onRun);
+    });
 
     compiler.plugin('emit', (compilation, callback) => {
       const { memory } = this;
-      
-      const assets = memory.getBundles()
-        .map(({ filename, buffer }) => {
-          const relativePath = getPublicPath(filename, true);
-          
-          return {
-            [relativePath]: {
-              source: () => buffer.toString(),
-              size: () => buffer.length
-            }
-          };
-        });
+
+      const assets = memory.getBundles().map(({ filename, buffer }) => {
+        const relativePath = getPublicPath(filename, true);
+
+        return {
+          [relativePath]: {
+            source: () => buffer.toString(),
+            size: () => buffer.length
+          }
+        };
+      });
 
       compilation.assets = merge(compilation.assets, ...assets);
       callback();
@@ -85,7 +87,9 @@ class AutoDLLPlugin {
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
             const { memory } = this;
-            const bundlesPublicPaths = memory.getBundles().map(({ filename }) => getPublicPath(filename));
+            const bundlesPublicPaths = memory
+              .getBundles()
+              .map(({ filename }) => getPublicPath(filename));
 
             htmlPluginData.assets.js = concat(
               bundlesPublicPaths,

@@ -32,10 +32,23 @@ module.exports = {
         ]
       },
 
-      inherit: false,
+      invalidate (state, config, hash) {
+        hash = hash.add('....');
+        
+        return Promise.resolve()
+          .then(() => {
+            hash = hash.add('....');
+
+            return hash;
+          });
+      },
+
+      inherit (config) {
+        return config;
+      },
+
       config: {
         output: {
-          
           library: 'yaboo',
           libraryTarget: 'umd',
           path: 'boooom',
