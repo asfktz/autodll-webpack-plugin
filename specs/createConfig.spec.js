@@ -1,7 +1,7 @@
 import test from 'ava';
 import webpack from 'webpack';
-import { _createConfig } from '../lib/createConfig';
-import createHash from '../lib/createHash';
+import { _createConfig } from '../src/createConfig';
+import createHash from '../src/createHash';
 
 const cacheDir = '/.cache/fake-cache-dir';
 const createConfig = _createConfig(cacheDir);

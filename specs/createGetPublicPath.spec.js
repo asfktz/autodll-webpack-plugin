@@ -1,6 +1,6 @@
 import test from 'ava';
 import path from 'path';
-import { createGetPublicPath } from '../lib/paths';
+import { createGetPublicPath } from '../src/paths';
 
 test('createGetPublicPath: should return publicPath path currently', (t) => {
   const compilerOptions = { output: { publicPath: '/base' } };

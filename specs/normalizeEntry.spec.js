@@ -1,5 +1,5 @@
 import test from 'ava';
-import normalizeEntry from '../lib/normalizeEntry';
+import normalizeEntry from '../src/normalizeEntry';
 
 test('normalizeEntry: should exclude empty bundles', (t) => {
   const results = normalizeEntry({

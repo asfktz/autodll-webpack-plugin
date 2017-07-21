@@ -1,6 +1,6 @@
 import test from 'ava';
-import getInstanceIndex, { isAutoDll } from '../lib/getInstanceIndex';
-import AutoDLLPlugin from '../lib/plugin';
+import getInstanceIndex, { isAutoDll } from '../src/getInstanceIndex';
+import AutoDLLPlugin from '../src/plugin';
 
 test('getInstanceIndex', t => {
   const instance = new AutoDLLPlugin();

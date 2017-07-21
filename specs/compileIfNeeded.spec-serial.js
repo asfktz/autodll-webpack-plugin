@@ -4,10 +4,10 @@ import path from 'path';
 import del from 'del';
 import recursive from 'recursive-readdir';
 
-import compileIfNeeded, { compile } from '../lib/compileIfNeeded';
-import createCompiler from '../lib/createCompiler';
-import createSettings from '../lib/createSettings';
-import { cacheDir } from '../lib/paths';
+import compileIfNeeded, { compile } from '../src/compileIfNeeded';
+import createCompiler from '../src/createCompiler';
+import createSettings from '../src/createSettings';
+import { cacheDir } from '../src/paths';
 
 test('compileIfNeeded: compile: should not call getCompiler when entry is {} ', t => {
   {
