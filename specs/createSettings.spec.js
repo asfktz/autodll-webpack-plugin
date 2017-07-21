@@ -1,11 +1,8 @@
 import test from 'ava';
 import mergeAll from 'lodash/fp/mergeAll';
 import { _createSettings } from '../src/createSettings';
-import { _getEnv } from '../src/getEnv';
+import { getEnv, getContext } from './helpers/mocks';
 
-const fakeProcess = { env: { NODE_ENV: 'FAKE_ENV' } };
-const getEnv = _getEnv(fakeProcess);
-const getContext = () => '/fake_context/';
 const createSettings = _createSettings(getEnv, getContext);
 
 const base = {

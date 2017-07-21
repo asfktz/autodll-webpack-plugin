@@ -47,9 +47,6 @@ class AutoDLLPlugin {
     compiler.plugin(['run', 'watch-run'], (compiler, callback) => {
       const getCompiler = () => {
         const config = createConfig(settings, compiler.options);
-        console.log(config);
-        
-        
         return createCompiler(config);
       };
 

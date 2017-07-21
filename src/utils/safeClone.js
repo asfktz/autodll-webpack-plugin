@@ -6,7 +6,6 @@ import isArray from 'lodash/isArray';
 const safeClone = (config) => {
   return cloneDeepWith(config, value => {
     if (isObject(value) && (!isPlainObject(value) && !isArray(value))) {
-      console.log(value);
       return value;
     }
   });

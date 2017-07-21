@@ -1,72 +1,98 @@
 import test from 'ava';
 import webpack from 'webpack';
+import mergeAll from 'lodash/fp/mergeAll';
+import isUndefined from 'lodash/isUndefined';
 import { _createConfig } from '../src/createConfig';
-import createHash from '../src/createHash';
+import { _createSettings } from '../src/createSettings';
+import { cacheDir, getEnv, getContext } from './helpers/mocks';
 
-const cacheDir = '/.cache/fake-cache-dir';
+import AutoDllPlugin from '../src';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+
+const createSettings = _createSettings(getEnv, getContext);
 const createConfig = _createConfig(cacheDir);
 
-const makeConfig = ({ plugins, module } = {}) => {
-  const userSettings = {
-    filename: '[name].[hash].js',
-    entry: {
-      vendor: ['react', 'react-dom']
+const parentConfig = {
+  context: './src',
+  entry: {
+    home: './home.js',
+    events: './events.js',
+    contact: './contact.js',
+  },
+  output: {
+    path: './dist',
+    filename: '[name].bundle.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(sass|scss)$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
+        ]
+      } 
+      // …
+    ],
+  },
+  node: {
+    fs: 'empty'
+  },
+  plugins: [
+    new AutoDllPlugin(),
+    new HtmlWebpackPlugin(),
+    new UglifyJsPlugin()
+  ]
+};
+
+const settingsHelper = (overrides = {}) => {
+  const base = {
+    index: 2,
+    originalSettings: {
+      entry: {
+        reactStuff: ['react', 'react-dom'],
+        animationStuff: ['pixi.js', 'gsap']
+      }
     }
   };
 
-  if (plugins) {
-    userSettings.plugins = plugins;
-  }
-
-  if (module) {
-    userSettings.module = module;
-  }
-
-  const settings = Object.assign({}, userSettings, {
-    hash: createHash(userSettings)
-  });
-
-  const results = createConfig(settings);
-
-  return results;
+  return createSettings(
+    mergeAll([base, {
+      originalSettings: overrides
+    }])
+  );
 };
 
 test('createConfig: basic', t => {
-  t.snapshot(makeConfig());
+  const settings = settingsHelper({});
+  const results = createConfig(settings, {});
+  t.snapshot(results);
 });
 
-test('createConfig: with plugins', t => {
-  t.snapshot(
-    makeConfig({
-      plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-          compress: true
-        })
-      ]
-    })
-  );
+test('createConfig: should not inherit when { inherit: false }', t => {
+  const settings = settingsHelper({
+    inherit: false
+  });
+
+  const results = createConfig(settings, parentConfig);
+  t.true(results.plugins.length === 1, 'should have only one plugin (DllPlugin)');
+  t.true(results.plugins[0].constructor.name === 'DllPlugin', 'ensure DllPlugin is included');
+  t.true(isUndefined(results.module));
+  t.true(isUndefined(results.node));
 });
 
-test('createConfig: with module (loaders)', t => {
-  t.snapshot(
-    makeConfig({
-      config: {
-        module: {
-          rules: [
-            {
-              test: /\.jsx?$/,
-              include: [],
-              exclude: [],
-              issuer: {},
-              enforce: 'post',
-              loader: 'babel-loader',
-              options: {
-                presets: ['es2015']
-              }
-            }
-          ]
-        }
-      }
-    })
-  );
+test('createConfig: should inherit', t => {
+  const settings = settingsHelper({
+    inherit: true
+  });
+
+  const results = createConfig(settings, parentConfig);
+
+  t.deepEqual(results.module, parentConfig.module);
+  t.deepEqual(results.node, parentConfig.node);
+
+  t.true(results.plugins.length === 1, 'should not inherit plugins by default. but should have DllPlugin');
+  t.true(results.plugins[0].constructor.name === 'DllPlugin', 'ensure DllPlugin is included');
 });
