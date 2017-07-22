@@ -22,8 +22,7 @@ const cleanup = settings => () => {
 
 export const runCompile = (settings, getDllCompiler) => () => {
   // skip compiling if there is nothing to build
-  if (isEmpty(settings.entry)) return;
-
+  // if (isEmpty(settings.entry)) return;
   return new Promise((resolve, reject) => {
     getDllCompiler().run((err, stats) => {
       if (err) {
@@ -40,13 +39,18 @@ const compileIfNeeded = (settings, getCompiler) => {
   return isCacheValid(settings)
     .then(log.tap(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
-      if (isValid) return;
+      if (isValid) {
+        return { source: 'cache', stats: null };
+      }
 
       return Promise.resolve()
         .then(log.tap('cleanup'))
         .then(cleanup(settings))
         .then(log.tap('compile'))
-        .then(runCompile(settings, getCompiler));
+        .then(runCompile(settings, getCompiler))
+        .then((stats) => {
+          return { source: 'build', stats };
+        });
     });
 };
 

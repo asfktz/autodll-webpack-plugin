@@ -1,10 +1,10 @@
 import { DllReferencePlugin } from 'webpack';
 import path from 'path';
 
+import createConfig from './createConfig';
 import compileIfNeeded from './compileIfNeeded';
 import createDllCompiler from './createDllCompiler';
-import createConfig from './createConfig';
-import { cacheDir, createGetPublicPath } from './paths';
+import { cacheDir, createGetPublicDllPath } from './paths';
 import { concat, merge, keys } from './utils/index.js';
 import createSettings from './createSettings';
 import getInstanceIndex from './getInstanceIndex';
@@ -15,21 +15,28 @@ export const getManifestPath = hash => bundleName =>
 
 class AutoDLLPlugin {
   constructor(settings) {
-    this.originalSettings = settings;
+    this._originalSettings = settings;
   }
 
   apply(compiler) {
     const settings = createSettings({
-      originalSettings: this.originalSettings,
+      originalSettings: this._originalSettings,
       index: getInstanceIndex(compiler.options.plugins, this),
       parentConfig: compiler.options
     });
 
-    const { context, inject, entry } = settings;
+    const dllConfig = createConfig(settings, compiler.options);
 
-    const getPublicPath = createGetPublicPath(compiler.options, settings.path);
+    // exposed for better clarity while debugging 
+    this._settings = settings;
+    this._dllConfig = dllConfig;
 
-    keys(entry).map(getManifestPath(settings.hash)).forEach(manifestPath => {
+    const { context, inject } = settings;
+
+    console.log('context:', context);
+    const getPublicDllPath = createGetPublicDllPath(settings);
+
+    keys(dllConfig.entry).map(getManifestPath(settings.hash)).forEach(manifestPath => {
       new DllReferencePlugin({
         context: context,
         manifest: manifestPath
@@ -45,13 +52,16 @@ class AutoDLLPlugin {
     });
 
     compiler.plugin(['run', 'watch-run'], (compiler, callback) => {
-      compileIfNeeded(settings, createDllCompiler(settings, compiler.options))
-        .then(() =>
-          createMemory(settings.hash).then(memory => {
-            this.initialized = true;
-            this.memory = memory;
-          })
-        )
+      compileIfNeeded(settings, createDllCompiler(dllConfig))
+        .then((state) => {
+          this.state = state;
+
+          createMemory(settings.hash)
+            .then(memory => {
+              this.initialized = true;
+              this.memory = memory;
+            });
+        })
         .then(callback);
     });
 
@@ -59,7 +69,7 @@ class AutoDLLPlugin {
       const { memory } = this;
 
       const assets = memory.getBundles().map(({ filename, buffer }) => {
-        const relativePath = getPublicPath(filename, true);
+        const relativePath = getPublicDllPath(filename, true);
 
         return {
           [relativePath]: {
@@ -81,7 +91,7 @@ class AutoDLLPlugin {
             const { memory } = this;
             const bundlesPublicPaths = memory
               .getBundles()
-              .map(({ filename }) => getPublicPath(filename));
+              .map(({ filename }) => getPublicDllPath(filename));
 
             htmlPluginData.assets.js = concat(
               bundlesPublicPaths,

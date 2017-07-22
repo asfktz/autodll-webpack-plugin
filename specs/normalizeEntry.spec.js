@@ -13,8 +13,3 @@ test('normalizeEntry: should exclude empty bundles', (t) => {
     realBundle: ['test']
   });
 });
-
-test('normalizeEntry: should return {} when received empty value', (t) => {
-  t.deepEqual(normalizeEntry({}), {});
-  t.deepEqual(normalizeEntry(undefined), {});
-});

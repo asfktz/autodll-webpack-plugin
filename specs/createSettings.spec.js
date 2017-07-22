@@ -7,6 +7,9 @@ const createSettings = _createSettings(getEnv, getContext);
 
 const base = {
   index: 0,
+  parentConfig: {
+    context: '/parent_context/'
+  },
   originalSettings: {
     entry: {
       reactStuff: ['react', 'react-dom'],
@@ -24,7 +27,7 @@ test('createSettings: create hash with env & instance index', t => {
   {
     const params = mergeAll([base, { index: 9 }]);
     const results = createSettings(params);
-    t.is(results.hash, 'FAKE_ENV_instance_9_562e0fe624fe82ce5e6172ccfaa4f900');
+    t.is(results.hash, 'FAKE_ENV_instance_9_f7e8a26f2784cc5287aeb695c43afae1');
   }
 
   {
@@ -35,7 +38,7 @@ test('createSettings: create hash with env & instance index', t => {
 
     const results = createSettings(params);
 
-    t.is(results.hash, 'MARS_instance_2_f25047331adabfbf5310911a578cd763');
+    t.is(results.hash, 'MARS_instance_2_5cfe735fbe5ff42ad8a69efc1e64a05e');
   }
 });
 
@@ -47,7 +50,7 @@ test('createSettings: set the default base options currently', t => {
     t.is(results.inject, false);
     t.is(results.filename, '[name].js');
     t.is(results.path, '');
-    t.is(results.context, '/fake_context/');
+    t.is(results.context, '/parent_context/');
   }
 });
 
@@ -62,6 +65,11 @@ test('createSettings: override the base options currently', t => {
           filename: '[name].[hash].special.js',
           path: '/path/to/dll',
           context: '/override_context/'
+        },
+        parentConfig: {
+          output: {
+            publicPath: '/some_public_path/'
+          }
         }
       }
     ]);
@@ -73,5 +81,43 @@ test('createSettings: override the base options currently', t => {
     t.is(results.filename, '[name].[hash].special.js');
     t.is(results.path, '/path/to/dll');
     t.is(results.context, '/override_context/');
+    t.is(results.publicPath, '/some_public_path/');
+  }
+});
+
+
+test('createSettings: context override', t => {
+  {
+    const params = mergeAll([
+      base,
+      {
+        parentConfig: {
+          context: '/parent_context/'
+        },
+        originalSettings: {}
+      }
+    ]);
+
+    const results = createSettings(params);
+
+    t.is(results.context, '/parent_context/');
+  }
+
+  {
+    const params = mergeAll([
+      base,
+      {
+        parentConfig: {
+          context: '/parent_context/'
+        },
+        originalSettings: {
+          context: '/settings_context/'
+        }
+      }
+    ]);
+
+    const results = createSettings(params);
+
+    t.is(results.context, '/settings_context/');
   }
 });

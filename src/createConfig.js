@@ -16,20 +16,30 @@ const prepare = config => {
     plugin => get(plugin, 'constructor.name') === 'AutoDLLPlugin'
   );
 
-  return merge(omit(config, 'entry', 'output', 'plugins'), { plugins });
+  // omit properties that can break things
+  // context is omitted becouse we already assigned the parent context as the defaults in createSettings
+  // plugins are ommited by default too. It's not ideal, but it's better to let the user make a conscious choice about it.
+  return merge(omit(config, 'context',  'plugins', 'entry', 'output'), {
+    plugins
+  });
 };
 
 const mapParentConfig = (settings, rawParentConfig) => {
   const parentConfig = prepare(rawParentConfig);
-  let originalParentConfig;
+  let _originalParentConfig;
 
   if (settings.debug) {
-    originalParentConfig = cloneDeep(parentConfig);
+    _originalParentConfig = cloneDeep(parentConfig);
   }
+  
+  // The user can control what to inherit from the parent config
+  // by passing a fucntion to inherit the user can take only the properties he wants.
+  // At this stage, inherit is always a function. regardless of what the user set "inherit" to be.
+  // it created by createSettings.
+  var mapFn = settings.inherit;
+  const mappedParentConfig = mapFn(safeClone(parentConfig));
 
-  const mappedParentConfig = settings.inherit(safeClone(parentConfig));
-
-  if (settings.debug && !isEqual(parentConfig, originalParentConfig)) {
+  if (settings.debug && !isEqual(parentConfig, _originalParentConfig)) {
     throw new Error('Do not modify the original config');
   }
 
@@ -49,6 +59,7 @@ export const _createConfig = cacheDir => (settings, rawParentConfig) => {
   const parentConfig = mapParentConfig(settings, rawParentConfig);
 
   const ownConfig = {
+    context: settings.context,
     entry: settings.entry,
     plugins: [
       new DllPlugin({
@@ -65,9 +76,11 @@ export const _createConfig = cacheDir => (settings, rawParentConfig) => {
   const advanceConfig = settings.config;
 
   const cacheConfig = {
+    // The user is not allowed to change output.path
+    // otherwise bad things will happen.
+    // (this is the path for the cache)
     output: {
-      path: path.join(outputPath),
-      publicPath: ''
+      path: path.join(outputPath)
     }
   };
 

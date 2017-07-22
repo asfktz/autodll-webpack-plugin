@@ -1,6 +1,7 @@
 import omit from 'lodash/omit';
 import isNil from 'lodash/isNil';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
 import stubObject from 'lodash/stubObject';
 import { merge } from './utils';
@@ -10,7 +11,6 @@ import getEnv from './getEnv';
 
 
 const getInstanceId = index => `instance_${index}`;
-const getContext = () => process.cwd();
 
 const getExclude = inherit => {
   return isArray(inherit.exclude) ? inherit.exclude : ['plugins'];
@@ -33,11 +33,21 @@ const getInherit = inherit => {
   return createDefaultInherit(exclude);
 };
 
-export const _createSettings = (getEnv, getContext) => ({ originalSettings, index }) => {
+export const _createSettings = (getEnv) => ({ originalSettings, index, parentConfig }) => {
   const { entry, env, inherit, ...otherSettings } = originalSettings;
   
   const defaults = {
-    context: getContext(),
+    // Keep an eye on this one.
+    // Till now process.cwd() was used as default
+    // but using parentConfig.context makes more sense.
+    // From webpack's docs, it defaults to process.cwd() too.
+    context: parentConfig.context,
+
+    // Whether the user wants to inherit from parent config or not, we must have publicPath.
+    // we'll use it later when we read the dll bundles from memory.
+    // defaults to '/'
+    publicPath: get(parentConfig, 'output.publicPath', '/'),
+    
     path: '',
     entry: null,
     filename: '[name].js',
@@ -59,4 +69,4 @@ export const _createSettings = (getEnv, getContext) => ({ originalSettings, inde
   });
 };
 
-export default _createSettings(getEnv, getContext);
+export default _createSettings(getEnv);

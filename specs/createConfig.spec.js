@@ -1,16 +1,27 @@
 import test from 'ava';
-import mergeAll from 'lodash/fp/mergeAll';
 import isUndefined from 'lodash/isUndefined';
 import { _createConfig } from '../src/createConfig';
-import { _createSettings } from '../src/createSettings';
-import { cacheDir, getEnv, getContext } from './helpers/mocks';
+import { cacheDir} from './helpers/mocks';
+import createSettingsHelper from './helpers/createSettingsHelper';
 
 import AutoDllPlugin from '../src';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 
-const createSettings = _createSettings(getEnv, getContext);
 const createConfig = _createConfig(cacheDir);
+
+const settingsHelper = createSettingsHelper({
+  index: 2,
+  parentConfig: {
+    context: '/parent_context/'
+  },
+  originalSettings: {
+    entry: {
+      reactStuff: ['react', 'react-dom'],
+      animationStuff: ['pixi.js', 'gsap']
+    }
+  }
+});
 
 const parentConfig = {
   context: './src',
@@ -44,24 +55,6 @@ const parentConfig = {
     new HtmlWebpackPlugin(),
     new UglifyJsPlugin()
   ]
-};
-
-const settingsHelper = (overrides = {}) => {
-  const base = {
-    index: 2,
-    originalSettings: {
-      entry: {
-        reactStuff: ['react', 'react-dom'],
-        animationStuff: ['pixi.js', 'gsap']
-      }
-    }
-  };
-
-  return createSettings(
-    mergeAll([base, {
-      originalSettings: overrides
-    }])
-  );
 };
 
 test('createConfig: basic', t => {

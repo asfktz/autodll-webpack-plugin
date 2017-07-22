@@ -1,8 +1,6 @@
 import webpack from 'webpack';
-import createConfig from './createConfig';
 
-const createDllCompiler = (settings, parentConfig) => () => {
-  const config = createConfig(settings, parentConfig);
+const createDllCompiler = (config) => () => {
   return webpack(config);
 };
 
