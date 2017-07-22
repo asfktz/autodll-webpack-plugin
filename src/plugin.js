@@ -2,7 +2,7 @@ import { DllReferencePlugin } from 'webpack';
 import path from 'path';
 
 import compileIfNeeded from './compileIfNeeded';
-import createCompiler from './createCompiler';
+import createDllCompiler from './createDllCompiler';
 import createConfig from './createConfig';
 import { cacheDir, createGetPublicPath } from './paths';
 import { concat, merge, keys } from './utils/index.js';
@@ -45,12 +45,7 @@ class AutoDLLPlugin {
     });
 
     compiler.plugin(['run', 'watch-run'], (compiler, callback) => {
-      const getCompiler = () => {
-        const config = createConfig(settings, compiler.options);
-        return createCompiler(config);
-      };
-
-      compileIfNeeded(settings, getCompiler)
+      compileIfNeeded(settings, createDllCompiler(settings, compiler.options))
         .then(() =>
           createMemory(settings.hash).then(memory => {
             this.initialized = true;

@@ -1,5 +1,4 @@
 import test from 'ava';
-import webpack from 'webpack';
 import mergeAll from 'lodash/fp/mergeAll';
 import isUndefined from 'lodash/isUndefined';
 import { _createConfig } from '../src/createConfig';

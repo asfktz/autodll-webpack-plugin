@@ -20,12 +20,12 @@ const cleanup = settings => () => {
     .each(dirname => del(path.join(cacheDir, dirname)));
 };
 
-export const compile = (settings, getCompiler) => () => {
+export const runCompile = (settings, getDllCompiler) => () => {
   // skip compiling if there is nothing to build
   if (isEmpty(settings.entry)) return;
 
   return new Promise((resolve, reject) => {
-    getCompiler().run((err, stats) => {
+    getDllCompiler().run((err, stats) => {
       if (err) {
         return reject(err);
       }
@@ -46,7 +46,7 @@ const compileIfNeeded = (settings, getCompiler) => {
         .then(log.tap('cleanup'))
         .then(cleanup(settings))
         .then(log.tap('compile'))
-        .then(compile(settings, getCompiler));
+        .then(runCompile(settings, getCompiler));
     });
 };
 

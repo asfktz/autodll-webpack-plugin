@@ -3,31 +3,33 @@ import spy from 'spy';
 import path from 'path';
 import del from 'del';
 import recursive from 'recursive-readdir';
-
-import compileIfNeeded, { compile } from '../src/compileIfNeeded';
-import createCompiler from '../src/createCompiler';
+import compileIfNeeded, { runCompile }  from '../src/compileIfNeeded';
+import createDllCompiler from '../src/createDllCompiler';
 import createSettings from '../src/createSettings';
 import { cacheDir } from '../src/paths';
 
-test('compileIfNeeded: compile: should not call getCompiler when entry is {} ', t => {
+test('compileIfNeeded: runCompile: should not call getCompiler when entry is {} ', t => {
   {
-    const settings = { entry: { vendor: ['lib'] } };
-    const compiler = { run: spy() };
-    compile(settings, () => compiler)();
-    t.is(compiler.run.called, true, 'should call compiler.run');
+    const settings = { entry: {} };
+    const dllCompiler = { run: spy() };
+    runCompile(settings, () => dllCompiler)();
+
+    t.is(dllCompiler.run.called, false, 'should NOT call compiler.run');
   }
 
   {
-    const settings = { entry: {} };
-    const compiler = { run: spy() };
-    compile(settings, () => compiler)();
-    t.is(compiler.run.called, false, 'should NOT compiler.run');
+    const settings = { entry: { vendor: ['lib'] } };
+    const dllCompiler = { run: spy() };
+    runCompile(settings, () => dllCompiler)();
+    t.is(dllCompiler.run.called, true, 'should call compiler.run');
   }
 });
 
 const cleanup = () => del.sync(path.join(cacheDir));
 
 test('compileIfNeeded: should generate files', t => {
+  t.plan(1);
+
   cleanup();
 
   const settings = createSettings({
@@ -45,7 +47,7 @@ test('compileIfNeeded: should generate files', t => {
     path.join(cacheDir, settings.hash, file)
   );
 
-  return compileIfNeeded(settings, () => createCompiler(settings))
+  return compileIfNeeded(settings, createDllCompiler(settings, {}))
     .then(() => recursive(cacheDir))
     .then(files => {
       t.deepEqual(expected.sort(), files.sort());
@@ -53,59 +55,50 @@ test('compileIfNeeded: should generate files', t => {
     });
 });
 
-test(
-  'compileIfNeeded: should skip when settings equals lastSettings.json',
-  t => {
-    cleanup();
+test.only('compileIfNeeded: should skip when settings equals lastSettings.json', t => {
+  cleanup();
 
-    const createCompilerSpy = settings => {
-      const compiler = createCompiler(settings);
-      spy(compiler, 'run');
-      return compiler;
-    };
+  const createDllCompilerSpy = settings => {
+    const getCompiler = createDllCompiler(settings, {});
+    const compiler = getCompiler();
+    spy(compiler, 'run');
+    return compiler;
+  };
 
-    const settings = createSettings({
-      originalSettings: {
-        context: path.join(__dirname, '..'),
-        entry: {
-          vendor: ['lodash']
-        }
-      },
-      index: 4,
-      env: 'planet_earth'
-    });
+  const settings = createSettings({
+    originalSettings: {
+      context: path.join(__dirname, '..'),
+      entry: {
+        vendor: ['lodash']
+      }
+    },
+    index: 4,
+    env: 'planet_earth'
+  });
 
-    return Promise.resolve()
-      .then(() => {
-        let _compiler;
+  return Promise.resolve()
+    .then(() => {
+      let _compiler;
 
-        return compileIfNeeded(settings, () => {
-          _compiler = createCompilerSpy(settings);
-          return _compiler;
-        }).then(() => {
-          t.is(
-            _compiler.run.called,
-            true,
-            'Should call getCompiler the first time'
-          );
-        });
-      })
-      .then(() => {
-        let _compiler = 'NEVER_CREATED';
-
-        return compileIfNeeded(settings, () => {
-          _compiler = createCompilerSpy(settings);
-          return _compiler;
-        }).then(() => {
-          t.is(
-            _compiler,
-            'NEVER_CREATED',
-            'Should NOT call the getCompiler the second time'
-          );
-        });
-      })
-      .then(() => {
-        cleanup();
+      return compileIfNeeded(settings, () => {
+        _compiler = createDllCompilerSpy(settings);
+        return _compiler;
+      }).then(() => {
+        t.is(
+          _compiler.run.called,
+          true,
+          'Should call getCompiler the first time'
+        );
       });
-  }
-);
+    })
+    .then(() => {
+      compileIfNeeded(settings, () => {
+        t.fail('getDllCompiler is called');
+      });
+
+      t.pass('getDllCompiler is not called');
+    })
+    .then(() => {
+      cleanup();
+    });
+});

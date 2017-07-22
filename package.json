@@ -1,5 +1,7 @@
 {
   "name": "autodll-webpack-plugin",
+  "author": "Asaf Katz",
+  "license": "MIT",
   "version": "0.2.1",
   "description": "",
   "main": "lib/index.js",
@@ -15,22 +17,18 @@
     "build": "npm run cleanup && babel src --out-dir lib",
     "build:watch": "npm run cleanup && babel src --out-dir lib --watch",
     "prepublishOnly": "npm run build",
-    "precommit": "npm run cleanup && del-cli yarn.lock && npm run build && lint-staged && npm run test"
+    "precommit": "del-cli yarn.lock && lint-staged && npm run test"
   },
-  "author": "Asaf Katz",
-  "license": "ISC",
   "files": [
     "src",
     "lib"
   ],
   "lint-staged": {
     "src/**/*.js": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ],
     "specs/**/*.js": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "peerDependencies": {
