@@ -55,7 +55,7 @@ test('compileIfNeeded: should generate files', t => {
     });
 });
 
-test.only('compileIfNeeded: should skip when settings equals lastSettings.json', t => {
+test('compileIfNeeded: should skip when settings equals lastSettings.json', t => {
   cleanup();
 
   const createDllCompilerSpy = settings => {
