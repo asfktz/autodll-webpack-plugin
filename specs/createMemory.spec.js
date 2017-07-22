@@ -1,6 +1,6 @@
 import test from 'ava';
-import { createMemory } from '../lib/createMemory';
-import createHash from '../lib/createHash';
+import { createMemory } from '../src/createMemory';
+import createHash from '../src/createHash';
 import MemoryFileSystem from 'memory-fs';
 import { promisifyAll } from 'bluebird';
 import path from 'path';
