@@ -380,11 +380,12 @@ __dirname;   // '/Users/username/my-project'
 
 new AutoDllPlugin({
   context: __dirname,
-  vendor: [
-    'react',
-    'react-dom',
-    './src/module.js'
-  ]
+  entry: {
+    vendor: [
+      'react',
+      'react-dom'
+    ]
+  }
 })
 ```
 
@@ -420,11 +421,12 @@ path.join(__dirname, '..');  // '/Users/username/my-project'
 
 new AutoDllPlugin({
   context: path.join(__dirname, '..'),
-  vendor: [
-    'react',
-    'react-dom',
-    './src/module.js'
-  ]
+  entry: {
+    vendor: [
+      'react',
+      'react-dom'
+    ]
+  }
 })
 ```
 
