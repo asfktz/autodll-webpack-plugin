@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const AutoDllPlugin = require('autodll-webpack-plugin');
+const AutoDllPlugin = require('../../lib');
 
 module.exports = {
   entry: {

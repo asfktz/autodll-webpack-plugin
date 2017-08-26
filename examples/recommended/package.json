@@ -9,7 +9,6 @@
   },
   "devDependencies": {
     "html-webpack-plugin": "^2.29.0",
-    "autodll-webpack-plugin": "latest",
     "webpack-dev-server": "^2.5.0",
     "webpack": "^3.1.0"
   },

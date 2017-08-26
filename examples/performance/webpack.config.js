@@ -1,11 +1,11 @@
 const webpack = require('webpack');
 const path = require('path');
-const AutoDllPlugin = require('autodll-webpack-plugin');
+const AutoDllPlugin = require('../../lib');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: [
-    "babel-polyfill",
+    'babel-polyfill',
     './src/index.js'
   ],
   devtool: 'source-map',

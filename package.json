@@ -41,7 +41,8 @@
     "lodash": "^4.17.4",
     "make-dir": "^1.0.0",
     "memory-fs": "^0.4.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "webpack-sources": "^1.0.1"
   },
   "devDependencies": {
     "ava": "^0.21.0",
