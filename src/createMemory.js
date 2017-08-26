@@ -3,9 +3,14 @@ import fs from './utils/fs';
 import Promise from 'bluebird';
 import { cacheDir } from './paths';
 import path from 'path';
-import get from 'lodash/get';
 
 const { stringify, parse } = JSON;
+
+const initializeMFS = () => {
+  const mfs = new MemoryFileSystem();
+  mfs.mkdirSync('/assets');
+  return mfs;
+};
 
 const cleanup = mfs => {
   mfs.rmdirSync('/assets');
@@ -13,10 +18,10 @@ const cleanup = mfs => {
   return mfs;
 };
 
-const createWriteAssets = (cacheDir, fs, mfs, shouldUpdate) => (hash, stats) => {
-  if (!shouldUpdate(stats)) return;
-
+const createSync = (cacheDir, fs, mfs) => (hash, stats) => {
   mfs = cleanup(mfs);
+
+  mfs.writeFileSync('/stats.json', stringify(stats));
 
   return Promise.resolve(stats.assets)
     .map(({ name }) => name)
@@ -31,14 +36,10 @@ const createWriteAssets = (cacheDir, fs, mfs, shouldUpdate) => (hash, stats) => 
     });
 };
 
-const createWriteStats = mfs => stats => {
-  return mfs.writeFileSync('/stats.json', stringify(stats));
-};
-
 const createGetAssets = mfs => () => {
   return mfs.readdirSync('/assets').map(filename => ({
     filename,
-    buffer: mfs.readFileSync(`/assets/${filename}`)
+    buffer: mfs.readFileSync(path.join('/assets', filename))
   }));
 };
 
@@ -51,27 +52,13 @@ const createGetStats = mfs => () => {
   }
 };
 
-const createShouldUpdate = getStats => nextStats => {
-  const stats = getStats();
-  return get(stats, 'hash') !== nextStats.hash;
-};
-
 export const _createMemory = (fs, cacheDir) => () => {
-  const mfs = new MemoryFileSystem();
-
-  mfs.mkdirSync('/assets');
-  
-  const getAssets = createGetAssets(mfs);
-  const getStats = createGetStats(mfs);
-  const writeStats = createWriteStats(mfs);
-  const shouldUpdate = createShouldUpdate(getStats);
-  const writeAssets = createWriteAssets(cacheDir, fs, mfs, shouldUpdate);
+  const mfs = initializeMFS();
 
   return {
-    writeAssets,
-    writeStats,
-    getAssets,
-    getStats
+    sync: createSync(cacheDir, fs, mfs),
+    getAssets: createGetAssets(mfs),
+    getStats: createGetStats(mfs)
   };
 };
 

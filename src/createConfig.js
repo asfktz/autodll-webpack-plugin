@@ -80,7 +80,7 @@ export const _createConfig = cacheDir => (settings, rawParentConfig) => {
     // otherwise bad things will happen.
     // (this is the path for the cache)
     output: {
-      path: path.join(outputPath)
+      path: outputPath
     }
   };
 

@@ -1,14 +1,10 @@
 import { DllReferencePlugin } from 'webpack';
-import _ from 'lodash';
-import isEmpty from 'lodash/isEmpty';
 import flatMap from 'lodash/flatMap';
 import { RawSource } from 'webpack-sources';
 
-global._ = _;
-
 import path from 'path';
 
-import { cacheDir, createGetPublicDllPath } from './paths';
+import { cacheDir } from './paths';
 import { concat, merge, keys } from './utils/index.js';
 import createCompileIfNeeded from './createCompileIfNeeded';
 import createConfig from './createConfig';
@@ -51,15 +47,12 @@ class AutoDLLPlugin {
     this._dllConfig = dllConfig;
     const { context, inject } = settings;
 
-    // const getPublicDllPath = createGetPublicDllPath(settings);
-
     keys(dllConfig.entry)
       .map(getManifestPath(settings.hash))
       .forEach(manifestPath => {
         new DllReferencePlugin({
           context: context,
           manifest: manifestPath
-          // scope: settings.path
         }).apply(compiler);
       });
 
@@ -74,19 +67,20 @@ class AutoDLLPlugin {
     compiler.plugin(['run', 'watch-run'], (compiler, callback) => {
       compileIfNeeded(createDllCompiler(dllConfig))
         .then(ensureStats)
-        .then(stats => memory.writeAssets(settings.hash, stats))
+        .then(({ source, stats }) => {
+          if (source === 'memory') return;
+          return memory.sync(settings.hash, stats);
+        })
         .then(() => callback())
-        .catch(error => {
-          console.error(error);
-        });
+        .catch(console.error);
     });
 
     compiler.plugin('emit', (compilation, callback) => {
+      console.log(memory.getAssets());
+
       const dllAssets = memory
         .getAssets()
         .reduce((assets, { filename, buffer }) => {
-          // const assetPath = path.join(settings.publicPath, filename);
-
           return {
             ...assets,
             [filename]: new RawSource(buffer)

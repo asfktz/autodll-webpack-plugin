@@ -43,8 +43,11 @@ test('createMemory should have assets', t => {
     assets: [{ name: 'vendor-a.bundle.js' }, { name: 'vendor-b.bundle.js' }]
   };
 
-  return memory.writeAssets(hash, stats).then(() => {
+  return memory.sync(hash, stats).then(() => {
     const assets = memory.getAssets();
+
+    t.deepEqual(memory.getStats(), stats);
+
     t.is(assets[0].filename, 'vendor-a.bundle.js');
     t.is(assets[0].buffer.toString(), 'test 1');
 
