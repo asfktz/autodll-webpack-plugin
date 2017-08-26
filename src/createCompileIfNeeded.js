@@ -31,31 +31,6 @@ export const runCompile = (settings, getDllCompiler) => () => {
   });
 };
 
-// const createStatsCache = (hash) => {
-//   let cache;
-
-//   const statsPath = path.join(cacheDir, hash, 'stats.json');
-
-//   return {
-//     read () {
-//       if (cache) {
-//         return Promise.resolve(cache);
-//       }
-
-//       return fs.readFileAsync(statsPath)
-//         .then((buffer) => {
-//           cache = JSON.parse(buffer);
-//           return cache;
-//         });
-//     },
-
-//     write (stats) {
-//       cache = null;
-//       return fs.writeFileAsync(statsPath, JSON.stringify(stats.toJson()));
-//     }
-//   };
-// };
-
 const output = (source, stats) => ({
   source,
   stats: stats ? stats.toJson() : null

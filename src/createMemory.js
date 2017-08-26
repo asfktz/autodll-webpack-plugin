@@ -20,12 +20,12 @@ const createWriteAssets = (cacheDir, fs, mfs, shouldUpdate) => (hash, stats) => 
 
   return Promise.resolve(stats.assets)
     .map(({ name }) => name)
-    .map(filename =>
-      Promise.props({
+    .map(filename => {
+      return Promise.props({
         filename,
         buffer: fs.readFileAsync(path.join(cacheDir, hash, filename))
-      })
-    )
+      });
+    })
     .each(({ filename, buffer }) => {
       mfs.writeFileSync(path.join('/assets', filename), buffer);
     });
@@ -51,9 +51,9 @@ const createGetStats = mfs => () => {
   }
 };
 
-const createShouldUpdate = getStats => stats => {
-  const lastStats = getStats();
-  return get(lastStats, 'hash') === stats.hash;
+const createShouldUpdate = getStats => nextStats => {
+  const stats = getStats();
+  return get(stats, 'hash') !== nextStats.hash;
 };
 
 export const _createMemory = (fs, cacheDir) => () => {

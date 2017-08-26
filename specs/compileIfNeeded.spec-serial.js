@@ -4,12 +4,15 @@ import path from 'path';
 import isObject from 'lodash/isObject';
 import isNull from 'lodash/isNull';
 import recursive from 'recursive-readdir';
-import compileIfNeeded, { runCompile } from '../src/compileIfNeeded';
+import createCompileIfNeeded from '../src/createCompileIfNeeded';
 import createDllCompiler from '../src/createDllCompiler';
 import createSettings from '../src/createSettings';
 import createConfig from '../src/createConfig';
 import { cacheDir } from '../src/paths';
 import cleanup from './helpers/cleanup';
+import createLogger from '../lib/createLogger';
+
+const log = createLogger(false);
 
 test.serial('compileIfNeeded: should generate files', t => {
   t.plan(1);
@@ -32,12 +35,13 @@ test.serial('compileIfNeeded: should generate files', t => {
   });
 
   const dllConfig = createConfig(settings, parentConfig);
+  const compileIfNeeded = createCompileIfNeeded(log, settings);
 
   const expected = ['vendor.manifest.json', 'vendor.js'].map(file =>
     path.join(cacheDir, settings.hash, file)
   );
 
-  return compileIfNeeded(settings, createDllCompiler(dllConfig))
+  return compileIfNeeded(createDllCompiler(dllConfig))
     .then(() => recursive(cacheDir))
     .then(files => {
       t.deepEqual(expected.sort(), files.sort());
@@ -77,12 +81,13 @@ test.serial(
     });
 
     const dllConfig = createConfig(settings, parentConfig);
+    const compileIfNeeded = createCompileIfNeeded(log, settings);
 
     return Promise.resolve()
       .then(() => {
         let _compiler;
 
-        return compileIfNeeded(settings, () => {
+        return compileIfNeeded(() => {
           _compiler = createDllCompilerSpy(dllConfig);
           return _compiler;
         }).then(state => {
@@ -98,10 +103,10 @@ test.serial(
         });
       })
       .then(() => {
-        return compileIfNeeded(settings, () => {
+        return compileIfNeeded(() => {
           t.fail('getDllCompiler is called');
         }).then(state => {
-          t.true(isObject(state), 'state is object');
+          t.true(isObject(state), 'state is an object');
           t.is(state.source, 'cache', 'source should be cache');
           t.true(isNull(state.stats), 'should not have stats');
 
