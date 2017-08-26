@@ -43,17 +43,18 @@ module.exports = {
     new AutoDllPlugin({
       debug: true,
       filename: '[name].[hash].js',
-      // path: './dll',
+      // path is not working with loaders for now
+      path: './dll',
       inject: true,
       inherit: true,
       entry: {
         vendor: [
-          './src/awesome-module.js'
-          // 'font-awesome/css/font-awesome.css'
-          // 'react',
-          // 'react-dom',
-          // 'moment',
-          // 'font-awesome'
+          // './src/awesome-module.js'
+          // 'font-awesome/css/font-awesome.css',
+          'react',
+          'react-dom',
+          'moment',
+          'font-awesome'
         ],
         other: [
           'react'

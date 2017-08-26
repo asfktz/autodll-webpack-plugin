@@ -1,5 +1,5 @@
 import awesomeModule from './awesome-module';
 
-var elm = awesomeModule();
+const elm = awesomeModule();
 
 document.body.append(elm);

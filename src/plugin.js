@@ -1,5 +1,6 @@
 import { DllReferencePlugin } from 'webpack';
 import flatMap from 'lodash/flatMap';
+import isEmpty from 'lodash/isEmpty';
 import { RawSource } from 'webpack-sources';
 
 import path from 'path';
@@ -37,10 +38,10 @@ class AutoDLLPlugin {
     const memory = createMemory();
     const ensureStats = createEnsureStats(log, settings.hash, memory);
 
-    // if (isEmpty(dllConfig.entry)) {
-    //   // there's nothing to do.
-    //   return;
-    // }
+    if (isEmpty(dllConfig.entry)) {
+      // there's nothing to do.
+      return;
+    }
 
     // exposed for better clarity while debugging
     this._settings = settings;
@@ -76,14 +77,14 @@ class AutoDLLPlugin {
     });
 
     compiler.plugin('emit', (compilation, callback) => {
-      console.log(memory.getAssets());
-
       const dllAssets = memory
         .getAssets()
         .reduce((assets, { filename, buffer }) => {
+          const assetPath = path.join(settings.path, filename);
+
           return {
             ...assets,
-            [filename]: new RawSource(buffer)
+            [assetPath]: new RawSource(buffer)
           };
         }, {});
 
@@ -104,7 +105,7 @@ class AutoDLLPlugin {
               memory.getStats().entrypoints,
               'assets'
             ).map((filename) => {
-              return path.join(settings.publicPath, filename);
+              return path.join(settings.publicPath, settings.path, filename);
             });
             
             htmlPluginData.assets.js = concat(

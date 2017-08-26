@@ -3,7 +3,7 @@ import other from './some/other/module';
 
 export default () => {
   console.log(other);
-  var rootElm = document.createElement('div');
+  const rootElm = document.createElement('div');
 
   rootElm.innerHTML = `
     <h1>Test inherit</h1>
