@@ -1,14 +1,9 @@
 const path = require('path');
-const axios = require('axios');
 
-const PORT = 8081;
+const PORT = 8080;
 
-const client = axios.create({
-  baseURL: `http://localhost:${PORT}/`
-});
-
-module.exports = (webpack, WebpackDevServer) => (config, runTests) => {
-  return new Promise((resolve) => {
+const createRunner = (webpack, WebpackDevServer) => (config, runTests) => {
+  return new Promise(resolve => {
     const compiler = webpack(config);
 
     const devServer = new WebpackDevServer(compiler, {
@@ -39,3 +34,5 @@ module.exports = (webpack, WebpackDevServer) => (config, runTests) => {
     });
   });
 };
+
+module.exports = createRunner;

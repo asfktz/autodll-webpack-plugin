@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --history-api-fallback --config ./webpack.config.js",
-    "build": "webpack --config ./webpack.config.js"
+    "build": "webpack --config ./webpack.config.js",
+    "test": "ava specs/*.integration.js"
   },
   "devDependencies": {
     "ava": "^0.21.0",

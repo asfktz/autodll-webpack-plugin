@@ -1,14 +1,14 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const config = require('./webpack.config.js');
-const expect = require('expect');
+const config = require('../webpack.config.js');
 const del = require('del');
 const test = require('ava');
 
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 
-const { createRunner, routeCalls } = require('../helpers');
+const createRunner = require('../../../helpers/createRunner');
+const routeCalls = require('../../../helpers/routeCalls');
 
 const runner = createRunner(webpack, WebpackDevServer);
 

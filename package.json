@@ -10,7 +10,7 @@
     "lint:fix": "npm run lint -- --fix",
     "lint-staged": "lint-staged",
     "test:unit": "ava specs/**/*.spec.js",
-    "test:integration": "ava --serial specs/**/*.spec-serial.js",
+    "test:integration": "node ./scripts/runIntegrationTests.js",
     "test": "npm run test:unit && npm run test:integration",
     "test:inspect": "node --inspect node_modules/ava/profile.js",
     "cleanup": "del-cli ./lib",
