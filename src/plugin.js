@@ -1,4 +1,4 @@
-import { DllReferencePlugin } from 'webpack';
+import webpack, { DllReferencePlugin } from 'webpack';
 import flatMap from 'lodash/flatMap';
 import isEmpty from 'lodash/isEmpty';
 import { RawSource } from 'webpack-sources';
@@ -13,7 +13,7 @@ import createDllCompiler from './createDllCompiler';
 import createMemory from './createMemory';
 import createSettings from './createSettings';
 import getInstanceIndex from './getInstanceIndex';
-import createEnsureStats from './createEnsureStats';
+import createStatsHandler from './createStatsHandler';
 import createLogger from './createLogger';
 
 export const getManifestPath = hash => bundleName =>
@@ -36,16 +36,16 @@ class AutoDLLPlugin {
     const compileIfNeeded = createCompileIfNeeded(log, settings);
 
     const memory = createMemory();
-    const ensureStats = createEnsureStats(log, settings.hash, memory);
+    const handleStats = createStatsHandler(log, settings.hash, memory);
 
     if (isEmpty(dllConfig.entry)) {
       // there's nothing to do.
       return;
     }
 
-    // exposed for better clarity while debugging
-    this._settings = settings;
-    this._dllConfig = dllConfig;
+    // exposed for better clarity while debugging   
+    var dllCompiler = webpack(dllConfig);
+
     const { context, inject } = settings;
 
     keys(dllConfig.entry)
@@ -65,10 +65,12 @@ class AutoDLLPlugin {
       callback();
     });
 
-    compiler.plugin(['run', 'watch-run'], (compiler, callback) => {
-      compileIfNeeded(createDllCompiler(dllConfig))
-        .then(ensureStats)
+    compiler.plugin(['run', 'watch-run'], (_compiler, callback) => {
+      compileIfNeeded(() => dllCompiler)
+        .then(handleStats)
         .then(({ source, stats }) => {
+          compiler.applyPlugins('autodll-stats-retrieved', stats, source);
+
           if (source === 'memory') return;
           return memory.sync(settings.hash, stats);
         })

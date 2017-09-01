@@ -12,6 +12,7 @@ const isCacheValid = settings => {
 };
 
 const cleanup = settings => () => {
+  console.log(cacheDir);
   return fs
     .readdirAsync(cacheDir)
     .filter(dirname => dirname.startsWith(`${settings.env}_${settings.id}`))
@@ -23,32 +24,26 @@ export const runCompile = (settings, getDllCompiler) => () => {
   // if (isEmpty(settings.entry)) return;
   return new Promise((resolve, reject) => {
     getDllCompiler().run((err, stats) => {
-      if (err) {
-        return reject(err);
-      }
+      if (err) return reject(err);
+
       resolve(stats);
     });
   });
 };
 
-const output = (source, stats) => ({
-  source,
-  stats: stats ? stats.toJson() : null
-});
-
 const createCompileIfNeeded = (log, settings) => {
-  const compileIfNeeded = (getCompiler) => {
+  const compileIfNeeded = getCompiler => {
     return isCacheValid(settings)
       .then(log.tap(isValid => `is valid cache? ${isValid}`))
       .then(isValid => {
-        if (isValid) { return output('cache', null); }
+        if (isValid) return null;
 
         return Promise.resolve()
           .then(log.tap('cleanup'))
           .then(cleanup(settings))
           .then(log.tap('compile'))
           .then(runCompile(settings, getCompiler))
-          .then((stats) => output('build', stats));
+          .then(stats => stats);
       });
   };
 
