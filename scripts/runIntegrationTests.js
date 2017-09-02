@@ -10,9 +10,13 @@ readdirSync(cwd)
   .filter(isDirectory)
   .map(dirname => join(cwd, dirname))
   .forEach(ctx => {
-    spawnSync('npm', ['test'], {
-      cwd: ctx,
-      shell: true,
-      stdio: 'inherit'
-    });
+    spawnSync(
+      'node',
+      ['./node_modules/.bin/ava', '--serial', 'specs/*.integration.js'],
+      {
+        cwd: ctx,
+        shell: true,
+        stdio: 'inherit'
+      }
+    );
   });

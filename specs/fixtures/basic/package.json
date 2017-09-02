@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {
-    "start": "webpack-dev-server --history-api-fallback --config ./webpack.config.js",
-    "build": "webpack --config ./webpack.config.js",
-    "test": "ava specs/*.integration.js"
-  },
+  "scripts": {},
   "devDependencies": {
     "ava": "^0.21.0",
     "axios": "^0.16.2",
@@ -17,12 +13,16 @@
     "find-cache-dir": "^1.0.0",
     "html-webpack-plugin": "^2.29.0",
     "lodash": "^4.17.4",
+    "read-pkg": "^2.0.0",
     "webpack": "^3.5.5",
-    "webpack-dev-server": "^2.7.1"
+    "webpack-dev-server": "^2.7.1",
+    "write-pkg": "^3.1.0"
   },
   "dependencies": {
     "moment": "^2.18.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "basic@1.0.0"
 }

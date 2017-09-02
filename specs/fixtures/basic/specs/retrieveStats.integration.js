@@ -1,88 +1,52 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const config = require('../webpack.config.js');
-const del = require('del');
 const test = require('ava');
 
-const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('fs'));
-
-const createRunner = require('../../../helpers/createRunner');
-const routeCalls = require('../../../helpers/routeCalls');
+const { routeCalls, createRunner, createClearCache, createMakeChange, fs } = require('../../../helpers/integration');
 
 const runner = createRunner(webpack, WebpackDevServer);
 
-const makeChange = str => {
-  return fs.writeFileAsync('./src/text.js', `module.exports = '${str}';`);
-};
+const clearCache = createClearCache(__dirname);
+const makeChange = createMakeChange(__dirname, '../src/text.js');
 
-test.serial('test ava', t => {
-  del.sync('./node_modules/.cache/autodll-webpack-plugin');
+test.serial('Ensure stats retrieved from the currect source', async t => {
+  clearCache();  
   makeChange('initial');
 
-  return Promise.resolve()
-    .then(() => {
-      console.log('clean run (cache deleted)');
+  console.log('clean run (cache deleted)');
 
-      return runner(config, ({ done, compiler }) => {
-        compiler.plugin(
-          'autodll-stats-retrieved',
-          routeCalls([
-            (stats, source) => {
-              console.log('source:', source);
-              t.is(source, 'build');
-            },
-            (stats, source) => {
-              console.log('source:', source);
-              t.is(source, 'memory');
-            }
-          ])
-        );
+  await runner(config, ({ done, compiler }) => {
+    compiler.plugin('autodll-stats-retrieved', routeCalls(
+      (stats, source) => {
+        t.is(source, 'build', 'should retreive stats from build');
+      },
+      (stats, source) => {
+        t.is(source, 'memory', 'should retreive stats from memory');
+      }
+    ));
 
-        compiler.plugin(
-          'done',
-          routeCalls([
-            () => {
-              makeChange('some change');
-            },
+    compiler.plugin('done', routeCalls(
+      () => makeChange('some change'),
+      () => done()
+    ));
+  });
 
-            () => {
-              done();
-            }
-          ])
-        );
-      });
-    })
-    .then(() => {
-      console.log('second run (with cached dll bundle from previous run)');
+  console.log('second run (with cached dll bundle from previous run)');
 
-      return runner(config, ({ done, compiler }) => {
-        compiler.plugin(
-          'autodll-stats',
-          routeCalls([
-            (stats, source) => {
-              console.log('source:', source);
-              t.is(source, 'fs');
-            },
-            (stats, source) => {
-              console.log('source:', source);
-              t.is(source, 'memory');
-            }
-          ])
-        );
+  await runner(config, ({ done, compiler }) => {
+    compiler.plugin('autodll-stats-retrieved', routeCalls(
+      (stats, source) => {
+        t.is(source, 'fs', 'should retreive stats from fs');
+      },
+      (stats, source) => {
+        t.is(source, 'memory', 'should retreive stats from memory');
+      })
+    );
 
-        compiler.plugin(
-          'done',
-          routeCalls([
-            () => {
-              makeChange('first change');
-            },
-
-            () => {
-              done();
-            }
-          ])
-        );
-      });
-    });
+    compiler.plugin('done', routeCalls(
+      () => makeChange('some other change'),
+      () => done()
+    ));
+  });
 });
