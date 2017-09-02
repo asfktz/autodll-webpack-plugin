@@ -63,7 +63,6 @@ test.serial(
       return compiler;
     };
 
-
     const parentConfig = {
       context: '/parent_context/'
     };

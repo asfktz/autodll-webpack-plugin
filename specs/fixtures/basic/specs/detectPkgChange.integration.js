@@ -3,22 +3,22 @@ const WebpackDevServer = require('webpack-dev-server');
 const config = require('../webpack.config.js');
 const test = require('ava');
 
-const { routeCalls, createRunner, createClearCache, createPkg, createMakeChange, merge } = require('../../../helpers/integration');
+const { routeCalls, createRunner, createClearCache, createPkgHandler, createMakeChange } = require('../../../helpers/integration');
 
 const runner = createRunner(webpack, WebpackDevServer);
 
-const pkg = createPkg(__dirname);
+const pkgHandler = createPkgHandler(__dirname);
 const makeChange = createMakeChange(__dirname, '../src/text.js');
 const clearCache = createClearCache(__dirname);
 
 //on clean exit
-process.on('exit', pkg.restore);
+process.on('exit', pkgHandler.restore);
 
 //catches ctrl+c event
-process.on('SIGINT', pkg.restore);
+process.on('SIGINT', pkgHandler.restore);
 
 //catches uncaught exceptions
-process.on('uncaughtException', pkg.restore);
+process.on('uncaughtException', pkgHandler.restore);
 
 
 test.serial('Detect package.json change', async t => {
@@ -37,12 +37,12 @@ test.serial('Detect package.json change', async t => {
 
     compiler.plugin('done', routeCalls(
       () => {
-        pkg.change();
+        pkgHandler.change();
         makeChange('some change');
       },
       () => done()
     ));
   });
 
-  pkg.restore();
+  pkgHandler.restore();
 });

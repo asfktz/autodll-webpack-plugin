@@ -15,7 +15,7 @@ const createClearCache = cwd => () => {
 const writePkg = require('write-pkg');
 const readPkg = require('read-pkg');
 
-const createPkg = __dirname => {
+const createPkgHandler = __dirname => {
   const cwd = join(__dirname, '..');
   const originalPkg = readPkg.sync(cwd);
 
@@ -49,7 +49,7 @@ module.exports = {
   createRunner,
   createClearCache,
   routeCalls,
-  createPkg,
+  createPkgHandler,
   createMakeChange,
   fs,
   merge

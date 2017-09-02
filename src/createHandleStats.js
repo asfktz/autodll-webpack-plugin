@@ -26,7 +26,7 @@ const createRetrieveStats = (memory, statsPath) => () => {
   });
 };
 
-const _createStatsHandler = (fs, cacheDir) => (log, hash, memory) => {
+const _createHandleStats = (fs, cacheDir) => (log, hash, memory) => {
   const statsPath = join(cacheDir, hash, 'stats.json');
   const storeStats = createStoreStats(fs, statsPath);
   const retrieveStats = createRetrieveStats(memory, statsPath);
@@ -49,4 +49,4 @@ const _createStatsHandler = (fs, cacheDir) => (log, hash, memory) => {
   };
 };
 
-export default _createStatsHandler(fs, cacheDir);
+export default _createHandleStats(fs, cacheDir);

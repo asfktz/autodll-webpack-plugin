@@ -3,7 +3,7 @@ const WebpackDevServer = require('webpack-dev-server');
 const config = require('../webpack.config.js');
 const test = require('ava');
 
-const { routeCalls, createRunner, createClearCache, createMakeChange, fs } = require('../../../helpers/integration');
+const { routeCalls, createRunner, createClearCache, createMakeChange } = require('../../../helpers/integration');
 
 const runner = createRunner(webpack, WebpackDevServer);
 

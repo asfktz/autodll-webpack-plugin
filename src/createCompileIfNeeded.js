@@ -1,29 +1,25 @@
 import path from 'path';
 import fs from './utils/fs';
-import makeDir from 'make-dir';
 import { cacheDir } from './paths';
 import del from 'del';
+import makeDir from 'make-dir';
 
-const isCacheValid = settings => {
-  return makeDir(cacheDir)
-    .then(() => fs.statAsync(path.resolve(cacheDir, settings.hash)))
-    .then(() => true)
-    .catch(() => false);
-};
+import validateCache from './validateCache';
 
-const cleanup = settings => () => {
-  console.log(cacheDir);
+const emptyCacheDir = settings => () => {
+  // delete all the cached builds of the current instance
+  // filter only the current instance build.
+  // subdirectory name example: development_instance_0_bc6309c769a8a9d386898f61f8cb35d2
   return fs
     .readdirAsync(cacheDir)
     .filter(dirname => dirname.startsWith(`${settings.env}_${settings.id}`))
-    .each(dirname => del(path.join(cacheDir, dirname)));
+    .each(dirname => del(path.join(cacheDir, dirname)))
+    .catch(() => makeDir(cacheDir));
 };
 
-export const runCompile = (settings, getDllCompiler) => () => {
-  // skip compiling if there is nothing to build
-  // if (isEmpty(settings.entry)) return;
+export const runCompile = (settings, getCompiler) => () => {
   return new Promise((resolve, reject) => {
-    getDllCompiler().run((err, stats) => {
+    getCompiler().run((err, stats) => {
       if (err) return reject(err);
 
       resolve(stats);
@@ -31,23 +27,18 @@ export const runCompile = (settings, getDllCompiler) => () => {
   });
 };
 
-const createCompileIfNeeded = (log, settings) => {
-  const compileIfNeeded = getCompiler => {
-    return isCacheValid(settings)
-      .then(log.tap(isValid => `is valid cache? ${isValid}`))
-      .then(isValid => {
-        if (isValid) return null;
-
-        return Promise.resolve()
-          .then(log.tap('cleanup'))
-          .then(cleanup(settings))
-          .then(log.tap('compile'))
-          .then(runCompile(settings, getCompiler))
-          .then(stats => stats);
-      });
-  };
-
-  return compileIfNeeded;
+const createCompileIfNeeded = (log, settings) => getCompiler => {
+  return validateCache(cacheDir, settings)
+    .then(log.tap(isValid => `is valid cache? ${isValid}`))
+    .then(isValid => {
+      if (isValid) return null;
+      return Promise.resolve()
+        .then(log.tap('cleanup'))
+        .then(emptyCacheDir(settings))
+        .then(log.tap('compile'))
+        .then(runCompile(settings, getCompiler))
+        .then(stats => stats);
+    });
 };
 
 export default createCompileIfNeeded;
