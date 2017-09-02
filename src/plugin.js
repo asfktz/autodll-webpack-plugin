@@ -64,7 +64,7 @@ class AutoDLLPlugin {
     compiler.plugin(['run', 'watch-run'], (_compiler, callback) => {
       compileIfNeeded(() => webpack(dllConfig))
         .then((a) => {
-          debugger
+          
           return a;
         })
         .then(handleStats)
