@@ -39,9 +39,6 @@ class AutoDLLPlugin {
       return;
     }
 
-    // exposed for better clarity while debugging   
-    // var dllCompiler = webpack(dllConfig);
-
     const { context, inject } = settings;
 
     keys(dllConfig.entry)
