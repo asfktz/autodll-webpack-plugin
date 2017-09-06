@@ -42,6 +42,9 @@ test.serial('Detect package.json change', async t => {
       },
       () => done()
     ));
+
+    // Important! We only test package.json right now.
+    // But the cache also invalidates when the settings passed to the plugin are different.
   });
 
   pkgHandler.restore();

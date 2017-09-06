@@ -28,7 +28,7 @@ export const runCompile = (settings, getCompiler) => () => {
 };
 
 const createCompileIfNeeded = (log, settings) => getCompiler => {
-  return validateCache(cacheDir, settings)
+  return validateCache(settings)
     .then(log.tap(isValid => `is valid cache? ${isValid}`))
     .then(isValid => {
       if (isValid) return null;

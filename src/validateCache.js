@@ -1,28 +1,38 @@
 import path from 'path';
 import fs, { mkdirp } from './utils/fs';
 import readPkg from 'read-pkg';
+import { cacheDir } from './paths';
 
-const validateCache = (cacheDir, settings) => {
-  const prevPkgDepsPath = path.join(cacheDir, 'package.json.hash');
+// This file could be written much better.
+// Ideally I should just return a boolean of the cache is valid or not
+// right now it also save the last package.json to cache.
+// I don't like it, But it will do for now.
 
-  return fs
-    .readFileAsync(prevPkgDepsPath)
-    .catch(() => null)
-    .then(prevPkgHash =>
-      readPkg(settings.context).then(pkg => {
-        const pkgHash = JSON.stringify(pkg);
+// Conditions for cache invalidation (return false):
+// 1. The build dir is not exist for example:
+//    specs/fixtures/basic/node_modules/.cache/
+//    autodll-webpack-plugin/development_instance_0_8d5207f894c329f437bd1ff655c7379a
+// 2. The previous package.json is not stored in cache
+// 3. The previous package.json diffrent from the current package.json
 
-        if (prevPkgHash && prevPkgHash.toString() === pkgHash) {
-          return true;
-        }
+const validateCache = (settings) => {
+  const prevPkgPath = path.join(cacheDir, 'package.json.hash');
 
-        return mkdirp(path.join(cacheDir, settings.hash))
-          .then(() => fs.writeFileAsync(prevPkgDepsPath, pkgHash))
-          .then(() => {
-            return false;
-          });
-      })
-    );
+  return Promise.all([
+    fs.lstatAsync(path.join(cacheDir, settings.hash)).catch(() => null),
+    fs.readFileAsync(prevPkgPath).catch(() => null),
+    readPkg(settings.context).catch(() => null)
+  ]).then(([buildHashDirExist, prevPkgHash, pkg]) => {
+    const pkgHash = JSON.stringify(pkg);
+
+    if (buildHashDirExist && (prevPkgHash && prevPkgHash.toString() === pkgHash)) {
+      return true;
+    }
+
+    return mkdirp(cacheDir)
+      .then(() => fs.writeFileAsync(prevPkgPath, pkgHash))
+      .then(() => false);
+  });
 };
 
 export default validateCache;
