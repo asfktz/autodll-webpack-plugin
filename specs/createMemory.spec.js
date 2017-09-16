@@ -1,11 +1,12 @@
 import test from 'ava';
 import { _createMemory } from '../src/createMemory';
 import createHash from '../src/createHash';
+import os from 'os';
 import MemoryFileSystem from 'memory-fs';
 import { promisifyAll } from 'bluebird';
 import path from 'path';
 
-const cacheDir = '/my/cache/dir';
+const cacheDir = `${os.tmpdir()}/my/cache/dir`;
 
 // why? testing with the FileSystem is hard.
 // We can't run multiple tests in parallel when using the FS
