@@ -14,6 +14,7 @@ Related to [#9](https://github.com/asfktz/autodll-webpack-plugin/issues/9).
 
 #### Committers:
 - Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
+- Asaf Katz ([@asfktz](https://github.com/asfktz))
 
 ## 0.2.1
 
