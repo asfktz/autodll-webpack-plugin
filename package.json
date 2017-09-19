@@ -10,7 +10,7 @@
     "lint:fix": "npm run lint -- --fix",
     "lint-staged": "lint-staged",
     "test:unit": "ava specs/**/*.spec.js",
-    "test:integration": "ava --serial specs/**/*.spec-serial.js",
+    "test:integration": "node ./scripts/runIntegrationTests.js",
     "test": "npm run test:unit && npm run test:integration",
     "test:inspect": "node --inspect node_modules/ava/profile.js",
     "cleanup": "del-cli ./lib",
@@ -35,24 +35,29 @@
     "webpack": ">= 2.0.0"
   },
   "dependencies": {
-    "bluebird": "^3.5.0",
     "del": "^3.0.0",
     "find-cache-dir": "^1.0.0",
     "lodash": "^4.17.4",
     "make-dir": "^1.0.0",
     "memory-fs": "^0.4.1",
-    "webpack-merge": "^4.1.0"
+    "mkdirp": "^0.5.1",
+    "read-pkg": "^2.0.0",
+    "webpack-merge": "^4.1.0",
+    "webpack-sources": "^1.0.1"
   },
   "devDependencies": {
     "ava": "^0.21.0",
+    "axios": "^0.16.2",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-preset-env": "^1.5.2",
     "babel-preset-stage-3": "^6.24.1",
     "babel-register": "^6.24.1",
+    "bluebird": "^3.5.0",
     "del-cli": "^1.1.0",
     "eslint": "^4.1.1",
     "eslint-plugin-react": "^7.1.0",
+    "expect": "^1.20.2",
     "faucet": "^0.0.1",
     "html-webpack-plugin": "^2.29.0",
     "husky": "^0.14.3",
@@ -60,7 +65,8 @@
     "recursive-readdir": "^2.2.1",
     "spy": "^1.0.0",
     "uglifyjs-webpack-plugin": "^0.4.6",
-    "webpack": "^3.2.0"
+    "webpack": "^3.2.0",
+    "webpack-dev-server": "^2.7.1"
   },
   "babel": {
     "presets": [

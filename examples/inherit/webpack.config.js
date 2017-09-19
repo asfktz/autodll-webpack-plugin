@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
+  context: __dirname,
   entry: {
     main: './src/index.js',
   },
@@ -14,6 +15,26 @@ module.exports = {
     publicPath: '/'
   },
 
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      },
+      {
+        test: /\.(eot|svg|ttf|woff(2)?)(\?v=\d+\.\d+\.\d+)?/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192
+            }
+          }
+        ]
+      }
+    ]
+  },
+
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
@@ -21,43 +42,30 @@ module.exports = {
     }),
     new AutoDllPlugin({
       debug: true,
-      filename: '[name]_[hash].js',
-      path: './dll',
       inject: true,
+      filename: '[name].[hash].js',
+      path: './dll',
+      inherit: true,
       entry: {
         vendor: [
+          './src/awesome-module.js',
           'react',
           'react-dom',
-          'moment'
+          'moment',
+          'font-awesome'
+        ],
+        other: [
+          'react'
         ]
-      },
-
-      invalidate (state, config, hash) {
-        hash = hash.add('....');
-        
-        return Promise.resolve()
-          .then(() => {
-            hash = hash.add('....');
-
-            return hash;
-          });
-      },
-
-      inherit (config) {
-        return config;
       },
 
       config: {
         output: {
-          library: 'yaboo',
-          libraryTarget: 'umd',
-          path: 'boooom',
-          publicPath: 'bsssss'
+
         },
         plugins: [
-          new UglifyJsPlugin()
-        ],
-        module: {}
+          // new UglifyJsPlugin()
+        ]
       }
     })
   ]

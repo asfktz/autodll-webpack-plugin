@@ -2,17 +2,17 @@ const path = require('path');
 const AutoDllPlugin = require('../../../lib');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-  entry: {
-    main: './src/index.js',
-  },
+  context: __dirname, 
+  entry: './src/index.js',
 
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
+
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
@@ -20,35 +20,15 @@ module.exports = {
     }),
     new AutoDllPlugin({
       debug: true,
+      inject: true,
       filename: '[name]_[hash].js',
       path: './dll',
-      inject: true,
       entry: {
         vendor: [
           'react',
           'react-dom',
           'moment'
         ]
-      },
-
-      inherit (config) {
-        return config;
-      },
-
-      config: {
-        entry: {
-          koko: [
-            'react',
-            'react-dom',
-            'moment'
-          ]
-        },
-
-        output: {},
-        plugins: [
-          new UglifyJsPlugin()
-        ],
-        module: {}
       }
     })
   ]

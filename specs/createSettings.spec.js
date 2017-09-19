@@ -27,7 +27,7 @@ test('createSettings: create hash with env & instance index', t => {
   {
     const params = mergeAll([base, { index: 9 }]);
     const results = createSettings(params);
-    t.is(results.hash, 'FAKE_ENV_instance_9_f7e8a26f2784cc5287aeb695c43afae1');
+    t.is(results.hash, 'FAKE_ENV_instance_9_3a37b749d35175f034d80d4f778a4344');
   }
 
   {
@@ -38,7 +38,7 @@ test('createSettings: create hash with env & instance index', t => {
 
     const results = createSettings(params);
 
-    t.is(results.hash, 'MARS_instance_2_5cfe735fbe5ff42ad8a69efc1e64a05e');
+    t.is(results.hash, 'MARS_instance_2_0aef250e225283a6339e894b1b024211');
   }
 });
 

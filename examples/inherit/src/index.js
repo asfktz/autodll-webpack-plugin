@@ -1,11 +1,5 @@
-const moment = require('moment');
-const React = require('react');
-const ReactDOM = require('react-dom');
-const createElement = React.createElement;
+import awesomeModule from './awesome-module';
 
-const Test = createElement('div', {}, [
-  createElement('h1', {}, [ 'AutoDllPlugin Recommended Setup' ]),
-  createElement('p', {}, [ moment().format('LLLL') ])
-]);
+const elm = awesomeModule();
 
-ReactDOM.render(Test, document.getElementById('root'));
+document.body.append(elm);
