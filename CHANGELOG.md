@@ -9,7 +9,11 @@
 #### Internal:
 - [#38](https://github.com/asfktz/autodll-webpack-plugin/pull/38) Fix test script on windows. [@sudo-suhas](https://github.com/sudo-suhas) <br>
 Related to [#9](https://github.com/asfktz/autodll-webpack-plugin/issues/9).
-- Moving from tape to ava, preparing the ground for integration tests. [@asfktz](https://github.com/asfktz)
+- Moving from tape to ava. [@asfktz](https://github.com/asfktz)
+- Integration tests. [@asfktz](https://github.com/asfktz)
+
+### Enhancement:
+- Invalidate cache on `package.json` change. [@asfktz](https://github.com/asfktz)
 
 #### Committers:
 - Suhas Karanth ([@sudo-suhas](https://github.com/sudo-suhas))
