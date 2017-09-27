@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/asfktz/autodll-webpack-plugin.svg?branch=master)](https://travis-ci.org/asfktz/autodll-webpack-plugin) ![](https://img.shields.io/npm/dm/autodll-webpack-plugin.svg)
+[![Build Status](https://travis-ci.org/asfktz/autodll-webpack-plugin.svg?branch=master)](https://travis-ci.org/asfktz/autodll-webpack-plugin) [![Build Status](https://img.shields.io/npm/dm/autodll-webpack-plugin.svg)](https://www.npmjs.com/package/autodll-webpack-plugin)
+
 
 # AutoDllPlugin
 Webpack's DllPlugin without the boilerplate
