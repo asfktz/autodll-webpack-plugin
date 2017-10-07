@@ -5,7 +5,7 @@ import { RawSource } from 'webpack-sources';
 
 import path from 'path';
 
-import { cacheDir, getManifestPath } from './paths';
+import { cacheDir, getManifestPath, getInjectPath } from './paths';
 import { concat, merge, keys } from './utils/index.js';
 import createCompileIfNeeded from './createCompileIfNeeded';
 import createConfig from './createConfig';
@@ -103,9 +103,13 @@ class AutoDLLPlugin {
             const dllEntriesPaths = flatMap(
               memory.getStats().entrypoints,
               'assets'
-            ).map((filename) => {
-              return path.join(settings.publicPath, settings.path, filename);
-            });
+            ).map((filename) =>
+              getInjectPath({
+                publicPath: settings.publicPath,
+                pluginPath: settings.path,
+                filename,
+              })
+            );
             
             htmlPluginData.assets.js = concat(
               dllEntriesPaths,
