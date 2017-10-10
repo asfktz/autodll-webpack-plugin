@@ -3,7 +3,7 @@
   "author": "Asaf Katz",
   "license": "MIT",
   "version": "0.2.1",
-  "description": "",
+  "description": "Webpack's DllPlugin without the boilerplate",
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint src specs",
