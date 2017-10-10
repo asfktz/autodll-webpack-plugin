@@ -4,6 +4,7 @@
   "license": "MIT",
   "version": "0.3.0",
   "description": "Webpack's DllPlugin without the boilerplate",
+  "repository": "https://github.com/asfktz/autodll-webpack-plugin",
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint src specs",
