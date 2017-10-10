@@ -44,8 +44,6 @@ module.exports = {
       debug: true,
       inject: true,
       filename: '[name].[hash].js',
-      path: './dll',
-      inherit: true,
       entry: {
         vendor: [
           './src/awesome-module.js',
@@ -59,10 +57,10 @@ module.exports = {
         ]
       },
 
+      path: './dll',
+      inherit: true,
       config: {
-        output: {
-
-        },
+        output: {},
         plugins: [
           // new UglifyJsPlugin()
         ]
