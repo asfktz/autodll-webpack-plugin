@@ -46,6 +46,7 @@
     "webpack-sources": "^1.0.1"
   },
   "devDependencies": {
+    "all-contributors-cli": "^4.5.0",
     "ava": "^0.21.0",
     "axios": "^0.16.2",
     "babel-cli": "^6.24.1",

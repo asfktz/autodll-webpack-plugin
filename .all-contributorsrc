@@ -1,0 +1,98 @@
+{
+  "projectName": "autodll-webpack-plugin",
+  "projectOwner": "asfktz",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "asfktz",
+      "name": "Asaf Katz",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/199747?v=4",
+      "profile": "https://twitter.com/asfktz",
+      "contributions": [
+        "code",
+        "review",
+        "test",
+        "infra"
+      ]
+    },
+    {
+      "login": "sudo-suhas",
+      "name": "Suhas Karanth",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22251956?v=4",
+      "profile": "https://github.com/sudo-suhas",
+      "contributions": [
+        "code",
+        "ideas",
+        "bug",
+        "infra",
+        "test",
+        "tool",
+        "question"
+      ]
+    },
+    {
+      "login": "viankakrisna",
+      "name": "Ade Viankakrisna Fadlil",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/9636410?v=4",
+      "profile": "https://musify.id",
+      "contributions": [
+        "code",
+        "bug",
+        "tool",
+        "question"
+      ]
+    },
+    {
+      "login": "tryggvigy",
+      "name": "Tryggvi Gylfason",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2373958?v=4",
+      "profile": "https://github.com/tryggvigy",
+      "contributions": [
+        "code",
+        "question",
+        "bug"
+      ]
+    },
+    {
+      "login": "drewhamlett",
+      "name": "Drew Hamlett",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1056587?v=4",
+      "profile": "https://github.com/drewhamlett",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "d3viant0ne",
+      "name": "Joshua Wiens",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/8420490?v=4",
+      "profile": "https://github.com/d3viant0ne",
+      "contributions": [
+        "doc",
+        "question"
+      ]
+    },
+    {
+      "login": "danez",
+      "name": "Daniel Tschinder",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/231804?v=4",
+      "profile": "https://github.com/danez",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "amilajack",
+      "name": "Amila Welihinda",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6374832?v=4",
+      "profile": "http://amilajack.com",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ]
+}
