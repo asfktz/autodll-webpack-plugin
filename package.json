@@ -2,7 +2,7 @@
   "name": "autodll-webpack-plugin",
   "author": "Asaf Katz",
   "license": "MIT",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Webpack's DllPlugin without the boilerplate",
   "repository": "https://github.com/asfktz/autodll-webpack-plugin",
   "main": "lib/index.js",
