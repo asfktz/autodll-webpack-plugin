@@ -41,6 +41,7 @@ export const _createConfig = cacheDir => (settings, rawParentConfig) => {
     context: settings.context,
     entry: settings.entry,
     plugins: [
+      ...(settings.plugins || []),
       new DllPlugin({
         path: path.join(outputPath, '[name].manifest.json'),
         name: '[name]_[hash]'
