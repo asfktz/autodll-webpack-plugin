@@ -438,9 +438,10 @@ If you still encounter an issue with the context set up correctly, please open a
 1. `git clone git@github.com:asfktz/autodll-webpack-plugin.git`
 2. `cd autodll-webpack-plugin`
 3. `npm install`
-4. `cd examples/recommended`
-5. `npm install`
-6. `npm start` or `npm run build`
+4. `npm run build`
+5. `cd examples/recommended`
+6. `npm install`
+7. `npm start` or `npm run build`
 
 ## Contributors
 
