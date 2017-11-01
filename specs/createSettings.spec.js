@@ -8,14 +8,14 @@ const createSettings = _createSettings(getEnv, getContext);
 const base = {
   index: 0,
   parentConfig: {
-    context: '/parent_context/'
+    context: '/parent_context/',
   },
   originalSettings: {
     entry: {
       reactStuff: ['react', 'react-dom'],
-      animationStuff: ['pixi.js', 'gsap']
-    }
-  }
+      animationStuff: ['pixi.js', 'gsap'],
+    },
+  },
 };
 
 test('createSettings: basic', t => {
@@ -31,10 +31,7 @@ test('createSettings: create hash with env & instance index', t => {
   }
 
   {
-    const params = mergeAll([
-      base,
-      { index: 2, originalSettings: { env: 'MARS' } }
-    ]);
+    const params = mergeAll([base, { index: 2, originalSettings: { env: 'MARS' } }]);
 
     const results = createSettings(params);
 
@@ -64,14 +61,14 @@ test('createSettings: override the base options currently', t => {
           inject: true,
           filename: '[name].[hash].special.js',
           path: '/path/to/dll',
-          context: '/override_context/'
+          context: '/override_context/',
         },
         parentConfig: {
           output: {
-            publicPath: '/some_public_path/'
-          }
-        }
-      }
+            publicPath: '/some_public_path/',
+          },
+        },
+      },
     ]);
 
     const results = createSettings(params);
@@ -85,17 +82,16 @@ test('createSettings: override the base options currently', t => {
   }
 });
 
-
 test('createSettings: context override', t => {
   {
     const params = mergeAll([
       base,
       {
         parentConfig: {
-          context: '/parent_context/'
+          context: '/parent_context/',
         },
-        originalSettings: {}
-      }
+        originalSettings: {},
+      },
     ]);
 
     const results = createSettings(params);
@@ -108,12 +104,12 @@ test('createSettings: context override', t => {
       base,
       {
         parentConfig: {
-          context: '/parent_context/'
+          context: '/parent_context/',
         },
         originalSettings: {
-          context: '/settings_context/'
-        }
-      }
+          context: '/settings_context/',
+        },
+      },
     ]);
 
     const results = createSettings(params);

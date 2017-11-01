@@ -1,7 +1,7 @@
 import test from 'ava';
 import isUndefined from 'lodash/isUndefined';
 import { _createConfig } from '../src/createConfig';
-import { cacheDir} from './helpers/mocks';
+import { cacheDir } from './helpers/mocks';
 import createSettingsHelper from './helpers/createSettingsHelper';
 
 import AutoDllPlugin from '../src';
@@ -13,14 +13,14 @@ const createConfig = _createConfig(cacheDir);
 const settingsHelper = createSettingsHelper({
   index: 2,
   parentConfig: {
-    context: '/parent_context/'
+    context: '/parent_context/',
   },
   originalSettings: {
     entry: {
       reactStuff: ['react', 'react-dom'],
-      animationStuff: ['pixi.js', 'gsap']
-    }
-  }
+      animationStuff: ['pixi.js', 'gsap'],
+    },
+  },
 });
 
 const parentConfig = {
@@ -38,23 +38,15 @@ const parentConfig = {
     rules: [
       {
         test: /\.(sass|scss)$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ]
-      } 
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
       // …
     ],
   },
   node: {
-    fs: 'empty'
+    fs: 'empty',
   },
-  plugins: [
-    new AutoDllPlugin(),
-    new HtmlWebpackPlugin(),
-    new UglifyJsPlugin()
-  ]
+  plugins: [new AutoDllPlugin(), new HtmlWebpackPlugin(), new UglifyJsPlugin()],
 };
 
 test('createConfig: basic', t => {
@@ -65,7 +57,7 @@ test('createConfig: basic', t => {
 
 test('createConfig: should not inherit when { inherit: false }', t => {
   const settings = settingsHelper({
-    inherit: false
+    inherit: false,
   });
 
   const results = createConfig(settings, parentConfig);
@@ -77,7 +69,7 @@ test('createConfig: should not inherit when { inherit: false }', t => {
 
 test('createConfig: should inherit', t => {
   const settings = settingsHelper({
-    inherit: true
+    inherit: true,
   });
 
   const results = createConfig(settings, parentConfig);
@@ -85,6 +77,9 @@ test('createConfig: should inherit', t => {
   t.deepEqual(results.module, parentConfig.module);
   t.deepEqual(results.node, parentConfig.node);
 
-  t.true(results.plugins.length === 1, 'should not inherit plugins by default. but should have DllPlugin');
+  t.true(
+    results.plugins.length === 1,
+    'should not inherit plugins by default. but should have DllPlugin'
+  );
   t.true(results.plugins[0].constructor.name === 'DllPlugin', 'ensure DllPlugin is included');
 });

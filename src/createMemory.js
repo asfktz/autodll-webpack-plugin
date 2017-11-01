@@ -28,7 +28,7 @@ const createSync = (cacheDir, fs, mfs) => (hash, stats) => {
     .map(filename => {
       return Promise.props({
         filename,
-        buffer: fs.readFileAsync(path.join(cacheDir, hash, filename))
+        buffer: fs.readFileAsync(path.join(cacheDir, hash, filename)),
       });
     })
     .each(({ filename, buffer }) => {
@@ -39,7 +39,7 @@ const createSync = (cacheDir, fs, mfs) => (hash, stats) => {
 const createGetAssets = mfs => () => {
   return mfs.readdirSync('/assets').map(filename => ({
     filename,
-    buffer: mfs.readFileSync(path.join('/assets', filename))
+    buffer: mfs.readFileSync(path.join('/assets', filename)),
   }));
 };
 
@@ -58,7 +58,7 @@ export const _createMemory = (fs, cacheDir) => () => {
   return {
     sync: createSync(cacheDir, fs, mfs),
     getAssets: createGetAssets(mfs),
-    getStats: createGetStats(mfs)
+    getStats: createGetStats(mfs),
   };
 };
 

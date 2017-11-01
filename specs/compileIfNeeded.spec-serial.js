@@ -19,7 +19,7 @@ test.serial('compileIfNeeded: should generate files', t => {
   cleanup();
 
   const parentConfig = {
-    context: '/parent_context/'
+    context: '/parent_context/',
   };
 
   const settings = createSettings({
@@ -29,9 +29,9 @@ test.serial('compileIfNeeded: should generate files', t => {
       context: path.join(__dirname, '..'),
       env: 'production',
       entry: {
-        vendor: ['lodash']
-      }
-    }
+        vendor: ['lodash'],
+      },
+    },
   });
 
   const dllConfig = createConfig(settings, parentConfig);
@@ -49,71 +49,64 @@ test.serial('compileIfNeeded: should generate files', t => {
     });
 });
 
-test.serial(
-  'compileIfNeeded: should skip when settings equals lastSettings.json',
-  t => {
-    t.plan(8);
+test.serial('compileIfNeeded: should skip when settings equals lastSettings.json', t => {
+  t.plan(8);
 
-    cleanup();
+  cleanup();
 
-    const createDllCompilerSpy = settings => {
-      const getCompiler = createDllCompiler(settings, {});
-      const compiler = getCompiler();
-      spy(compiler, 'run');
-      return compiler;
-    };
+  const createDllCompilerSpy = settings => {
+    const getCompiler = createDllCompiler(settings, {});
+    const compiler = getCompiler();
+    spy(compiler, 'run');
+    return compiler;
+  };
 
-    const parentConfig = {
-      context: '/parent_context/'
-    };
+  const parentConfig = {
+    context: '/parent_context/',
+  };
 
-    const settings = createSettings({
-      parentConfig: parentConfig,
-      originalSettings: {
-        context: path.join(__dirname, '..'),
-        entry: {
-          vendor: ['lodash']
-        }
+  const settings = createSettings({
+    parentConfig: parentConfig,
+    originalSettings: {
+      context: path.join(__dirname, '..'),
+      entry: {
+        vendor: ['lodash'],
       },
-      index: 4,
-      env: 'planet_earth'
-    });
+    },
+    index: 4,
+    env: 'planet_earth',
+  });
 
-    const dllConfig = createConfig(settings, parentConfig);
-    const compileIfNeeded = createCompileIfNeeded(log, settings);
+  const dllConfig = createConfig(settings, parentConfig);
+  const compileIfNeeded = createCompileIfNeeded(log, settings);
 
-    return Promise.resolve()
-      .then(() => {
-        let _compiler;
+  return Promise.resolve()
+    .then(() => {
+      let _compiler;
 
-        return compileIfNeeded(() => {
-          _compiler = createDllCompilerSpy(dllConfig);
-          return _compiler;
-        }).then(state => {
-          t.true(isObject(state), 'state is object');
-          t.is(state.source, 'build', 'source should be build');
-          t.true(isObject(state.stats), 'state should have stats');
+      return compileIfNeeded(() => {
+        _compiler = createDllCompilerSpy(dllConfig);
+        return _compiler;
+      }).then(state => {
+        t.true(isObject(state), 'state is object');
+        t.is(state.source, 'build', 'source should be build');
+        t.true(isObject(state.stats), 'state should have stats');
 
-          t.is(
-            _compiler.run.called,
-            true,
-            'Should call getCompiler the first time'
-          );
-        });
-      })
-      .then(() => {
-        return compileIfNeeded(() => {
-          t.fail('getDllCompiler is called');
-        }).then(state => {
-          t.true(isObject(state), 'state is an object');
-          t.is(state.source, 'cache', 'source should be cache');
-          t.true(isNull(state.stats), 'should not have stats');
-
-          t.pass('getDllCompiler is not called');
-        });
-      })
-      .then(() => {
-        cleanup();
+        t.is(_compiler.run.called, true, 'Should call getCompiler the first time');
       });
-  }
-);
+    })
+    .then(() => {
+      return compileIfNeeded(() => {
+        t.fail('getDllCompiler is called');
+      }).then(state => {
+        t.true(isObject(state), 'state is an object');
+        t.is(state.source, 'cache', 'source should be cache');
+        t.true(isNull(state.stats), 'should not have stats');
+
+        t.pass('getDllCompiler is not called');
+      });
+    })
+    .then(() => {
+      cleanup();
+    });
+});
