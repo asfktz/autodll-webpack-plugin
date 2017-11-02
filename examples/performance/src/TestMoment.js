@@ -1,4 +1,3 @@
-
-export default function () {
-  return moment().format('LLL');
+export default function() {
+  return moment().format("LLL");
 }

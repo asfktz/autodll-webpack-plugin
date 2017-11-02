@@ -12,7 +12,7 @@ const createRetrieveStats = (memory, statsPath) => () => {
     if (statsFromMemory) {
       return {
         source: 'memory',
-        stats: statsFromMemory
+        stats: statsFromMemory,
       };
     }
 
@@ -21,7 +21,7 @@ const createRetrieveStats = (memory, statsPath) => () => {
       .then(buffer => JSON.parse(buffer))
       .then(statsFromFS => ({
         source: 'fs',
-        stats: statsFromFS
+        stats: statsFromFS,
       }));
   });
 };
@@ -31,19 +31,19 @@ const _createHandleStats = (fs, cacheDir) => (log, hash, memory) => {
   const storeStats = createStoreStats(fs, statsPath);
   const retrieveStats = createRetrieveStats(memory, statsPath);
 
-  return (statsFromBuild) => {
+  return statsFromBuild => {
     if (statsFromBuild) {
       const stats = statsFromBuild.toJson();
       return storeStats(stats).then(() => ({
         source: 'build',
-        stats: stats
+        stats: stats,
       }));
     }
 
     return retrieveStats().then(({ stats, source }) => {
       return {
         source: source,
-        stats: stats
+        stats: stats,
       };
     });
   };

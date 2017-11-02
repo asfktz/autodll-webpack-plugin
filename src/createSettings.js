@@ -7,11 +7,7 @@ import getEnv from './getEnv';
 
 const getInstanceId = index => `instance_${index}`;
 
-export const _createSettings = getEnv => ({
-  originalSettings,
-  index,
-  parentConfig
-}) => {
+export const _createSettings = getEnv => ({ originalSettings, index, parentConfig }) => {
   const { entry, env, inherit, ...otherSettings } = originalSettings;
 
   const defaults = {
@@ -32,18 +28,18 @@ export const _createSettings = getEnv => ({
     inject: false,
     debug: false,
     inherit: false,
-    config: {}
+    config: {},
   };
 
   const settings = merge(defaults, otherSettings, {
     entry: normalizeEntry(entry),
     id: getInstanceId(index),
     env: getEnv(env),
-    inherit: isNil(inherit) ? false : inherit
+    inherit: isNil(inherit) ? false : inherit,
   });
 
   return merge(settings, {
-    hash: createHash(settings)
+    hash: createHash(settings),
   });
 };
 

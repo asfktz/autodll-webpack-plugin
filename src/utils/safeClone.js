@@ -3,7 +3,7 @@ import isObject from 'lodash/isObject';
 import isPlainObject from 'lodash/isPlainObject';
 import isArray from 'lodash/isArray';
 
-const safeClone = (config) => {
+const safeClone = config => {
   return cloneDeepWith(config, value => {
     if (isObject(value) && (!isPlainObject(value) && !isArray(value))) {
       return value;

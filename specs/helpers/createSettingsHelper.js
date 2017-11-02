@@ -5,11 +5,14 @@ import { getEnv } from './mocks';
 
 const createSettings = _createSettings(getEnv);
 
-const createSettingsHelper = (base) => (overrides = {}) => {
+const createSettingsHelper = base => (overrides = {}) => {
   return createSettings(
-    mergeAll([base, {
-      originalSettings: overrides
-    }])
+    mergeAll([
+      base,
+      {
+        originalSettings: overrides,
+      },
+    ])
   );
 };
 

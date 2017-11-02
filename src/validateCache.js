@@ -15,13 +15,13 @@ import { cacheDir } from './paths';
 // 2. The previous package.json is not stored in cache
 // 3. The previous package.json diffrent from the current package.json
 
-const validateCache = (settings) => {
+const validateCache = settings => {
   const prevPkgPath = path.join(cacheDir, 'package.json.hash');
 
   return Promise.all([
     fs.lstatAsync(path.join(cacheDir, settings.hash)).catch(() => null),
     fs.readFileAsync(prevPkgPath).catch(() => null),
-    readPkg(settings.context).catch(() => null)
+    readPkg(settings.context).catch(() => null),
   ]).then(([buildHashDirExist, prevPkgHash, pkg]) => {
     const pkgHash = JSON.stringify(pkg);
 

@@ -25,11 +25,9 @@
     "lib"
   ],
   "lint-staged": {
-    "src/**/*.js": [
-      "eslint --fix"
-    ],
-    "specs/**/*.js": [
-      "eslint --fix"
+    "{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css}": [
+      "prettier-eslint --print-width 100 --trailing-comma es5 --write",
+      "git add"
     ]
   },
   "peerDependencies": {
@@ -58,12 +56,14 @@
     "bluebird": "^3.5.0",
     "del-cli": "^1.1.0",
     "eslint": "^4.1.1",
+    "eslint-config-prettier": "2.7.0",
     "eslint-plugin-react": "^7.1.0",
     "expect": "^1.20.2",
     "faucet": "^0.0.1",
     "html-webpack-plugin": "^2.29.0",
     "husky": "^0.14.3",
     "lint-staged": "^4.0.0",
+    "prettier-eslint-cli": "4.4.0",
     "recursive-readdir": "^2.2.1",
     "spy": "^1.0.0",
     "uglifyjs-webpack-plugin": "^0.4.6",

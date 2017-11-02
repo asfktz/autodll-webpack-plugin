@@ -25,18 +25,18 @@ const createPkgHandler = __dirname => {
         cwd,
         merge(originalPkg, {
           dependencies: merge(originalPkg.dependencies, {
-            ___TEST_DEP___: (Math.random() * 10000000000).toFixed()
-          })
+            ___TEST_DEP___: (Math.random() * 10000000000).toFixed(),
+          }),
         })
       );
     },
     restore() {
       writePkg.sync(cwd, originalPkg);
-    }
+    },
   };
 };
 
-const createMakeChange = (cwd, filepath) => (change) => {
+const createMakeChange = (cwd, filepath) => change => {
   if (!filepath) throw new Error('filepath is required');
 
   const path = join(cwd, filepath);
@@ -52,5 +52,5 @@ module.exports = {
   createPkgHandler,
   createMakeChange,
   fs,
-  merge
+  merge,
 };
