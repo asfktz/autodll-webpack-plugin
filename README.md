@@ -2,6 +2,8 @@
 
 
 # AutoDllPlugin
+
+[![Join the chat at https://gitter.im/autodll-webpack-plugin/Lobby](https://badges.gitter.im/autodll-webpack-plugin/Lobby.svg)](https://gitter.im/autodll-webpack-plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Webpack's DllPlugin without the boilerplate
 
 `npm install --save-dev autodll-webpack-plugin`
