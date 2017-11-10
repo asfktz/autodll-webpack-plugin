@@ -28,7 +28,7 @@ const createSync = (cacheDir, fs, mfs) => (hash, stats) => {
     .map(filename => {
       return Promise.props({
         filename,
-        buffer: fs.readFileAsync(path.join(cacheDir, hash, filename))
+        buffer: fs.readFileAsync(path.join(cacheDir, hash, filename)),
       });
     })
     .each(({ filename, buffer }) => {
@@ -58,7 +58,7 @@ export const _createMemory = (fs, cacheDir) => () => {
   return {
     sync: createSync(cacheDir, fs, mfs),
     getAssets: createGetAssets(mfs),
-    getStats: createGetStats(mfs)
+    getStats: createGetStats(mfs),
   };
 };
 

@@ -24,7 +24,7 @@ class AutoDLLPlugin {
     const settings = createSettings({
       originalSettings: this._originalSettings,
       index: getInstanceIndex(compiler.options.plugins, this),
-      parentConfig: compiler.options
+      parentConfig: compiler.options,
     });
 
     const log = createLogger(settings.debug);
@@ -46,7 +46,7 @@ class AutoDLLPlugin {
       .forEach(manifestPath => {
         new DllReferencePlugin({
           context: context,
-          manifest: manifestPath
+          manifest: manifestPath,
         }).apply(compiler);
       });
 
@@ -60,8 +60,7 @@ class AutoDLLPlugin {
 
     compiler.plugin(['run', 'watch-run'], (_compiler, callback) => {
       compileIfNeeded(() => webpack(dllConfig))
-        .then((a) => {
-          
+        .then(a => {
           return a;
         })
         .then(handleStats)
@@ -76,21 +75,16 @@ class AutoDLLPlugin {
     });
 
     compiler.plugin('emit', (compilation, callback) => {
-      const dllAssets = memory
-        .getAssets()
-        .reduce((assets, { filename, buffer }) => {
-          const assetPath = path.join(settings.path, filename);
+      const dllAssets = memory.getAssets().reduce((assets, { filename, buffer }) => {
+        const assetPath = path.join(settings.path, filename);
 
-          return {
-            ...assets,
-            [assetPath]: new RawSource(buffer)
-          };
-        }, {});
+        return {
+          ...assets,
+          [assetPath]: new RawSource(buffer),
+        };
+      }, {});
 
-      compilation.assets = merge(
-        compilation.assets,
-        dllAssets
-      );
+      compilation.assets = merge(compilation.assets, dllAssets);
 
       callback();
     });
@@ -100,21 +94,15 @@ class AutoDLLPlugin {
         compilation.plugin(
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
-            const dllEntriesPaths = flatMap(
-              memory.getStats().entrypoints,
-              'assets'
-            ).map((filename) =>
+            const dllEntriesPaths = flatMap(memory.getStats().entrypoints, 'assets').map(filename =>
               getInjectPath({
                 publicPath: settings.publicPath,
                 pluginPath: settings.path,
                 filename,
               })
             );
-            
-            htmlPluginData.assets.js = concat(
-              dllEntriesPaths,
-              htmlPluginData.assets.js
-            );
+
+            htmlPluginData.assets.js = concat(dllEntriesPaths, htmlPluginData.assets.js);
 
             callback(null, htmlPluginData);
           }

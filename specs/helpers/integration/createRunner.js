@@ -14,7 +14,7 @@ const createRunner = (webpack, WebpackDevServer) => (config, runTests) => {
 
       quiet: true,
       proxy: {},
-      contentBase: path.join(__dirname, 'public') // boolean | string | array, static file location
+      contentBase: path.join(__dirname, 'public'), // boolean | string | array, static file location
     });
 
     const done = () => {

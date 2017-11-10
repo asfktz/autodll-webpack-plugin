@@ -29,18 +29,18 @@ test('createMemory should have assets', t => {
   const fs = createFakeFS(hash, [
     {
       filename: 'vendor-a.bundle.js',
-      content: 'test 1'
+      content: 'test 1',
     },
     {
       filename: 'vendor-b.bundle.js',
-      content: 'test 2'
-    }
+      content: 'test 2',
+    },
   ]);
 
   const memory = _createMemory(fs, cacheDir)();
   const stats = {
     hash: 'stats-hash',
-    assets: [{ name: 'vendor-a.bundle.js' }, { name: 'vendor-b.bundle.js' }]
+    assets: [{ name: 'vendor-a.bundle.js' }, { name: 'vendor-b.bundle.js' }],
   };
 
   return memory.sync(hash, stats).then(() => {
@@ -55,4 +55,3 @@ test('createMemory should have assets', t => {
     t.is(assets[1].buffer.toString(), 'test 2');
   });
 });
-

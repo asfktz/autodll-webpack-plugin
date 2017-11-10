@@ -13,7 +13,7 @@ import { merge } from './utils';
 const webpackMerge = strategy({
   entry: 'append',
   output: 'append',
-  plugins: 'append'
+  plugins: 'append',
 });
 
 // omit properties that can break things
@@ -44,13 +44,13 @@ export const _createConfig = cacheDir => (settings, rawParentConfig) => {
       ...(settings.plugins || []),
       new DllPlugin({
         path: path.join(outputPath, '[name].manifest.json'),
-        name: '[name]_[hash]'
-      })
+        name: '[name]_[hash]',
+      }),
     ],
     output: {
       filename: filename,
-      library: '[name]_[hash]'
-    }
+      library: '[name]_[hash]',
+    },
   };
 
   const advanceConfig = settings.config;
@@ -60,8 +60,8 @@ export const _createConfig = cacheDir => (settings, rawParentConfig) => {
     // otherwise bad things will happen.
     // (this is the path for the cache)
     output: {
-      path: outputPath
-    }
+      path: outputPath,
+    },
   };
 
   return webpackMerge(parentConfig, ownConfig, advanceConfig, cacheConfig);

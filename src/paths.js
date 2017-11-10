@@ -10,7 +10,11 @@ export const getInjectPath = ({ publicPath, pluginPath, filename }) => {
   let injectPublicPath = publicPath;
   let injectRestPath = path.posix.join(pluginPath, filename);
   // Ensure that injectPublicPath and injectRestPath can be safely concatinated
-  if (!injectPublicPath.endsWith('/')) { injectPublicPath += '/'; }
-  if (injectRestPath.startsWith('/')) { injectRestPath = injectRestPath.substr(1); }
-  return (injectPublicPath + injectRestPath);
+  if (!injectPublicPath.endsWith('/')) {
+    injectPublicPath += '/';
+  }
+  if (injectRestPath.startsWith('/')) {
+    injectRestPath = injectRestPath.substr(1);
+  }
+  return injectPublicPath + injectRestPath;
 };
