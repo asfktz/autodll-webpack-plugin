@@ -18,15 +18,14 @@
     "build": "npm run cleanup && babel src --out-dir lib",
     "build:watch": "npm run cleanup && babel src --out-dir lib --watch",
     "prepublishOnly": "npm run build",
-    "precommit": "del-cli yarn.lock && lint-staged && npm run test"
+    "precommit": "del-cli yarn.lock && lint-staged && npm run test",
+    "format":
+      "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write \"{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}\" "
   },
-  "files": [
-    "src",
-    "lib"
-  ],
+  "files": ["src", "lib"],
   "lint-staged": {
-    "{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css}": [
-      "prettier-eslint --print-width 100 --trailing-comma es5 --write",
+    "{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}": [
+      "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write",
       "git add"
     ]
   },
@@ -101,14 +100,10 @@
   },
   "ava": {
     "files": [],
-    "source": [
-      "src/**/*.js"
-    ],
+    "source": ["src/**/*.js"],
     "concurrency": 5,
     "failFast": false,
-    "require": [
-      "babel-register"
-    ],
+    "require": ["babel-register"],
     "babel": "inherit"
   }
 }
