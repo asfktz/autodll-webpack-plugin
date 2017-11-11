@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test": "ava --serial specs/*.integration.js"
+  },
   "devDependencies": {
     "ava": "^0.21.0",
     "axios": "^0.16.2",
