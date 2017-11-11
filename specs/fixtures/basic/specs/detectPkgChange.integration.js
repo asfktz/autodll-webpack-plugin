@@ -26,21 +26,24 @@ process.on('SIGINT', pkgHandler.restore);
 //catches uncaught exceptions
 process.on('uncaughtException', pkgHandler.restore);
 
+console.log('Detect package.json change');
+
 test.serial('Detect package.json change', async t => {
   clearCache();
   makeChange('initial');
 
-  // clean run (cache deleted)
+  console.log('clean run (cache deleted)');
 
   await runner(config, ({ done, compiler }) => {
     compiler.plugin(
       'autodll-stats-retrieved',
       routeCalls(
         () => {
-          /* ignore first run */
+          console.log('first build');
         },
         (stats, source) => {
-          t.is(source, 'build', 'should rebuild after package.json changed from memory');
+          console.log('rebuild is triggered since package.json changed.');
+          t.is(source, 'build', 'should rebuild after package.json changed');
         }
       )
     );
@@ -49,10 +52,18 @@ test.serial('Detect package.json change', async t => {
       'done',
       routeCalls(
         () => {
+          console.log('first build is done.');
+
+          console.log('change to package.json');
           pkgHandler.change();
+
+          console.log('making a change to some file to trigger a rebuild');
           makeChange('some change');
         },
-        () => done()
+        () => {
+          console.log('Second build is done.');
+          done();
+        }
       )
     );
 
