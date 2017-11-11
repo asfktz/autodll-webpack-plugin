@@ -15,6 +15,8 @@ const runner = createRunner(webpack, WebpackDevServer);
 const clearCache = createClearCache(__dirname);
 const makeChange = createMakeChange(__dirname, '../src/text.js');
 
+console.log('Ensure stats retrieved from the currect source');
+
 test.serial('Ensure stats retrieved from the currect source', async t => {
   clearCache();
   makeChange('initial');
