@@ -1,18 +1,35 @@
-const { spawnSync } = require('child_process');
-const { join } = require('path');
-const { readdirSync, lstatSync } = require('fs');
+'use strict';
 
-const cwd = join(__dirname, '../specs/fixtures');
+const spawnSync = require('child_process').spawnSync;
+const path = require('path');
+const fs = require('fs');
 
-const isDirectory = source => lstatSync(join(cwd, source)).isDirectory();
+const cwd = path.join(__dirname, '../specs/fixtures');
 
-readdirSync(cwd)
+const isDirectory = source => fs.lstatSync(path.join(cwd, source)).isDirectory();
+
+const failingTests = fs
+  .readdirSync(cwd)
   .filter(isDirectory)
-  .map(dirname => join(cwd, dirname))
-  .forEach(ctx => {
-    spawnSync('npm', ['test'], {
-      cwd: ctx,
+  .filter(dirname => {
+    const result = spawnSync('npm', ['test'], {
+      cwd: path.join(cwd, dirname),
       shell: true,
       stdio: 'inherit',
     });
+
+    if (result.status !== 0) {
+      console.error(`\nIntegration test for "${dirname}" returned status code ${result.status}!`);
+      return true;
+    }
+    return false;
   });
+
+if (failingTests.length !== 0) {
+  console.error('\nIntegration tests are failing!');
+  console.error('The following tests returned non-zero status code:');
+  failingTests.forEach(t => {
+    console.error(`  - ${t}`);
+  });
+  process.exitCode = 1;
+}
