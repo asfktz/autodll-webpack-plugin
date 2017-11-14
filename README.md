@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/asfktz/autodll-webpack-plugin.svg?branch=master)](https://travis-ci.org/asfktz/autodll-webpack-plugin)
-[![Build Status](https://img.shields.io/npm/dm/autodll-webpack-plugin.svg)](https://www.npmjs.com/package/autodll-webpack-plugin)
+[![Build Status for Linux](https://travis-ci.org/asfktz/autodll-webpack-plugin.svg?branch=master)](https://travis-ci.org/asfktz/autodll-webpack-plugin)
+[![Build Status for Windows](https://ci.appveyor.com/api/projects/status/github/asfktz/autodll-webpack-plugin?branch=master&svg=true)](https://ci.appveyor.com/project/asfktz/autodll-webpack-plugin)
+[![Downloads](https://img.shields.io/npm/dm/autodll-webpack-plugin.svg)](https://www.npmjs.com/package/autodll-webpack-plugin)
 [![Join the chat at https://gitter.im/autodll-webpack-plugin/Lobby](https://badges.gitter.im/autodll-webpack-plugin/Lobby.svg)](https://gitter.im/autodll-webpack-plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
