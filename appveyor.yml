@@ -12,6 +12,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm install
+  - npm run install:fixturedeps
 
 # Post-install test scripts.
 test_script:
