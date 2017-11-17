@@ -1,10 +1,19 @@
 language: node_js
+
 node_js:
+  - '9'
   - '8'
-  - '7'
   - '6'
-#  - '4'
-install: npm install
+  - '4'
+
+branches:
+  only:
+    - master
+
+install:
+  - npm install
+  - npm run install:fixturedeps
+
 script:
   - npm run build
   - npm test
