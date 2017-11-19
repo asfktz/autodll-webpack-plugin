@@ -68,8 +68,7 @@ plugins: [
     entry: {
       vendor: [
         'react',
-        'react-dom',
-        'moment'
+        'react-dom'
       ]
     }
   })
@@ -120,8 +119,7 @@ module.exports = {
       entry: {
         vendor: [
           'react',
-          'react-dom',
-          'moment'
+          'react-dom'
         ]
       }
     })
@@ -163,8 +161,7 @@ module.exports = {
       entry: {
         vendor: [
           'react',
-          'react-dom',
-          'moment'
+          'react-dom'
         ]
       }
     })
@@ -328,17 +325,17 @@ new AutoDllPlugin({
     vendor: [
       'react',
       'react-dom',
-      'moment'
+      'lodash'
     ]
   }
 })
 ```
 
-And then, while working on your project, you encountered some weird behavior with `moment` and decided to put a `console.log` statement in one of its files to see how it behaves.
+And then, while working on your project, you encountered some weird behavior with `lodash` and decided to put a `console.log` statement in one of its files to see how it behaves.
 
 As explained above, AutoDLL is not going to invalidate its cache in this case, and you might get surprised that you don't see the changes.
 
-To fix that, all you have to do is comment out `moment` from the DLL, and uncomment it when you're done.
+To fix that, all you have to do is comment out `lodash` from the DLL, and uncomment it when you're done.
 
 ```js
 new AutoDllPlugin({
@@ -346,7 +343,7 @@ new AutoDllPlugin({
     vendor: [
       'react',
       'react-dom'
-     // 'moment'
+     // 'lodash'
     ]
   }
 })
