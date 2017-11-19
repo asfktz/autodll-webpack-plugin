@@ -20,12 +20,10 @@
     "build:watch": "npm run cleanup && babel src --out-dir lib --watch",
     "prepublishOnly": "npm run build",
     "precommit": "del-cli yarn.lock && lint-staged && npm run test",
-    "format": "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write \"{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}\" "
+    "format":
+      "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write \"{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}\" "
   },
-  "files": [
-    "src",
-    "lib"
-  ],
+  "files": ["src", "lib"],
   "lint-staged": {
     "{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}": [
       "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write",
@@ -50,7 +48,6 @@
   "devDependencies": {
     "all-contributors-cli": "^4.5.0",
     "ava": "^0.21.0",
-    "axios": "^0.16.2",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-preset-env": "^1.5.2",
@@ -59,9 +56,6 @@
     "del-cli": "^1.1.0",
     "eslint": "^4.1.1",
     "eslint-config-prettier": "2.7.0",
-    "eslint-plugin-react": "^7.1.0",
-    "expect": "^1.20.2",
-    "faucet": "^0.0.1",
     "html-webpack-plugin": "^2.29.0",
     "husky": "^0.14.3",
     "lint-staged": "^4.0.0",
@@ -105,14 +99,10 @@
   },
   "ava": {
     "files": [],
-    "source": [
-      "src/**/*.js"
-    ],
+    "source": ["src/**/*.js"],
     "concurrency": 5,
     "failFast": false,
-    "require": [
-      "babel-register"
-    ],
+    "require": ["babel-register"],
     "babel": "inherit"
   }
 }
