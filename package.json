@@ -7,6 +7,7 @@
   "repository": "https://github.com/asfktz/autodll-webpack-plugin",
   "main": "lib/index.js",
   "scripts": {
+    "install:fixturedeps": "node ./scripts/installFixtureDeps.js",
     "lint": "eslint src specs",
     "lint:fix": "npm run lint -- --fix",
     "lint-staged": "lint-staged",
@@ -19,10 +20,12 @@
     "build:watch": "npm run cleanup && babel src --out-dir lib --watch",
     "prepublishOnly": "npm run build",
     "precommit": "del-cli yarn.lock && lint-staged && npm run test",
-    "format":
-      "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write \"{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}\" "
+    "format": "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write \"{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}\" "
   },
-  "files": ["src", "lib"],
+  "files": [
+    "src",
+    "lib"
+  ],
   "lint-staged": {
     "{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}": [
       "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write",
@@ -33,10 +36,10 @@
     "webpack": ">= 2.0.0"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "del": "^3.0.0",
     "find-cache-dir": "^1.0.0",
     "lodash": "^4.17.4",
-    "bluebird": "^3.5.0",
     "make-dir": "^1.0.0",
     "memory-fs": "^0.4.1",
     "mkdirp": "^0.5.1",
@@ -68,7 +71,8 @@
     "spy": "^1.0.0",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.2.0",
-    "webpack-dev-server": "^2.7.1"
+    "webpack-dev-server": "^2.7.1",
+    "write-pkg": "^3.1.0"
   },
   "babel": {
     "presets": [
@@ -101,10 +105,14 @@
   },
   "ava": {
     "files": [],
-    "source": ["src/**/*.js"],
+    "source": [
+      "src/**/*.js"
+    ],
     "concurrency": 5,
     "failFast": false,
-    "require": ["babel-register"],
+    "require": [
+      "babel-register"
+    ],
     "babel": "inherit"
   }
 }

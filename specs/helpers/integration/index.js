@@ -1,22 +1,24 @@
+'use strict';
+
 const createRunner = require('./createRunner');
 const routeCalls = require('./routeCalls');
 
-const { promisifyAll } = require('bluebird');
+const promisifyAll = require('bluebird').promisifyAll;
 const fs = promisifyAll(require('fs'));
 
 const del = require('del');
-const { join } = require('path');
+const path = require('path');
 
 const createClearCache = cwd => () => {
-  const path = join(cwd, '../node_modules/.cache/autodll-webpack-plugin');
-  del.sync(path);
+  const cachePath = path.join(cwd, '../node_modules/.cache/autodll-webpack-plugin');
+  del.sync(cachePath);
 };
 
 const writePkg = require('write-pkg');
 const readPkg = require('read-pkg');
 
 const createPkgHandler = __dirname => {
-  const cwd = join(__dirname, '..');
+  const cwd = path.join(__dirname, '..');
   const originalPkg = readPkg.sync(cwd);
 
   return {
@@ -39,11 +41,12 @@ const createPkgHandler = __dirname => {
 const createMakeChange = (cwd, filepath) => change => {
   if (!filepath) throw new Error('filepath is required');
 
-  const path = join(cwd, filepath);
-  return fs.writeFileAsync(path, `module.exports = '${change}';`);
+  return fs.writeFileAsync(path.join(cwd, filepath), `module.exports = '${change}';`);
 };
 
-const merge = (...sources) => Object.assign({}, ...sources);
+function merge() {
+  return Object.assign.apply(Object, [{}].concat(Array.from(arguments)));
+}
 
 module.exports = {
   createRunner,

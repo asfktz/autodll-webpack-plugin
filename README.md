@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/asfktz/autodll-webpack-plugin.svg?branch=master)](https://travis-ci.org/asfktz/autodll-webpack-plugin)
-[![Build Status](https://img.shields.io/npm/dm/autodll-webpack-plugin.svg)](https://www.npmjs.com/package/autodll-webpack-plugin)
+[![Build Status for Linux](https://travis-ci.org/asfktz/autodll-webpack-plugin.svg?branch=master)](https://travis-ci.org/asfktz/autodll-webpack-plugin)
+[![Build Status for Windows](https://ci.appveyor.com/api/projects/status/github/asfktz/autodll-webpack-plugin?branch=master&svg=true)](https://ci.appveyor.com/project/asfktz/autodll-webpack-plugin)
+[![Downloads](https://img.shields.io/npm/dm/autodll-webpack-plugin.svg)](https://www.npmjs.com/package/autodll-webpack-plugin)
 [![Join the chat at https://gitter.im/autodll-webpack-plugin/Lobby](https://badges.gitter.im/autodll-webpack-plugin/Lobby.svg)](https://gitter.im/autodll-webpack-plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
@@ -67,8 +68,7 @@ plugins: [
     entry: {
       vendor: [
         'react',
-        'react-dom',
-        'moment'
+        'react-dom'
       ]
     }
   })
@@ -119,8 +119,7 @@ module.exports = {
       entry: {
         vendor: [
           'react',
-          'react-dom',
-          'moment'
+          'react-dom'
         ]
       }
     })
@@ -162,8 +161,7 @@ module.exports = {
       entry: {
         vendor: [
           'react',
-          'react-dom',
-          'moment'
+          'react-dom'
         ]
       }
     })
@@ -327,17 +325,17 @@ new AutoDllPlugin({
     vendor: [
       'react',
       'react-dom',
-      'moment'
+      'lodash'
     ]
   }
 })
 ```
 
-And then, while working on your project, you encountered some weird behavior with `moment` and decided to put a `console.log` statement in one of its files to see how it behaves.
+And then, while working on your project, you encountered some weird behavior with `lodash` and decided to put a `console.log` statement in one of its files to see how it behaves.
 
 As explained above, AutoDLL is not going to invalidate its cache in this case, and you might get surprised that you don't see the changes.
 
-To fix that, all you have to do is comment out `moment` from the DLL, and uncomment it when you're done.
+To fix that, all you have to do is comment out `lodash` from the DLL, and uncomment it when you're done.
 
 ```js
 new AutoDllPlugin({
@@ -345,7 +343,7 @@ new AutoDllPlugin({
     vendor: [
       'react',
       'react-dom'
-     // 'moment'
+     // 'lodash'
     ]
   }
 })
