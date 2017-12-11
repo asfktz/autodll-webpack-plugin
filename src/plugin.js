@@ -113,13 +113,15 @@ class AutoDLLPlugin {
         compilation.plugin(
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
-            const dllEntriesPaths = flatMap(memory.getStats().entrypoints, 'assets').map(filename =>
-              getInjectPath({
-                publicPath: settings.publicPath,
-                pluginPath: settings.path,
-                filename,
-              })
-            );
+            const dllEntriesPaths = flatMap(memory.getStats().entrypoints, 'assets')
+              .filter(filename => !filename.endsWith('.js.map'))
+              .map(filename =>
+                getInjectPath({
+                  publicPath: settings.publicPath,
+                  pluginPath: settings.path,
+                  filename,
+                })
+              );
 
             htmlPluginData.assets.js = concat(dllEntriesPaths, htmlPluginData.assets.js);
 
