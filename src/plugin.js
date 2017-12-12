@@ -109,19 +109,26 @@ class AutoDLLPlugin {
     });
 
     if (inject) {
+      const getDllEntriesPaths = extension =>
+        flatMap(memory.getStats().entrypoints, 'assets')
+          .filter(filename => filename.endsWith(extension))
+          .map(filename =>
+            getInjectPath({
+              publicPath: settings.publicPath,
+              pluginPath: settings.path,
+              filename,
+            })
+          );
+
       compiler.plugin('compilation', compilation => {
         compilation.plugin(
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
-            const dllEntriesPaths = flatMap(memory.getStats().entrypoints, 'assets').map(filename =>
-              getInjectPath({
-                publicPath: settings.publicPath,
-                pluginPath: settings.path,
-                filename,
-              })
+            htmlPluginData.assets.js = concat(getDllEntriesPaths('.js'), htmlPluginData.assets.js);
+            htmlPluginData.assets.css = concat(
+              getDllEntriesPaths('.css'),
+              htmlPluginData.assets.css
             );
-
-            htmlPluginData.assets.js = concat(dllEntriesPaths, htmlPluginData.assets.js);
 
             callback(null, htmlPluginData);
           }
