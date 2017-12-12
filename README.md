@@ -298,6 +298,24 @@ module.exports = {
 ]</pre>
             </td>
         </tr>
+        <tr>
+          <td>inherit</td>
+          <td>Boolean/Function</td>
+          <td><code>false</code></td>
+          <td>
+            Inherit from the parent config.
+            A valid use-case would be if you have <code>devtool: "source-maps"</code> in your webpack config and wanted source maps to be created for the DLL bundle as well.
+            However, this <strong>does not</strong> inherit plugins from the parent config and inheriting loaders are buggy too(see <a href="https://github.com/asfktz/autodll-webpack-plugin/issues/37">#37</a>).
+            It can also be a function to inherit only the desired properties.
+            <pre>function inherit(webpackConfig) {
+  // Return object with desired properties.
+}
+</pre>
+            To see it action, <a href="https://github.com/asfktz/autodll-webpack-plugin/tree/master/experiments/inherit">check out the example</a>.
+            <br>
+            <strong>⚠️ This option is highly experimental! Use with caution and if you face any problems, please open a issue.<strong>
+          </td>
+        </tr>
     </tbody>
 </table>
 
