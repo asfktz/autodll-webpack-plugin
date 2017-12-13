@@ -12,9 +12,7 @@ import { safeClone } from './utils';
 
 const defaultExclude = ['plugins'];
 
-const createDefaultMapper = ({ exclude }) => parentConfig => {
-  return omit(parentConfig, exclude);
-};
+const createDefaultMapper = exclude => parentConfig => omit(parentConfig, exclude);
 
 const createMapper = inherit => {
   if (isFunction(inherit)) {
@@ -22,12 +20,12 @@ const createMapper = inherit => {
   }
 
   if (isPlainObject(inherit)) {
-    let exclude = isArray(inherit.exclude) ? inherit.exclude : defaultExclude;
+    const exclude = isArray(inherit.exclude) ? inherit.exclude : defaultExclude;
     return createDefaultMapper(exclude);
   }
 
   if (inherit === true) {
-    return createDefaultMapper({ exclude: defaultExclude });
+    return createDefaultMapper(defaultExclude);
   }
 
   // do not inherit
