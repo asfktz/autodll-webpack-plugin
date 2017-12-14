@@ -24,7 +24,7 @@ module.exports = {
       filename: '[name]_[hash].js',
       path: './dll',
       entry: {
-        vendor: ['react', 'react-dom', 'moment'],
+        vendor: ['react', 'react-dom'],
       },
     }),
   ],

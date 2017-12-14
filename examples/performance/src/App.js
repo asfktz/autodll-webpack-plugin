@@ -2,7 +2,6 @@ import axios from 'axios';
 import Draft from 'draft-js';
 import howler from 'howler';
 import Immutable from 'immutable';
-import moment from 'moment';
 import Pixi from 'pixi.js';
 import polished from 'polished';
 import React from 'react';

@@ -1,11 +1,10 @@
-const moment = require('moment');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const createElement = React.createElement;
 
 const Test = createElement('div', {}, [
   createElement('h1', {}, ['AutoDllPlugin Basic Setup']),
-  createElement('p', {}, [moment().format('LLLL')]),
+  createElement('p', {}, [new Date().toDateString()]),
 ]);
 
 ReactDOM.render(Test, document.getElementById('root'));

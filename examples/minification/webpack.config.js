@@ -4,13 +4,13 @@ const AutoDllPlugin = require('../../lib');
 
 module.exports = {
   entry: {
-    app: './src/index.js'
+    app: './src/index.js',
   },
 
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: '/',
   },
 
   plugins: [
@@ -18,15 +18,9 @@ module.exports = {
       debug: true,
       filename: '[name].dll.js',
       entry: {
-        vendor: [
-          'react',
-          'react-dom',
-          'moment'
-        ]
+        vendor: ['react', 'react-dom'],
       },
-      plugins: [
-        new webpack.optimize.UglifyJsPlugin(),
-      ]
-    })
-  ]
+      plugins: [new webpack.optimize.UglifyJsPlugin()],
+    }),
+  ],
 };

@@ -4,15 +4,12 @@ const AutoDllPlugin = require('../../lib');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: [
-    'babel-polyfill',
-    './src/index.js'
-  ],
+  entry: ['babel-polyfill', './src/index.js'],
   devtool: 'source-map',
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: '/',
   },
 
   module: {
@@ -23,16 +20,16 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env', 'react']
-          }
-        }
-      }
-    ]
+            presets: ['env', 'react'],
+          },
+        },
+      },
+    ],
   },
 
   devServer: {
     hot: true,
-    historyApiFallback: true
+    historyApiFallback: true,
   },
 
   plugins: [
@@ -46,7 +43,6 @@ module.exports = {
           'babel-polyfill',
           'react',
           'react-dom',
-          'moment',
           'styled-components',
           'polished',
           'redux',
@@ -61,14 +57,14 @@ module.exports = {
           'howler',
           'react-motion',
           'react-player',
-          'pixi.js'
-        ]
-      }
+          'pixi.js',
+        ],
+      },
     }),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       inject: true,
       template: './src/index.html',
-    })
-  ]
+    }),
+  ],
 };
