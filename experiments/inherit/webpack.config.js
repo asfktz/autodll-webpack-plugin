@@ -12,14 +12,14 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: '/',
   },
 
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'css-loader' ]
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(eot|svg|ttf|woff(2)?)(\?v=\d+\.\d+\.\d+)?/,
@@ -27,12 +27,12 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 8192
-            }
-          }
-        ]
-      }
-    ]
+              limit: 8192,
+            },
+          },
+        ],
+      },
+    ],
   },
 
   plugins: [
@@ -45,16 +45,8 @@ module.exports = {
       inject: true,
       filename: '[name].[hash].js',
       entry: {
-        vendor: [
-          './src/awesome-module.js',
-          'react',
-          'react-dom',
-          'moment',
-          'font-awesome'
-        ],
-        other: [
-          'react'
-        ]
+        vendor: ['./src/awesome-module.js', 'react', 'react-dom', 'font-awesome'],
+        other: ['react'],
       },
 
       path: './dll',
@@ -63,8 +55,8 @@ module.exports = {
         output: {},
         plugins: [
           // new UglifyJsPlugin()
-        ]
-      }
-    })
-  ]
+        ],
+      },
+    }),
+  ],
 };
