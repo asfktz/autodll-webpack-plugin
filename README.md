@@ -29,7 +29,7 @@ The DllPlugin allows you to to create a separate bundle in advance for all of th
 
 That leads to a dramatic reduction in the amount of time takes Webpack to build your bundles.
 
-For example, these are the measurements for the  [performance test](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/performance) that you can find in the [examples](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples) folder:
+For example, these are the measurements for the  [performance test](examples/performance) that you can find in the [examples](examples) folder:
 
 |                   |  **Without DllPlugin**  | **With DllPlugin** |
 |-------------------|-------------------|-----------------------|
@@ -94,11 +94,9 @@ Will Result in:
 ```
 
 
-### Basic Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/basic)):
-
+### Basic Usage ([example](examples/basic)):
 
 ```js
-const webpack = require('webpack');
 const path = require('path');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 
@@ -127,14 +125,13 @@ module.exports = {
 };
 ```
 
-### Recommended Usage ([example](https://github.com/asfktz/autodll-webpack-plugin/tree/master/examples/recommended)):
+### Recommended Usage ([example](examples/recommended)):
 
 While it's not required, using AutoDllPlugin together with [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin) is highly recommended, because its saves you the trouble of manually adding the DLL bundles to the HTML by yourself.
 
 Use AutoDllPlugin's `inject` option to enable this feature.
 
 ```js
-const webpack = require('webpack');
 const path = require('path');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -184,7 +181,7 @@ module.exports = {
         <tr>
             <td>entry</td>
             <td>Object</td>
-            <td>{}</td>
+            <td><code>{}</code></td>
             <td>
               <p>
                 The entry points for the DLL's. <br>
@@ -210,22 +207,22 @@ module.exports = {
         <tr>
             <td>filename</td>
             <td>String</td>
-            <td>"[name].js"</td>
+            <td><code>"[name].js"</code></td>
             <td>
               <p>The filename template. <br> Same as webpack's
                 <a href="https://webpack.js.org/configuration/output/#output-filename">output.filename</a>.
               </p>
               <p>Examples:</p>
               <ul>
-                <li>[name]_[hash].dll.js</li>
-                <li>[id].bundle.js</li>
+                <li><code>[name]_[hash].dll.js</code></li>
+                <li><code>[id].bundle.js</code></li>
               </ul>
             </td>
         </tr>
         <tr>
             <td>context</td>
             <td>String</td>
-            <td><p>process.cwd()</p></td>
+            <td><code>process.cwd()</code></td>
             <td>
               <p>
                 The base directory, an <strong>absolute path</strong>, for resolving entry points and loaders from the configuration.
@@ -260,7 +257,7 @@ module.exports = {
         <tr>
             <td>inject</td>
             <td>Boolean</td>
-            <td>false</td>
+            <td><code>false</code></td>
             <td>
               <p>By setting inject to true, AutoDLL will inject the DLL bundles into the HTML for you.</p>
               <p>
@@ -272,7 +269,7 @@ module.exports = {
         <tr>
             <td>path</td>
             <td>String</td>
-            <td>""</td>
+            <td><code>""</code></td>
             <td>
                 The path for the DLL bundles, relative to webpack's
                 <a href="https://webpack.js.org/configuration/output/#output-publicpath">output.publicPath</a>
@@ -281,13 +278,13 @@ module.exports = {
         <tr>
             <td>debug</td>
             <td>Boolean</td>
-            <td>false</td>
+            <td><code>false</code></td>
             <td>Use debug mode to see more clearly what AutoDLL is doing.</td>
         </tr>
         <tr>
             <td>plugins</td>
             <td>Array</td>
-            <td>[]</td>
+            <td><code>[]</code></td>
             <td>
               <p>
                 Plugins for the DLL compiler. Same as webpack's
@@ -323,7 +320,7 @@ module.exports = {
 
 ### I added my dependencies to the DLL, and now, when I make a change to one of them I don't see it! Why?
 
-When you run webpack for the first time,  AutoDLL builds the DLL bundles and stores them in the cache for next time.
+When you run webpack for the first time, AutoDLL builds the DLL bundles and stores them in the cache for next time.
 
 That leads to faster builds and rebuilds (using webpack's dev server).
 
@@ -331,7 +328,7 @@ There are two conditions for triggering a new build on the next run:
 1. Running `npm install / remove / update package-name` (or Yarn equivalent).
 2. Changing the plugin's configurations.
 
-For performance considerations,  AutoDLL is not aware of any changes made to module's files themselves.
+For performance considerations, AutoDLL is not aware of any changes made to module's files themselves.
 
 So as long as you intend to work on a module, just exclude it from the DLL.
 
