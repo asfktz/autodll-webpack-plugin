@@ -1,5 +1,6 @@
 import path from 'path';
-import fs, { mkdirp } from './utils/fs';
+import fs from './utils/fs';
+import makeDir from 'make-dir';
 import readPkg from 'read-pkg';
 import { cacheDir } from './paths';
 
@@ -29,7 +30,7 @@ const validateCache = settings => {
       return true;
     }
 
-    return mkdirp(cacheDir)
+    return makeDir(cacheDir)
       .then(() => fs.writeFileAsync(prevPkgPath, pkgHash))
       .then(() => false);
   });
