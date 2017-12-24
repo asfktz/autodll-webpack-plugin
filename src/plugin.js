@@ -6,7 +6,7 @@ import { RawSource } from 'webpack-sources';
 import path from 'path';
 
 import { cacheDir, getManifestPath, getInjectPath } from './paths';
-import { concat, merge, keys } from './utils/index.js';
+import { concat, keys } from './utils/index.js';
 import createCompileIfNeeded from './createCompileIfNeeded';
 import createConfig from './createConfig';
 import createMemory from './createMemory';
@@ -103,7 +103,7 @@ class AutoDLLPlugin {
         };
       }, {});
 
-      compilation.assets = merge(compilation.assets, dllAssets);
+      compilation.assets = { ...compilation.assets, ...dllAssets };
 
       callback();
     });

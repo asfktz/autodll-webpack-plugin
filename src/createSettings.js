@@ -1,6 +1,5 @@
 import get from 'lodash/get';
 import isNil from 'lodash/isNil';
-import { merge } from './utils';
 import createHash from './createHash';
 import normalizeEntry from './normalizeEntry';
 import getEnv from './getEnv';
@@ -31,16 +30,19 @@ export const _createSettings = getEnv => ({ originalSettings, index, parentConfi
     config: {},
   };
 
-  const settings = merge(defaults, otherSettings, {
+  const settings = {
+    ...defaults,
+    ...otherSettings,
     entry: normalizeEntry(entry),
     id: getInstanceId(index),
     env: getEnv(env),
     inherit: isNil(inherit) ? false : inherit,
-  });
+  };
 
-  return merge(settings, {
+  return {
+    ...settings,
     hash: createHash(settings),
-  });
+  };
 };
 
 export default _createSettings(getEnv);

@@ -8,7 +8,6 @@ import get from 'lodash/get';
 import omit from 'lodash/omit';
 
 import mapParentConfig from './mapParentConfig';
-import { merge } from './utils';
 
 const webpackMerge = strategy({
   entry: 'append',
@@ -28,7 +27,7 @@ const prepare = config => {
   // plugins are ommited by default too.
   // It's not ideal, but it's better to let the user make a conscious choice about it.
   const props = ['context', 'plugins', 'entry', 'output'];
-  return merge(omit(config, props), { plugins });
+  return { ...omit(config, props), plugins };
 };
 
 export const _createConfig = cacheDir => (settings, rawParentConfig) => {
