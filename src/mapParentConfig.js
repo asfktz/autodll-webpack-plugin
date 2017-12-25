@@ -1,5 +1,4 @@
 import omit from 'lodash/omit';
-import isArray from 'lodash/isArray';
 import isFunction from 'lodash/isFunction';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
@@ -20,7 +19,7 @@ const createMapper = inherit => {
   }
 
   if (isPlainObject(inherit)) {
-    const exclude = isArray(inherit.exclude) ? inherit.exclude : defaultExclude;
+    const exclude = Array.isArray(inherit.exclude) ? inherit.exclude : defaultExclude;
     return createDefaultMapper(exclude);
   }
 
