@@ -6,7 +6,7 @@ import { RawSource } from 'webpack-sources';
 import path from 'path';
 
 import { cacheDir, getManifestPath, getInjectPath } from './paths';
-import { concat, keys } from './utils/index.js';
+import { keys } from './utils/index.js';
 import createCompileIfNeeded from './createCompileIfNeeded';
 import createConfig from './createConfig';
 import createMemory from './createMemory';
@@ -124,11 +124,11 @@ class AutoDLLPlugin {
         compilation.plugin(
           'html-webpack-plugin-before-html-generation',
           (htmlPluginData, callback) => {
-            htmlPluginData.assets.js = concat(getDllEntriesPaths('.js'), htmlPluginData.assets.js);
-            htmlPluginData.assets.css = concat(
-              getDllEntriesPaths('.css'),
-              htmlPluginData.assets.css
-            );
+            htmlPluginData.assets.js = [...getDllEntriesPaths('.js'), ...htmlPluginData.assets.js];
+            htmlPluginData.assets.css = [
+              ...getDllEntriesPaths('.css'),
+              ...htmlPluginData.assets.css,
+            ];
 
             callback(null, htmlPluginData);
           }
