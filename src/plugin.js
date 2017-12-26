@@ -6,7 +6,6 @@ import { RawSource } from 'webpack-sources';
 import path from 'path';
 
 import { cacheDir, getManifestPath, getInjectPath } from './paths';
-import { keys } from './utils/index.js';
 import createCompileIfNeeded from './createCompileIfNeeded';
 import createConfig from './createConfig';
 import createMemory from './createMemory';
@@ -60,7 +59,7 @@ class AutoDLLPlugin {
 
     const { context, inject } = settings;
 
-    keys(dllConfig.entry)
+    Object.keys(dllConfig.entry)
       .map(getManifestPath(settings.hash))
       .forEach(manifestPath => {
         new DllReferencePlugin({
