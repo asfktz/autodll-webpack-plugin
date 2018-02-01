@@ -43,12 +43,12 @@ export const _createConfig = cacheDir => (settings, rawParentConfig) => {
       ...(settings.plugins || []),
       new DllPlugin({
         path: path.join(outputPath, '[name].manifest.json'),
-        name: '[name]_[hash]',
+        name: '[name]_[chunkhash]',
       }),
     ],
     output: {
       filename: filename,
-      library: '[name]_[hash]',
+      library: '[name]_[chunkhash]',
     },
   };
 
