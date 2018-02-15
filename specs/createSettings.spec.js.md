@@ -1,4 +1,4 @@
-# Snapshot report for `specs/createSettings.spec.js`
+# Snapshot report for `specs\createSettings.spec.js`
 
 The actual snapshot is saved in `createSettings.spec.js.snap`.
 
