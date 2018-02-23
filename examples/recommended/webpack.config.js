@@ -3,6 +3,8 @@ const AutoDllPlugin = require('../../lib');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  // TODO: Add conditional for mode: 'string'
+  
   entry: './src/index.js',
 
   output: {

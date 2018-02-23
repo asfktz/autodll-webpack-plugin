@@ -4,13 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --history-api-fallback --config ./webpack.config.js",
-    "build": "webpack --config ./webpack.config.js"
+    "start": "webpack-dev-server --history-api-fallback",
+    "build": "webpack"
   },
   "devDependencies": {
-    "html-webpack-plugin": "^2.29.0",
-    "webpack-dev-server": "^2.5.0",
-    "webpack": "^3.1.0"
+    "extract-text-webpack-plugin": "^4.0.0-alpha.0",
+    "html-webpack-plugin": "webpack-contrib/html-webpack-plugin",
+    "webpack": "^4.0.0-beta.2",
+    "webpack-cli": "^2.0.6",
+    "webpack-dev-server": "^3.0.0-beta.2"
   },
   "dependencies": {
     "react": "^15.6.1",
