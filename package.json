@@ -64,9 +64,9 @@
     "recursive-readdir": "^2.2.1",
     "slash": "^1.0.0",
     "spy": "^1.0.0",
-    "uglifyjs-webpack-plugin": "^1.2.0",
-    "webpack": "^4.0.0-beta.2",
-    "webpack-dev-server": "^3.0.0-beta.2",
+    "uglifyjs-webpack-plugin": "^1.2.2",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.0.0",
     "write-pkg": "^3.1.0"
   },
   "babel": {
