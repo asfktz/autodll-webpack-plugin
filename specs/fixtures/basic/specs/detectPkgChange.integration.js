@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+const { SyncHook } = require('tapable');
 const config = require('../webpack.config.js');
 const test = require('ava');
 
@@ -35,12 +36,13 @@ test.serial('Detect package.json change', async t => {
   console.log('clean run (cache deleted)');
 
   await runner(config, ({ done, compiler }) => {
-    compiler.plugin(
-      'autodll-stats-retrieved',
+    compiler.hooks.autodllStatsRetrieved = new SyncHook(['stats', 'source']);
+    compiler.hooks.autodllStatsRetrieved.call(
       routeCalls(
         () => {
           console.log('first build');
         },
+
         (stats, source) => {
           console.log('rebuild is triggered since package.json changed.');
           t.is(source, 'build', 'should rebuild after package.json changed');
@@ -48,8 +50,8 @@ test.serial('Detect package.json change', async t => {
       )
     );
 
-    compiler.plugin(
-      'done',
+    compiler.hooks.done.tapAsync(
+      'AutoDllPlugin',
       routeCalls(
         () => {
           console.log('first build is done.');

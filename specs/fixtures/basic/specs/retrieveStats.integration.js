@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+const { SyncHook } = require('tapable');
 const config = require('../webpack.config.js');
 const test = require('ava');
 
@@ -24,8 +25,8 @@ test.serial('Ensure stats retrieved from the currect source', async t => {
   console.log('clean run (cache deleted)');
 
   await runner(config, ({ done, compiler }) => {
-    compiler.plugin(
-      'autodll-stats-retrieved',
+    compiler.hooks.autodllStatsRetrieved = new SyncHook(['stats', 'source']);
+    compiler.hooks.autodllStatsRetrieved.call(
       routeCalls(
         (stats, source) => {
           t.is(source, 'build', 'should retreive stats from build');
@@ -36,14 +37,17 @@ test.serial('Ensure stats retrieved from the currect source', async t => {
       )
     );
 
-    compiler.plugin('done', routeCalls(() => makeChange('some change'), () => done()));
+    compiler.hooks.done.tapAsync(
+      'AutoDllPlugin',
+      routeCalls(() => makeChange('some change'), () => done())
+    );
   });
 
   console.log('second run (with cached dll bundle from previous run)');
 
   await runner(config, ({ done, compiler }) => {
-    compiler.plugin(
-      'autodll-stats-retrieved',
+    compiler.hooks.autodllStatsRetrieved = new SyncHook(['stats', 'source']);
+    compiler.hooks.autodllStatsRetrieved.call(
       routeCalls(
         (stats, source) => {
           t.is(source, 'fs', 'should retreive stats from fs');
@@ -54,6 +58,9 @@ test.serial('Ensure stats retrieved from the currect source', async t => {
       )
     );
 
-    compiler.plugin('done', routeCalls(() => makeChange('some other change'), () => done()));
+    compiler.hooks.done.tapAsync(
+      'AutoDllPlugin',
+      routeCalls(() => makeChange('some other change'), () => done())
+    );
   });
 });
