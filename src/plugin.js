@@ -69,12 +69,13 @@ class AutoDLLPlugin {
         }).apply(compiler);
       });
 
-    const beforeCompile = params => {
+    const beforeCompile = (params, callback) => {
       const dependencies = new Set(params.compilationDependencies);
       [...dependencies].filter(path => !path.startsWith(cacheDir));
+      callback();
     };
 
-    const watchRun = compiler => {
+    const watchRun = (compiler, callback) => {
       compileIfNeeded(() => webpack(dllConfig))
         .then(a => {
           return a;
@@ -90,10 +91,11 @@ class AutoDLLPlugin {
           if (source === 'memory') return;
           return memory.sync(settings.hash, stats);
         })
+        .then(callback())
         .catch(console.error);
     };
 
-    const emit = compilation => {
+    const emit = (compilation, callback) => {
       const dllAssets = memory.getAssets().reduce((assets, { filename, buffer }) => {
         const assetPath = path.join(settings.path, filename);
 
@@ -104,12 +106,14 @@ class AutoDLLPlugin {
       }, {});
 
       compilation.assets = { ...compilation.assets, ...dllAssets };
+
+      callback();
     };
 
     if (compiler.hooks) {
-      compiler.hooks.beforeCompile.tap('AutoDllPlugin', beforeCompile);
+      compiler.hooks.beforeCompile.tapAsync('AutoDllPlugin', beforeCompile);
       compiler.hooks.watchRun.tapAsync('AutoDllPlugin', watchRun);
-      compiler.hooks.emit.tap('AutoDllPlugin', emit);
+      compiler.hooks.emit.tapAsync('AutoDllPlugin', emit);
     } else {
       compiler.plugin('before-compile', beforeCompile);
       compiler.plugin(['run', 'watch-run'], watchRun);
