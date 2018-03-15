@@ -36,42 +36,76 @@ test.serial('Detect package.json change', async t => {
   console.log('clean run (cache deleted)');
 
   await runner(config, ({ done, compiler }) => {
-    compiler.hooks.autodllStatsRetrieved = new SyncHook(['stats', 'source']);
-    compiler.hooks.autodllStatsRetrieved.call(
-      routeCalls(
-        () => {
-          console.log('first build');
-        },
+    if (compiler.hooks) {
+      compiler.hooks.autodllStatsRetrieved = new SyncHook(['stats', 'source']);
+      compiler.hooks.autodllStatsRetrieved.call(
+        routeCalls(
+          () => {
+            console.log('first build');
+          },
 
-        (stats, source) => {
-          console.log('rebuild is triggered since package.json changed.');
-          t.is(source, 'build', 'should rebuild after package.json changed');
-        }
-      )
-    );
+          (stats, source) => {
+            console.log('rebuild is triggered since package.json changed.');
+            t.is(source, 'build', 'should rebuild after package.json changed');
+          }
+        )
+      );
 
-    compiler.hooks.done.tapAsync(
-      'AutoDllPlugin',
-      routeCalls(
-        () => {
-          console.log('first build is done.');
+      compiler.hooks.done.tapAsync(
+        'AutoDllPlugin',
+        routeCalls(
+          () => {
+            console.log('first build is done.');
 
-          console.log('change to package.json');
-          pkgHandler.change();
+            console.log('change to package.json');
+            pkgHandler.change();
 
-          console.log('making a change to some file to trigger a rebuild');
-          makeChange('some change');
-        },
-        () => {
-          console.log('Second build is done.');
-          done();
-        }
-      )
-    );
+            console.log('making a change to some file to trigger a rebuild');
+            makeChange('some change');
+          },
+          () => {
+            console.log('Second build is done.');
+            done();
+          }
+        )
+      );
 
-    // Important! We only test package.json right now.
-    // But the cache also invalidates when the settings passed to the plugin are different.
+      // Important! We only test package.json right now.
+      // But the cache also invalidates when the settings passed to the plugin are different.
+    } else {
+      compiler.plugin(
+        'autodll-stats-retrieved',
+        routeCalls(
+          () => {
+            console.log('first build');
+          },
+          (stats, source) => {
+            console.log('rebuild is triggered since package.json changed.');
+            t.is(source, 'build', 'should rebuild after package.json changed');
+          }
+        )
+      );
+
+      compiler.plugin(
+        'done',
+        routeCalls(
+          () => {
+            console.log('first build is done.');
+
+            console.log('change to package.json');
+            pkgHandler.change();
+
+            console.log('making a change to some file to trigger a rebuild');
+            makeChange('some change');
+          },
+          () => {
+            console.log('Second build is done.');
+            done();
+          }
+        )
+      );
+    }
+
+    pkgHandler.restore();
   });
-
-  pkgHandler.restore();
 });
