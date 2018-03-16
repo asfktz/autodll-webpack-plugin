@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   // TODO: Add conditional for mode: 'string'
-  
+
   entry: ['babel-polyfill', './src/index.js'],
   devtool: 'source-map',
   output: {
@@ -35,6 +35,11 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: './src/index.html',
+    }),
     new AutoDllPlugin({
       debug: true,
       inject: true,
@@ -62,11 +67,6 @@ module.exports = {
           'pixi.js',
         ],
       },
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: './src/index.html',
     }),
   ],
 };
