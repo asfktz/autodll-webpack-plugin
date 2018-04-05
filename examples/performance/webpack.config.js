@@ -4,9 +4,8 @@ const AutoDllPlugin = require('../../lib');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  // TODO: Add conditional for mode: 'string'
-
   entry: ['babel-polyfill', './src/index.js'],
+  mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
   devtool: 'source-map',
   output: {
     filename: '[name].bundle.js',
