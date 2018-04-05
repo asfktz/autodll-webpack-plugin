@@ -112,6 +112,7 @@ class AutoDLLPlugin {
 
     if (compiler.hooks) {
       compiler.hooks.beforeCompile.tapAsync('AutoDllPlugin', beforeCompile);
+      compiler.hooks.run.tapAsync('AutoDllPlugin', watchRun);
       compiler.hooks.watchRun.tapAsync('AutoDllPlugin', watchRun);
       compiler.hooks.emit.tapAsync('AutoDllPlugin', emit);
     } else {
@@ -144,7 +145,7 @@ class AutoDLLPlugin {
           if (!compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration) {
             return;
           }
-          compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tap(
+          compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tapAsync(
             'AutoDllPlugin',
             doCompilation
           );
