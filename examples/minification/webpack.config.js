@@ -1,18 +1,8 @@
-const webpack = require('webpack');
-const path = require('path');
 const AutoDllPlugin = require('../../lib');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-  entry: {
-    app: './src/index.js',
-  },
-
-  output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/',
-  },
-
+  mode: 'production',
   plugins: [
     new AutoDllPlugin({
       debug: true,
@@ -20,7 +10,7 @@ module.exports = {
       entry: {
         vendor: ['react', 'react-dom'],
       },
-      plugins: [new webpack.optimize.UglifyJsPlugin()],
+      plugins: [new UglifyJsPlugin()],
     }),
   ],
 };

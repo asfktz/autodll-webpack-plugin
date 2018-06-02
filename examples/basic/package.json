@@ -4,10 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --config ./webpack.config.js"
+    "build": "webpack"
   },
   "devDependencies": {
-    "webpack": "^3.0.0"
+    "webpack": "^4.0.0",
+    "webpack-cli": "^2.0.6"
   },
   "dependencies": {
     "react": "^15.6.1",

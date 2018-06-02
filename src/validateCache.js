@@ -5,7 +5,7 @@ import readPkg from 'read-pkg';
 import { cacheDir } from './paths';
 
 // This file could be written much better.
-// Ideally I should just return a boolean of the cache is valid or not
+// Ideally it should just return a boolean of the cache is valid or not
 // right now it also save the last package.json to cache.
 // I don't like it, But it will do for now.
 

@@ -39,7 +39,7 @@ const createSync = (cacheDir, fs, mfs) => (hash, stats) => {
 const createGetAssets = mfs => () => {
   return mfs.readdirSync('/assets').map(filename => ({
     filename,
-    buffer: mfs.readFileSync(path.posix.join('/assets', filename))
+    buffer: mfs.readFileSync(path.posix.join('/assets', filename)),
   }));
 };
 

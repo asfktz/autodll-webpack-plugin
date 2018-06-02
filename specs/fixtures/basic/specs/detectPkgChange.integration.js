@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+const { SyncHook } = require('tapable');
 const config = require('../webpack.config.js');
 const test = require('ava');
 
@@ -34,13 +35,17 @@ test.serial('Detect package.json change', async t => {
 
   console.log('clean run (cache deleted)');
 
+  // Important! We only test package.json right now.
+  // But the cache also invalidates when the settings passed to the plugin are different.
+
   await runner(config, ({ done, compiler }) => {
-    compiler.plugin(
-      'autodll-stats-retrieved',
+    compiler.hooks.autodllStatsRetrieved.tap(
+      'test',
       routeCalls(
         () => {
           console.log('first build');
         },
+
         (stats, source) => {
           console.log('rebuild is triggered since package.json changed.');
           t.is(source, 'build', 'should rebuild after package.json changed');
@@ -48,8 +53,8 @@ test.serial('Detect package.json change', async t => {
       )
     );
 
-    compiler.plugin(
-      'done',
+    compiler.hooks.done.tap(
+      'AutoDllPlugin',
       routeCalls(
         () => {
           console.log('first build is done.');
@@ -67,9 +72,6 @@ test.serial('Detect package.json change', async t => {
       )
     );
 
-    // Important! We only test package.json right now.
-    // But the cache also invalidates when the settings passed to the plugin are different.
+    pkgHandler.restore();
   });
-
-  pkgHandler.restore();
 });

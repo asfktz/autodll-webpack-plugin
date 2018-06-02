@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: ['babel-polyfill', './src/index.js'],
+  mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
   devtool: 'source-map',
   output: {
     filename: '[name].bundle.js',
@@ -33,6 +34,11 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: './src/index.html',
+    }),
     new AutoDllPlugin({
       debug: true,
       inject: true,
@@ -60,11 +66,6 @@ module.exports = {
           'pixi.js',
         ],
       },
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: './src/index.html',
     }),
   ],
 };
