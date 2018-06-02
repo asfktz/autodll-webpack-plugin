@@ -4,10 +4,32 @@
 [![Join the chat at https://gitter.im/autodll-webpack-plugin/Lobby](https://badges.gitter.im/autodll-webpack-plugin/Lobby.svg)](https://gitter.im/autodll-webpack-plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
+# Important Note
+
+
+Now, that webpack 5 planning to [support caching out-of-the-box](https://github.com/webpack/webpack/issues/6527),
+AutoDllPlugin will soon be obsolete.
+
+In the meantime, I would like to recommend Michael Goddard's [hard-source-webpack-plugin](https://github.com/mzgoddard/hard-source-webpack-plugin), <br>
+which seems like webpack 5 is going to use internally.
+
+
+<hr>
+
+
 # AutoDllPlugin
 Webpack's DllPlugin without the boilerplate
 
-`npm install --save-dev autodll-webpack-plugin`
+webpack 4
+```
+  npm install --save-dev autodll-webpack-plugin
+```
+
+webpack 2 / 3
+```
+  npm install --save-dev autodll-webpack-plugin@3
+```
+
 
 ---
 
