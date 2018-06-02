@@ -27,7 +27,7 @@ webpack 4
 
 webpack 2 / 3
 ```
-  npm install --save-dev autodll-webpack-plugin@3
+  npm install --save-dev autodll-webpack-plugin@0.3
 ```
 
 
