@@ -2,7 +2,7 @@
   "name": "autodll-webpack-plugin",
   "author": "Asaf Katz",
   "license": "MIT",
-  "version": "0.3.8",
+  "version": "0.4.0",
   "description": "Webpack's DllPlugin without the boilerplate",
   "repository": "https://github.com/asfktz/autodll-webpack-plugin",
   "main": "lib/index.js",
@@ -20,10 +20,12 @@
     "build:watch": "npm run cleanup && babel src --out-dir lib --watch",
     "prepublishOnly": "npm run build",
     "precommit": "del-cli yarn.lock && lint-staged && npm run test",
-    "format":
-      "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write \"{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}\" "
+    "format": "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write \"{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}\" "
   },
-  "files": ["src", "lib"],
+  "files": [
+    "src",
+    "lib"
+  ],
   "lint-staged": {
     "{{src,specs,scripts,examples/**/src,experiments/**/src}/**/*.{js,json,css},*.{js,json}}": [
       "prettier-eslint --print-width 100 --trailing-comma es5 --single-quote --write",
@@ -99,10 +101,14 @@
   },
   "ava": {
     "files": [],
-    "source": ["src/**/*.js"],
+    "source": [
+      "src/**/*.js"
+    ],
     "concurrency": 5,
     "failFast": false,
-    "require": ["babel-register"],
+    "require": [
+      "babel-register"
+    ],
     "babel": "inherit"
   }
 }
